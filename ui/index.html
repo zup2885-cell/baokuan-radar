@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>爆款雷达</title>
+<style>
+
+:root{--bg:#f4f2ec;--card:#fffdf8;--ink:#211d18;--muted:#6f665b;--faint:#a39a8e;--line:#e3ddd2;--accent:#b8432a;--accent-bg:#f7e3dc;--warm:#9a6a1f;--warm-bg:#f6ecd6;--ok:#3d6b3a;--ok-bg:#e3efdc;color-scheme:light}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{height:100%;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.6 "PingFang SC","Hiragino Sans GB",sans-serif;-webkit-font-smoothing:antialiased}
+button,input,textarea,select{font:inherit;color:inherit}
+button,.button-link{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:36px;cursor:pointer;border:1px solid var(--line);background:var(--card);border-radius:8px;padding:6px 12px;text-decoration:none;color:var(--ink)}
+button:hover,.button-link:hover{border-color:var(--muted)}
+button.primary{background:var(--accent);color:var(--card);border-color:var(--accent)}
+button.primary:hover{background:var(--ink);border-color:var(--ink)}
+button:disabled{opacity:.6;cursor:wait}
+:where(button,a,input,textarea,select,summary):focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+input,textarea,select{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px 10px;width:100%;min-width:0}
+textarea{resize:vertical;min-height:160px;line-height:1.75}
+a{color:var(--ink)}
+p{margin:0 0 12px}p:last-child{margin-bottom:0}
+/* PC: 200px navigation + 340px list + flexible detail; reading measure <= 760px. */
+.app{display:grid;grid-template-columns:200px minmax(0,1fr);height:100vh;height:100dvh}
+nav{min-width:0;border-right:1px solid var(--line);padding:24px 12px 16px;display:flex;flex-direction:column;gap:6px}
+.brand{font:600 20px "Songti SC","STSong",serif;letter-spacing:.04em;padding:0 8px 24px;display:flex;align-items:center;gap:8px;white-space:nowrap}
+.brand i{width:26px;height:26px;border-radius:50%;background:var(--accent);display:inline-grid;place-items:center;color:var(--card);font:600 13px sans-serif;font-style:normal}
+nav a{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-radius:8px;color:var(--muted);text-decoration:none;cursor:pointer}
+nav a.on{background:var(--card);color:var(--ink);font-weight:600}
+nav a b{font-weight:500;font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.status{margin-top:auto;font-size:12px;color:var(--muted);padding:12px;background:var(--card);border:1px solid var(--line);border-radius:12px;overflow-wrap:anywhere}
+.status-main{color:var(--ink);font-size:12px;line-height:1.75}
+.status-last{margin-top:8px;line-height:1.6;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.dot{display:inline-block;flex:none;width:7px;height:7px;border-radius:50%;margin-right:6px;background:var(--muted)}
+.dot.ok{background:var(--ok)}.dot.warn{background:var(--warm)}.dot.bad{background:var(--accent)}
+main{min-width:0;min-height:0;overflow:hidden;display:flex;flex-direction:column}
+header.bar{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:26px 28px 20px;flex-shrink:0}
+.page-heading{min-width:0}
+header.bar h1{margin:0 0 5px;font:600 24px/1.4 "Songti SC","STSong",serif;letter-spacing:.02em}
+.sub{color:var(--muted);font-size:13px;margin:0;line-height:1.7}
+.header-control{width:auto;flex:none}.search-control{width:280px;max-width:40%}
+.keyword-bar{display:flex;align-items:baseline;gap:12px;padding:0 28px 18px;flex-shrink:0}
+.filter-label{font-size:13px;color:var(--muted);flex:none}
+.chips{display:flex;align-items:center;flex-wrap:wrap;gap:8px;padding:0 28px 18px;flex-shrink:0;min-width:0}
+.keyword-bar .chips{padding:0;flex:1;min-width:0}
+.chip{font-size:13px;padding:4px 10px;border-radius:6px;background:var(--card);border:1px solid var(--line);color:var(--ink);max-width:100%;overflow-wrap:anywhere}
+.chip small{font-size:12px;color:var(--muted);margin-left:6px}
+.chip.done small{color:var(--ok)}
+.chip.err{background:var(--accent-bg);border-color:transparent}.chip.err small{color:var(--accent)}
+.chip.pick{cursor:pointer}.chip.pick.on{background:var(--ink);color:var(--card);border-color:var(--ink)}
+.split{flex:1;display:grid;grid-template-columns:340px minmax(0,1fr);min-height:0;border-top:1px solid var(--line)}
+.list{min-width:0;overflow:auto;padding:16px 14px 28px;display:flex;flex-direction:column;gap:10px;scrollbar-gutter:stable}
+.item{display:grid;flex:none;width:100%;grid-template-columns:72px minmax(0,1fr);gap:12px;padding:12px;border-radius:12px;background:var(--card);border:1px solid var(--line);cursor:pointer;text-align:left;align-items:start}
+.item.on{border-color:var(--accent);background:var(--accent-bg)}
+.item img,.thumb{display:block;width:72px;height:96px;border-radius:8px;object-fit:cover;background:var(--line)}
+.item-content{min-width:0}
+.item h3{margin:0;font-size:15px;font-weight:600;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;line-height:1.5;overflow-wrap:anywhere}
+.meta{font-size:13px;color:var(--muted);margin-top:6px;overflow-wrap:anywhere}
+.item-author{overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.item-stats{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:8px;font-size:12px}
+.item-stats strong{font-size:14px;font-weight:600;font-variant-numeric:tabular-nums}
+.item-source{font-size:13px;color:var(--muted);margin-top:8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.badge{display:inline-block;flex:none;white-space:nowrap;font-size:12px;line-height:1.65;padding:1px 6px;border-radius:5px;font-weight:500}
+.badge.hot{background:var(--accent-bg);color:var(--accent)}
+.badge.mid{background:var(--warm-bg);color:var(--warm)}
+.badge.plain,.badge.saved{background:var(--bg);color:var(--muted)}
+.item-state{font-size:12px;color:var(--muted);white-space:nowrap}
+.detail{container-type:inline-size;min-width:0;overflow:auto;padding:28px clamp(20px,3vw,48px) 48px;border-left:1px solid var(--line);background:var(--card);scrollbar-gutter:stable}
+.detail-inner{max-width:760px;margin-inline:auto;font-size:15px;line-height:1.75;overflow-wrap:anywhere}
+.detail-head{display:grid;grid-template-columns:120px minmax(0,1fr);column-gap:24px;row-gap:16px;align-items:start}
+.detail-cover{grid-row:1/4;width:120px;height:160px;object-fit:cover;border-radius:12px;background:var(--bg)}
+.cover-placeholder{display:grid;place-items:center;font-size:12px;color:var(--muted)}
+.detail-titlebox{min-width:0}
+.detail h2{margin:0 0 8px;font:600 23px/1.5 "PingFang SC","Hiragino Sans GB",sans-serif;overflow-wrap:anywhere}
+.detail-byline{font-size:13px;color:var(--muted);display:flex;flex-wrap:wrap;gap:4px 14px}
+.metrics{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;margin:0}
+.metric{min-width:0;display:flex;flex-direction:column}
+.metric dd{order:-1;margin:0;font-size:21px;font-weight:600;line-height:1.4;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.metric dt{font-size:12px;color:var(--muted);margin-top:4px}
+.metric.ratio dd{color:var(--accent)}
+.detail-actions{display:flex;align-items:center;flex-wrap:wrap;gap:8px;font-size:13px}
+.detail-actions .button-link{font-size:13px}
+.detail-context{margin-top:20px;color:var(--muted);font-size:13px}
+.analysis-status:empty{display:none}
+.analysis-status .msg{margin:20px 0 0}
+.msg{font-size:13px;padding:12px 16px;border-radius:12px;background:var(--bg);line-height:1.75;overflow-wrap:anywhere}
+.msg.error{background:var(--accent-bg);color:var(--accent)}
+.detail-tabs{display:flex;flex-wrap:wrap;gap:4px 16px;margin:24px 0;border-bottom:1px solid var(--line)}
+.detail-tabs button{min-height:42px;padding:8px 0 12px;border:0;border-bottom:2px solid transparent;border-radius:0;background:transparent;font-size:14px;color:var(--muted);white-space:nowrap}
+.detail-tabs button[aria-selected="true"]{border-bottom-color:var(--accent);color:var(--ink);font-weight:600}
+.tab-panel{display:flex;flex-direction:column;gap:24px;outline:none}
+.section-title,.reading-card h3,.card h3{margin:0 0 12px;font-size:13px;line-height:1.6;font-weight:500;color:var(--muted);letter-spacing:.05em}
+.reading-card,.card{min-width:0;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px}
+.conclusion{background:var(--accent-bg);border:0}
+.conclusion p{font-size:18px;font-weight:600;line-height:1.75}
+blockquote{margin:0 0 16px;padding:2px 0 2px 14px;border-left:3px solid var(--accent);white-space:pre-wrap;overflow-wrap:anywhere}
+blockquote:last-child{margin-bottom:0}
+.small-note,.hint{font-size:13px;color:var(--muted);line-height:1.75;margin-top:8px}
+.reasons,.topic-cards,.takeaway-cards{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
+.reasons>li{display:grid;grid-template-columns:26px minmax(0,1fr);gap:12px}
+.ordinal{font-size:18px;color:var(--accent);font-variant-numeric:tabular-nums;line-height:1.6}
+.reason-heading{display:flex;align-items:baseline;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.evidence{color:var(--muted);font-size:14px;margin:0}
+.takeaway-cards strong{display:block;margin-bottom:14px}
+.application-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:stretch}
+.micro-label{font-size:13px;color:var(--muted);margin-bottom:8px}
+.application{padding:14px 16px;background:var(--accent-bg);border-radius:8px}
+.application .micro-label{color:var(--accent)}
+.avoid{background:var(--bg)}
+.avoid summary{cursor:pointer;font-size:13px;color:var(--muted);letter-spacing:.05em}
+.avoid-entry{margin-top:16px}.avoid-entry p{margin-top:6px}
+.timeline{list-style:none;padding:0;margin:0;counter-reset:step}
+.timeline li{display:grid;grid-template-columns:28px minmax(0,1fr);column-gap:14px;position:relative;padding-bottom:20px;counter-increment:step}
+.timeline li:last-child{padding-bottom:0}
+.timeline li:not(:last-child):before{content:"";position:absolute;left:13px;top:30px;bottom:2px;width:1px;background:var(--line)}
+.step-number{display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--bg);font-size:13px;color:var(--muted)}
+.template-text{white-space:pre-wrap;margin:0;font:inherit}
+.section-top{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:12px}.section-top h3{margin:0}
+.section-top button{flex:none;font-size:13px}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.topic-cards h3{font-size:17px;letter-spacing:0;color:var(--ink);font-weight:600}
+.topic-cards ul{padding-left:20px;margin:12px 0 16px}.topic-cards li{margin:5px 0}
+.transcript{font:15px/1.9 "PingFang SC","Hiragino Sans GB",sans-serif;white-space:pre-wrap;overflow-wrap:anywhere}
+.transcript p{margin-bottom:20px}
+label{display:block;font-size:13px;color:var(--muted);margin:16px 0 6px}
+.notes-card label:first-child{margin-top:0}
+.form-actions{display:flex;gap:12px;align-items:center;margin-top:16px}
+.unsaved{font-size:13px;color:var(--accent)}
+.empty-state{color:var(--muted);padding:40px 16px;text-align:center;line-height:1.9}
+.missing-content{color:var(--muted);font-size:14px;margin:0;line-height:1.75}
+.settings,.hot-content{min-width:0;overflow:auto;padding:4px 28px 40px;flex:1}
+.settings-grid{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;align-items:start}
+.settings .card h3{padding-bottom:12px;border-bottom:1px solid var(--line)}
+.settings .msg{margin:12px 0}
+.inline{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.inline input[type="checkbox"]{width:auto;accent-color:var(--accent)}
+.inline label{margin:0;color:var(--ink);font-size:14px}
+.log{font-size:13px;color:var(--muted);border-bottom:1px solid var(--line);padding:10px 0;overflow-wrap:anywhere}.log:last-child{border:0;padding-bottom:0}
+.hot-filters button{flex:none;white-space:nowrap;font-size:13px;padding:5px 11px}
+.hot-filters button.on{background:var(--ink);color:var(--card);border-color:var(--ink)}
+.hot-filters .count{margin-left:6px;font-variant-numeric:tabular-nums}
+.hot-notice{padding:0 28px 20px;color:var(--muted);font-size:13px}
+.hot-table{max-width:1200px;margin:0 auto}
+.hotrow{display:grid;grid-template-columns:40px minmax(0,1fr) 110px minmax(140px,.65fr) 100px;gap:16px;padding:16px 0;border-bottom:1px solid var(--line);align-items:center}
+.hotrow:last-child{border:0}
+.hotrow.head{padding:0 0 12px;font-size:13px;color:var(--muted)}
+.hotrow .n{font-size:16px;color:var(--muted);font-variant-numeric:tabular-nums}.hotrow.top .n{color:var(--accent);font-weight:600}
+.hot-word{font-size:15px;overflow-wrap:anywhere}
+.hot-track{min-width:0}.hot-track .badge{max-width:100%;white-space:normal;overflow-wrap:anywhere}
+.hot-flags{display:flex;flex-wrap:wrap;gap:6px;min-width:0}.hot-flags .badge{white-space:normal;overflow-wrap:anywhere}
+.hot-value{text-align:right;font-variant-numeric:tabular-nums}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);max-width:calc(100% - 32px);background:var(--ink);color:var(--card);padding:10px 18px;border-radius:10px;font-size:13px;z-index:9}
+@container(max-width:640px){.detail-cover{grid-row:1}.metrics,.detail-actions{grid-column:1/-1}.metric dd{font-size:20px}.application-grid{grid-template-columns:1fr}.detail-head{column-gap:20px}.detail-tabs{gap:4px 14px}}
+@container(max-width:520px){.metrics{grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}}
+@container(max-width:420px){.detail-head{grid-template-columns:96px minmax(0,1fr);column-gap:16px}.detail-cover{width:96px;height:128px}.detail h2{font-size:20px}.grid2{grid-template-columns:1fr}.reading-card{padding:16px}.detail-tabs{gap:4px 12px}.detail-tabs button{font-size:13px}}
+@media(max-width:1100px){.hotrow{grid-template-columns:32px minmax(0,1fr) 90px 140px 80px;gap:12px}.settings-grid{grid-template-columns:1fr;max-width:760px}}
+@media(max-width:899px){.app{height:auto;min-height:100vh;grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr)}nav{flex-direction:row;flex-wrap:wrap;align-items:center;gap:4px;border-right:0;border-bottom:1px solid var(--line);padding:12px 16px}.brand{padding:0 14px 0 0}.status{display:none}nav a{padding:8px 10px}main{overflow:visible}header.bar{padding:24px 20px 18px;flex-wrap:wrap;gap:14px}.keyword-bar{padding:0 20px 18px;flex-wrap:wrap;gap:8px}.chips{padding-inline:20px}.split{grid-template-columns:minmax(0,1fr);flex:none}.list{max-height:360px;padding:16px 20px}.item{grid-template-columns:72px minmax(0,1fr)}.detail{overflow:visible;border-left:0;border-top:1px solid var(--line);padding:24px 20px 40px}.settings,.hot-content{overflow:visible;padding-inline:20px}.hot-notice{padding-inline:20px}.search-control{width:100%;max-width:100%}.grid2{gap:16px}.hotrow{grid-template-columns:28px minmax(0,1fr) 80px;gap:8px 12px}.hot-word{grid-column:2;grid-row:1}.hot-track{grid-column:2;grid-row:2}.hot-flags{grid-column:2;grid-row:3}.hot-value{grid-column:3;grid-row:1/4}.hotrow .n{grid-column:1;grid-row:1}.hotrow.head{display:none}}
+</style>
+</head>
+<body>
+<div class="app">
+  <nav aria-label="主导航">
+    <div class="brand"><i>爆</i>爆款雷达</div>
+    <a role="button" tabindex="0" data-view="today" class="on">今日爆款 <b id="nToday"></b></a>
+    <a role="button" tabindex="0" data-view="hot">热榜</a>
+    <a role="button" tabindex="0" data-view="library">收藏库 <b id="nSaved"></b></a>
+    <a role="button" tabindex="0" data-view="settings">设置</a>
+    <div class="status" id="status">读取中…</div>
+  </nav>
+  <main id="main"></main>
+</div>
+<script>
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt=n=>n==null?'—':n>=10000?(n/10000).toFixed(n>=100000?0:1)+' 万':n.toLocaleString();
+let S=null,view='today',renderedView=null,day=null,items=[],current=null,libQ='',libTag='',timer=null,followToday=true,pageVersion=0,listVersion=0,detailVersion=0,stateVersion=0,hotVersion=0,hotFilter='',refreshing=false,shownJobResult='';
+async function api(path,body){let r;try{r=await fetch(path,body!==undefined?{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}:{})}catch(e){throw new Error('无法连接本机服务，请重新打开爆款雷达')}let j;try{j=await r.json()}catch(e){throw new Error('本机服务返回内容不正确，请检查后台日志')}if(!r.ok)throw new Error(j.error||'请求失败');return j}
+function toast(t){const d=document.createElement('div');d.className='toast';d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),2600)}
+window.addEventListener('unhandledrejection',e=>{e.preventDefault();toast(e.reason?.message||'操作失败，请稍后再试')});
+const ACC={ready:['ok','小号搜索正常'],NEED_LOGIN:['bad','需要扫码登录小号'],PLATFORM_BLOCKED:['bad','抖音要求验证'],RATE_LIMITED:['warn','暂时限流']};
+const accountLabel=a=>(a.status!=='ready'&&ACC[a.status])||(a.logged_in?(ACC[a.status]||['ok','小号已登录']):['bad','小号未登录']);
+function scheduleRefresh(){clearTimeout(timer);timer=setTimeout(refresh,S?.job.name||S?.counts.processing||S?.counts.pending?6000:30000)}
+function updateSettingsStatus(){const a=S.account,[cls,label]=accountLabel(a);if($('#accountStatus'))$('#accountStatus').innerHTML=`<span class="dot ${cls}"></span>${label}`;if($('#accountMessage'))$('#accountMessage').textContent=a.message||'请用专门的小号扫码登录，不要用主号。';if($('#logs'))$('#logs').innerHTML=logHTML();document.querySelectorAll('#run,#login,#challenge,#redo,#classifyHot').forEach(b=>b.disabled=!!S.job.name)}
+const logHTML=()=>S.logs.map(l=>`<div class="log">${esc(l.at.slice(5,16).replace('T',' '))} · ${esc(l.message)}</div>`).join('')||'<div class="hint">还没有记录</div>';
+function ratioText(r){return r==null?'—':r>=100?String(Math.round(r)):r>=1?r.toFixed(1):r.toFixed(2)}
+function ratioBadge(v){if(v.ratio==null)return '<span class="badge plain">倍数未知</span>';return `<span class="badge ${v.ratio>=3?'hot':'plain'}">${ratioText(v.ratio)} 倍</span>`}
+function statusBadge(v){return {pending:'<span class="item-state">待拆解</span>',processing:'<span class="item-state">拆解中</span>',failed:'<span class="badge hot">失败</span>',imported:'<span class="item-state">未拆解</span>'}[v.status]||`<span class="item-state">${v.saved?'已收藏':'已拆解'}</span>`}
+function cleanTitle(text){return String(text||'').replace(/#[^\s#]+/gu,'').replace(/\s+/g,' ').trim()||'（无文字标题）'}
+function coverHTML(v,detail=false){const cls=detail?'detail-cover':'thumb';return v.cover?`<img class="${cls}" src="${esc(v.cover)}" referrerpolicy="no-referrer" loading="lazy" alt="${detail?'视频封面':''}" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'${cls} cover-placeholder',textContent:'暂无封面'}))">`:`<div class="${cls} cover-placeholder">暂无封面</div>`}
+function keywordHTML(){return S.keywords.map(k=>`<span class="chip ${k.error?'err':k.status}" title="${esc([k.reason,k.error?'搜索未成功，下轮重试或等待处理登录/验证':''].filter(Boolean).join('；'))}">${esc(k.word)}<small>${k.error?'失败':k.status==='done'||k.status==='empty'?'已搜 '+(k.found??0)+' 条':'排队中'}</small></span>`).join('')||'<span class="sub">这一天还没有关键词，可到「设置」查看运行记录或立即运行。</span>'}
+
+async function loadState(){
+  const version=++stateVersion,j=await api('/api/state'+(!followToday&&day?'?day='+encodeURIComponent(day):''));if(version!==stateVersion)return;S=j;day=S.day;
+  $('#nSaved').textContent=S.saved||'';
+  $('#nToday').textContent=S.today_count||'';
+  const a=S.account,[cls,label]=accountLabel(a);
+  const last=S.logs[0];
+  const auto=S.settings.auto?'自动已开启':'自动已关闭';
+  const recent=S.job.name?'正在：'+S.job.name+'…':last?last.at.slice(5,16).replace('T',' ')+' · '+last.message:'还没有运行记录';
+  $('#status').innerHTML=`<div class="status-main" title="${esc(label+' · '+auto)}"><span class="dot ${cls}"></span>${esc(a.status==='ready'?'小号已登录':a.status==='PLATFORM_BLOCKED'?'等待验证':a.status==='RATE_LIMITED'?'限流暂停':'小号未登录')} · ${auto}</div><div class="status-last" title="${esc(recent)}">${esc(recent)}</div>`;
+  scheduleRefresh();
+}
+async function refresh(){if(refreshing)return;refreshing=true;const version=pageVersion;try{await loadState();if(version!==pageVersion)return;if(S.job.name)shownJobResult='';else if(S.job.result&&shownJobResult!==S.job.result){toast(S.job.result);shownJobResult=S.job.result}if(renderedView!==view||(['today','library'].includes(view)&&!$('#list'))||(view==='settings'&&!$('#field')))await render();if(view==='today')updateTodayMeta();if(view==='today'||view==='library'){if(view==='library')await updateTags();await loadList(true)}else if(view==='settings')updateSettingsStatus();else if(view==='hot')await renderHot()}catch(e){$('#status').textContent=e.message+'，稍后自动重试'}finally{refreshing=false;scheduleRefresh()}}
+
+async function loadList(keep){
+  const version=++listVersion,page=pageVersion;
+  const j=await api(view==='library'?`/api/videos?view=library&q=${encodeURIComponent(libQ)}&tag=${encodeURIComponent(libTag)}`:`/api/videos?day=${day}`);
+  if(version!==listVersion||page!==pageVersion||!$('#list'))return;
+  items=j.items;if(!keep||!items.find(v=>v.aweme_id===current))current=items[0]?.aweme_id||null;
+  renderList();if(current)await showDetail(current,keep);else {$('#detail').dataset.id='';$('#detail').innerHTML=`<div class="empty-state">${view==='library'?(libQ||libTag?'没有符合条件的收藏，可以清空搜索或选择「全部标签」。':'还没有收藏。在「今日爆款」里点「收藏」就会放到这里。'):'搜索结果和拆解完成后会自动显示'}</div>`}
+}
+async function render(){
+  const page=pageVersion;
+  document.querySelectorAll('nav a').forEach(a=>a.classList.toggle('on',a.dataset.view===view));
+  if(view==='today')renderToday();else if(view==='library')await renderLibrary();else if(view==='hot')await renderHot();else renderSettings();
+  if(page===pageVersion)renderedView=view;
+}
+function renderToday(){
+  const opts=[...new Set([day,S.today,...S.days])].map(d=>`<option ${d===day?'selected':''}>${esc(d)}</option>`).join('');
+  $('#main').innerHTML=`<header class="bar"><div class="page-heading"><h1>今日爆款</h1><p class="sub">发现靠内容跑出来的视频，拆出可以借鉴的方法。</p></div><select id="day" class="header-control" aria-label="查看日期">${opts}</select></header>
+  <div class="keyword-bar"><span class="filter-label">${day===S.today?'今天搜的词':'当日搜的词'}</span><div class="chips" id="keywords">${keywordHTML()}</div></div>
+  <div class="split"><div class="list" id="list" aria-label="爆款视频列表"></div><div class="detail" id="detail" aria-label="视频详情"></div></div>`;
+  $('#day').onchange=async e=>{day=e.target.value;followToday=day===S.today;const page=++pageVersion;current=null;await loadState();if(page!==pageVersion)return;renderToday();await loadList()};
+}
+function updateTodayMeta(){if(!$('#keywords'))return;$('#keywords').innerHTML=keywordHTML();$('#day').innerHTML=[...new Set([day,S.today,...S.days])].map(d=>`<option ${d===day?'selected':''}>${esc(d)}</option>`).join('')}
+
+async function renderLibrary(){
+  const page=pageVersion;
+  const tags=(await api('/api/tags')).items;
+  if(page!==pageVersion||view!=='library')return;
+  $('#main').innerHTML=`<header class="bar"><div class="page-heading"><h1>收藏库</h1><p class="sub">${S.saved} 条收藏 · 留下值得反复研究的内容。</p></div><input id="q" class="search-control" aria-label="搜索收藏" placeholder="搜标题、文案、模板、备注" value="${esc(libQ)}"></header>
+  <div class="chips" id="libraryTags"></div>
+  <div class="split"><div class="list" id="list"></div><div class="detail" id="detail"></div></div>`;
+  let h;$('#q').oninput=e=>{libQ=e.target.value;clearTimeout(h);h=setTimeout(()=>{if(page===pageVersion)loadList()},300)};
+  renderTags(tags);
+}
+function renderTags(tags){const box=$('#libraryTags');if(!box)return;box.innerHTML=`<button class="chip pick ${libTag?'':'on'}" data-tag="" aria-pressed="${!libTag}">全部标签</button>`+tags.map(([t,n])=>`<button class="chip pick ${t===libTag?'on':''}" data-tag="${esc(t)}" aria-pressed="${t===libTag}">${esc(t)} ${n}</button>`).join('');box.querySelectorAll('.chip.pick').forEach(c=>c.onclick=()=>{libTag=libTag===c.dataset.tag?'':c.dataset.tag;renderTags(tags);loadList()})}
+async function updateTags(){const page=pageVersion,tags=(await api('/api/tags')).items;if(page===pageVersion&&view==='library'){renderTags(tags);const sub=$('header.bar .sub');if(sub)sub.textContent=S.saved+' 条收藏 · 留下值得反复研究的内容。'}}
+function renderList(){
+  const list=$('#list');if(!list)return;
+  if(!items.length){list.innerHTML=`<div class="empty-state">${view==='library'?'没有符合条件的收藏':'这一天还没有爆款。<br>小号搜索每隔 '+S.settings.search_gap_minutes+' 分钟搜一个关键词。'}</div>`;return}
+  const scroll=list.scrollTop;
+  list.innerHTML=items.map(v=>`<button class="item ${v.aweme_id===current?'on':''}" data-id="${esc(v.aweme_id)}" aria-pressed="${v.aweme_id===current}">
+    ${coverHTML(v)}<div class="item-content"><h3>${esc(cleanTitle(v.desc))}</h3><div class="meta item-author" title="${esc(v.author||'未知作者')}">${esc(v.author||'未知作者')} · 粉丝 ${fmt(v.followers)}</div>
+    <div class="item-stats"><span><strong>${fmt(v.likes)}</strong> 赞</span>${ratioBadge(v)}${statusBadge(v)}</div>
+    ${v.keyword?`<div class="item-source">搜索 · ${esc(v.keyword)}</div>`:''}</div></button>`).join('');
+  list.scrollTop=scroll;
+  list.querySelectorAll('.item').forEach(el=>el.onclick=()=>{current=el.dataset.id;renderList();showDetail(current)});
+}
+
+const DETAIL_TABS=[['analysis','爆款分析'],['copy','文案拆解'],['topics','改编选题'],['transcript','逐字稿'],['notes','标签和备注']];
+function missingHTML(a,content){return `<p class="missing-content">${a?'旧版分析暂未包含'+esc(content)+'，可点「重新拆解」补充。':'拆解完成后，这里会显示'+esc(content)+'。'}</p>`}
+function analysisStatus(v){
+  const previous=v.analysis?' 下方保留上次的拆解结果。':'';
+  if(v.status==='failed')return `<div class="msg error" role="status">拆解失败：${esc(v.error||'请查看运行记录')}。可以点「重新拆解」重试。${previous}</div>`;
+  if(v.status==='processing')return `<div class="msg" role="status">正在拆解，完成后会自动刷新。${previous}</div>`;
+  if(v.status==='pending')return `<div class="msg" role="status">正在排队拆解，完成后会自动刷新。${previous}</div>`;
+  if(v.status==='imported')return '<div class="msg" role="status">这条是导入的收藏，尚未拆解。点「拆解这一条」开始分析。</div>';
+  return v.analysis?'':'<div class="msg" role="status">暂时没有拆解结果，点「拆解这一条」开始分析。</div>';
+}
+function analysisHTML(a){
+  const opening=a?.opening_3s,reasons=Array.isArray(a?.reasons)?a.reasons:[],takeaways=Array.isArray(a?.takeaways)?a.takeaways:[],avoid=Array.isArray(a?.avoid_copying)?a.avoid_copying:[];
+  return `<section class="reading-card conclusion"><h3>一句话总结</h3>${a?.summary?`<p>${esc(a.summary)}</p>`:missingHTML(a,'一句话总结')}</section>
+  <section class="reading-card"><h3>开头前 3 秒</h3>${opening?`<blockquote>${esc(opening.evidence)}</blockquote><p><strong>手法：</strong>${esc(opening.technique)}</p><p><strong>为什么留得住人：</strong>${esc(opening.retention_reason)}</p><p class="small-note">${esc(opening.limitation)}</p>`:missingHTML(a,'开头前 3 秒分析')}</section>
+  <section><h3 class="section-title">为什么会爆</h3>${reasons.length?`<ol class="reasons">${reasons.map((r,i)=>`<li class="reading-card"><span class="ordinal" aria-hidden="true">${i+1}</span><div><div class="reason-heading"><strong>${esc(r.point)}</strong><span class="badge plain">推测</span></div><blockquote class="evidence">${esc(r.evidence)}</blockquote></div></li>`).join('')}</ol>`:missingHTML(a,'爆款原因及原文证据')}</section>
+  <section><h3 class="section-title">值得借鉴 · 用到我的领域</h3>${takeaways.length?`<div class="takeaway-cards">${takeaways.map(r=>`<article class="reading-card"><strong>${esc(r.point)}</strong><div class="application-grid"><div><p class="micro-label">原视频怎么做</p><blockquote class="evidence">${esc(r.evidence)}</blockquote></div><div class="application"><p class="micro-label">我可以怎么用</p><p>${esc(r.application)}</p></div></div></article>`).join('')}</div>`:missingHTML(a,'适合你的领域的借鉴方法')}</section>
+  <details class="reading-card avoid"><summary>不建议照搬${avoid.length?' · '+avoid.length+' 点':''}</summary>${avoid.length?avoid.map(r=>`<div class="avoid-entry"><strong>${esc(r.point)}</strong><p>${esc(r.reason)}</p><p class="small-note">可以改成：${esc(r.alternative)}</p></div>`).join(''):`<div class="avoid-entry">${missingHTML(a,'不建议照搬的地方')}</div>`}</details>
+  ${a?.gaps&&a.gaps!=='无'?`<p class="small-note">判断边界：${esc(a.gaps)}</p>`:''}`;
+}
+function copyHTML(a){
+  const structure=Array.isArray(a?.structure)?a.structure:[];
+  return `<section class="reading-card"><h3>开头钩子</h3>${a?.hook?`<blockquote>${esc(a.hook)}</blockquote>${a.hook_type?`<span class="badge hot">${esc(a.hook_type)}</span>`:''}`:missingHTML(a,'开头钩子')}</section>
+  <section class="reading-card"><h3>内容结构</h3>${structure.length?`<ol class="timeline">${structure.map((step,i)=>`<li><span class="step-number" aria-hidden="true">${i+1}</span><span>${esc(step)}</span></li>`).join('')}</ol>`:missingHTML(a,'文案结构')}</section>
+  <section class="reading-card"><div class="section-top"><h3>可套用模板</h3>${a?.template?'<button id="copyTpl">复制模板</button>':''}</div>${a?.template?`<p class="template-text">${esc(a.template)}</p>`:missingHTML(a,'可套用模板')}</section>
+  <div class="grid2"><section class="reading-card"><h3>选题角度</h3>${a?.topic?`<p>${esc(a.topic)}</p>`:missingHTML(a,'选题角度')}</section><section class="reading-card"><h3>目标人群</h3>${a?.audience?`<p>${esc(a.audience)}</p>`:missingHTML(a,'目标人群')}</section></div>`;
+}
+function topicsHTML(a){
+  const topics=Array.isArray(a?.adapted_topics)?a.adapted_topics:[];
+  return topics.length?`<div class="topic-cards">${topics.map(t=>`<article class="reading-card"><h3>${esc(t.title)}</h3><p class="micro-label">开头一句</p><blockquote>${esc(t.opening)}</blockquote><p class="micro-label">内容提纲</p><ul>${(Array.isArray(t.outline)?t.outline:[]).map(line=>`<li>${esc(line)}</li>`).join('')}</ul><p class="small-note">借鉴机制：${esc(t.source_mechanism)}</p></article>`).join('')}</div>`:`<section class="reading-card"><h3>改编选题</h3>${missingHTML(a,'适合你的领域的改编选题')}</section>`;
+}
+function transcriptHTML(v){
+  // 保留原文和换行；只有展示时将连续的口播文字分成可读的短段落。
+  const paragraphs=String(v.transcript||'').split(/\n+/).filter(t=>t.trim()).flatMap(line=>{
+    const sentences=line.match(/[^。！？!?]+[。！？!?]*|[。！？!?]+/g)||[line];
+    const parts=[];let part='';
+    sentences.forEach(sentence=>{if(part.length>=120){parts.push(part);part=''}part+=sentence});
+    if(part)parts.push(part);return parts;
+  });
+  return `<section class="reading-card"><div class="section-top"><h3>逐字稿</h3>${v.transcript?'<button id="copyTranscript">复制逐字稿</button>':''}</div><p class="small-note">${v.transcript_source==='whisper'?'来自本地语音识别，可能有错字，请对照原视频核对。':v.transcript_source==='desc'?'当前仅有视频标题或描述，未取得语音逐字稿。':'本地语音识别的逐字稿可能有错字，请对照原视频核对。'}</p><div class="transcript">${paragraphs.length?paragraphs.map(t=>`<p>${esc(t)}</p>`).join(''):'<p class="missing-content">还没有取得逐字稿，拆解完成后会自动显示。</p>'}</div></section>`;
+}
+function applyDetailTab(box,key){
+  box.dataset.tab=key;
+  box.querySelectorAll('[role="tab"]').forEach(button=>{const active=button.dataset.tab===key;button.setAttribute('aria-selected',String(active));button.tabIndex=active?0:-1});
+  box.querySelectorAll('[role="tabpanel"]').forEach(panel=>panel.hidden=panel.dataset.panel!==key);
+}
+function bindDetailTabs(box){
+  const buttons=[...box.querySelectorAll('[role="tab"]')];
+  buttons.forEach((button,i)=>{
+    button.onclick=()=>{applyDetailTab(box,button.dataset.tab);box.scrollTop=0};
+    button.onkeydown=e=>{let next;if(e.key==='ArrowRight')next=(i+1)%buttons.length;else if(e.key==='ArrowLeft')next=(i-1+buttons.length)%buttons.length;else if(e.key==='Home')next=0;else if(e.key==='End')next=buttons.length-1;else return;e.preventDefault();buttons[next].onclick();buttons[next].focus()};
+  });
+}
+function updateDetailStatus(box,v){
+  box.dataset.saved=v.saved?'1':'0';
+  const status=box.querySelector('#analysisStatus');if(status)status.innerHTML=analysisStatus(v);
+  const save=box.querySelector('#saveBtn');if(save){save.textContent=v.saved?'已收藏 · 取消':'收藏';save.setAttribute('aria-pressed',String(!!v.saved))}
+}
+async function showDetail(id,keep){
+  const box=$('#detail');if(!box)return;
+  const version=++detailVersion,page=pageVersion;
+  const v=await api('/api/video?id='+encodeURIComponent(id)),a=v.analysis;
+  if(version!==detailVersion||page!==pageVersion||id!==current||box!==$('#detail'))return;
+  const sig=JSON.stringify([v,S.settings.field]);
+  if(keep&&box.dataset.id===id&&(box.dataset.sig===sig||box.dataset.dirty==='1')){updateDetailStatus(box,v);return}
+  const same=box.dataset.id===id,active=same&&DETAIL_TABS.some(([key])=>key===box.dataset.tab)?box.dataset.tab:'analysis',scroll=same?box.scrollTop:0;
+  box.dataset.id=id;box.dataset.sig=sig;box.dataset.dirty='';
+  const panels={analysis:analysisHTML(a),copy:copyHTML(a),topics:topicsHTML(a),transcript:transcriptHTML(v),notes:`<section class="reading-card notes-card"><label for="tags">标签</label><input id="tags" aria-describedby="tagsHint" value="${esc((v.tags||[]).join('，'))}"><p class="hint" id="tagsHint">多个标签用逗号分隔，保存后可在收藏库筛选。</p><label for="note">我的备注</label><textarea id="note" placeholder="想怎么改成自己的选题" maxlength="5000">${esc(v.note||'')}</textarea><div class="form-actions"><button class="primary" id="saveNote">保存标签和备注</button><span class="unsaved" id="noteState" role="status"></span></div></section>`};
+  const metrics=[['点赞',fmt(v.likes)],['粉丝',fmt(v.followers)],['爆款倍数',v.ratio==null?'—':ratioText(v.ratio)+' 倍'],['评论',fmt(v.comments)],['收藏',fmt(v.favorites)],['分享',fmt(v.shares)]];
+  box.innerHTML=`<div class="detail-inner"><header class="detail-head">${coverHTML(v,true)}<div class="detail-titlebox"><h2>${esc(cleanTitle(v.desc))}</h2><div class="detail-byline"><span>${esc(v.author||'未知作者')}</span><span>${v.published_at?'发布于 '+esc(String(v.published_at).slice(0,10)):'发布日期未知'}</span></div></div>
+    <dl class="metrics">${metrics.map(([label,value],i)=>`<div class="metric ${i===2?'ratio':''}" ${i===2?'title="点赞 ÷ 粉丝；用于发现值得研究的内容，不代表传播因果"':''}><dt>${label}</dt><dd>${esc(value)}</dd></div>`).join('')}</dl>
+    <div class="detail-actions"><button class="primary" id="saveBtn" aria-pressed="${!!v.saved}">${v.saved?'已收藏 · 取消':'收藏'}</button>${v.url?`<a class="button-link" href="${esc(v.url)}" target="_blank" rel="noopener noreferrer">打开原视频</a>`:'<button disabled title="这条视频没有原始链接">打开原视频</button>'}<button id="redo">${a?'重新拆解':'拆解这一条'}</button></div></header>
+    <div id="analysisStatus" class="analysis-status">${analysisStatus(v)}</div>
+    ${a?`<div class="detail-context">${a.account_field?`应用领域：${esc(a.account_field)}${a.account_field!==S.settings.field?' · 领域设置已变化，建议重新拆解':''}`:'旧版分析 · 点「重新拆解」补充领域建议和新选题'}</div>`:''}
+    <div class="detail-tabs" role="tablist" aria-label="视频拆解内容">${DETAIL_TABS.map(([key,label])=>`<button id="tab-${key}" role="tab" data-tab="${key}" aria-controls="panel-${key}" aria-selected="${key===active}" tabindex="${key===active?0:-1}">${label}</button>`).join('')}</div>
+    ${DETAIL_TABS.map(([key,label])=>`<section class="tab-panel" id="panel-${key}" role="tabpanel" data-panel="${key}" aria-labelledby="tab-${key}" tabindex="0" ${key===active?'':'hidden'}>${panels[key]}</section>`).join('')}</div>`;
+  applyDetailTab(box,active);bindDetailTabs(box);updateDetailStatus(box,v);box.scrollTop=scroll;
+  const tagsInput=box.querySelector('#tags'),noteInput=box.querySelector('#note');
+  box.querySelector('#saveBtn').onclick=async()=>{const saved=box.dataset.saved!=='1';await api('/api/save',{id,saved});if(box===$('#detail')&&box.dataset.id===id)updateDetailStatus(box,{...v,saved});toast(saved?'已收藏':'已取消收藏');await loadState();await loadList(true)};
+  box.querySelector('#redo').onclick=async()=>{const j=await api('/api/reanalyze',{id});toast(j.ok?'开始拆解，大约 1 分钟':'正在忙：'+j.busy);refresh()};
+  tagsInput.oninput=noteInput.oninput=()=>{box.dataset.dirty='1';box.querySelector('#noteState').textContent='有未保存的修改'};
+  box.querySelector('#saveNote').onclick=async()=>{const tags=tagsInput.value,note=noteInput.value;await api('/api/note',{id,tags:tags.split(/[,，、\s]+/),note});if(box===$('#detail')&&box.dataset.id===id&&tagsInput===box.querySelector('#tags')&&tagsInput.value===tags&&noteInput.value===note){box.dataset.dirty='';box.querySelector('#noteState').textContent='已保存'}toast('已保存');await refresh()};
+  const copy=box.querySelector('#copyTpl');if(copy)copy.onclick=async()=>{await navigator.clipboard.writeText(a.template);toast('模板已复制')};
+  const transcript=box.querySelector('#copyTranscript');if(transcript)transcript.onclick=async()=>{await navigator.clipboard.writeText(v.transcript);toast('逐字稿已复制')};
+  updateSettingsStatus();
+}
+
+async function renderHot(){
+  const page=pageVersion,version=++hotVersion,filter=hotFilter;
+  const query=filter==='related'?'&related=1':filter?'&track='+encodeURIComponent(filter):'';
+  let j;try{j=await api('/api/hot?day='+encodeURIComponent(S.today)+query)}catch(e){if(e.message==='未知的热榜赛道'&&page===pageVersion&&version===hotVersion&&view==='hot'){hotFilter='';return renderHot()}throw e}
+  if(page!==pageVersion||version!==hotVersion||view!=='hot')return;
+  const picked=new Map(S.today_keywords.filter(k=>k.hot_word).map(k=>[k.hot_word,k.word]));
+  const filters=[['','全部',j.counts.all],['related','和我相关',j.counts.related],...j.tracks.map(t=>[t,t,j.counts.tracks[t]||0]),['未分类','未分类',j.counts.tracks['未分类']||0]];
+  const scroll=$('#hotList')?.scrollTop||0,filterScroll=$('#hotFilters')?.scrollLeft||0;
+  $('#main').innerHTML=`<header class="bar"><div class="page-heading"><h1>今日热榜</h1><p class="sub">${esc(j.day)} · 账号领域：${esc(j.field)}，从热词里寻找相关选题。</p></div><button id="classifyHot">补分类</button></header>
+  <div class="chips hot-filters" id="hotFilters" role="group" aria-label="热榜筛选">${filters.map(([value,label,n])=>`<button class="${filter===value?'on':''}" data-filter="${esc(value)}" aria-pressed="${filter===value}">${esc(label)}<span class="count">${n}</span></button>`).join('')}</div>
+  <div class="hot-notice">来自抖音公开热榜 · 赛道与相关性由 AI 判断${j.counts.tracks['未分类']?' · 尚有 '+j.counts.tracks['未分类']+' 条未分类，下轮自动重试，也可点「补分类」':''}${S.job.name?' · 正在：'+esc(S.job.name):''}</div>
+  <div class="hot-content" id="hotList"><div class="card hot-table"><div class="hotrow head" aria-hidden="true"><span>名次</span><span>热词</span><span>赛道</span><span>相关标记</span><span class="hot-value">热度值</span></div>${j.items.length?j.items.map(h=>`<div class="hotrow ${h.rank<=3?'top':''}"><span class="n">${h.rank}</span><span class="hot-word">${esc(h.word)}</span><span class="hot-track"><span class="badge plain">${esc(h.track||'未分类')}</span></span><span class="hot-flags">${h.related?'<span class="badge hot">和我相关</span>':''}${picked.has(h.word)?`<span class="badge plain">搜「${esc(picked.get(h.word))}」</span>`:''}${!h.related&&!picked.has(h.word)?'<span class="sub">—</span>':''}</span><span class="hot-value">${fmt(h.hot_value)}</span></div>`).join(''):`<div class="empty-state">${j.counts.all?'这个筛选下暂时没有热词'+(j.counts.tracks['未分类']?'，可先补分类':''):'今天还没抓热榜'}</div>`}</div></div>`;
+  $('#hotList').scrollTop=scroll;$('#hotFilters').scrollLeft=filterScroll;
+  $('#hotFilters').querySelectorAll('button').forEach(b=>b.onclick=async()=>{hotFilter=b.dataset.filter;await renderHot();if($('#hotList'))$('#hotList').scrollTop=0});
+  $('#classifyHot').onclick=async()=>{const j=await api('/api/classify-hot',{});toast(j.ok?'开始补分类，完成后自动刷新':'正在忙：'+j.busy);refresh()};
+  updateSettingsStatus();
+}
+function renderSettings(){
+  const s=S.settings,a=S.account,[cls,label]=accountLabel(a);
+  $('#main').innerHTML=`<header class="bar"><div class="page-heading"><h1>设置</h1><p class="sub">设置账号领域、搜索条件和运行节奏。</p></div><button id="run">立即运行一次</button></header>
+  <div class="settings"><div class="settings-grid">
+    <div class="card"><h3>抖音小号</h3><div id="accountStatus"><span class="dot ${cls}"></span>${label}</div>
+      <div class="msg" id="accountMessage">${esc(a.message||'请用专门的小号扫码登录，不要用主号。')}</div>
+      <div class="inline"><button id="login">扫码登录小号</button><button id="challenge">打开验证窗口</button></div>
+      <div class="hint">扫码：会弹出一个独立浏览器，用小号的抖音 App 扫码。<br>验证：点这里打开窗口，由本人完成验证；确认搜索页恢复后窗口会自动关闭。直接关闭窗口不会恢复搜索。工具不会自动破解验证码。</div></div>
+    <div class="card"><h3>找什么</h3>
+      <label for="field">账号领域</label><input id="field" value="${esc(s.field)}">
+      <div class="hint">用于热榜相关性判断、关键词和 AI 爆款分析。修改后热榜会在下一轮或点「补分类」时重新判断；已有分析需点「重新拆解」。</div>
+      <label for="fixed">固定关键词（计入每天总数，逗号分隔）</label><input id="fixed" value="${esc(s.fixed_keywords.join('，'))}">
+      <div class="grid2"><div><label for="kpd">每天搜几个关键词</label><input id="kpd" type="number" min="1" max="12" value="${s.keywords_per_day}"></div>
+      <div><label for="pk">每个关键词拆几条</label><input id="pk" type="number" min="1" max="10" value="${s.per_keyword}"></div>
+      <div><label for="ml">最低点赞数</label><input id="ml" type="number" min="0" max="1000000000" step="1000" value="${s.min_likes}"></div>
+      <div><label for="rd">只看最近几天发布的</label><input id="rd" type="number" min="1" max="180" value="${s.recent_days}"></div></div></div>
+    <div class="card"><h3>节奏</h3>
+      <div class="inline"><input type="checkbox" id="auto" ${s.auto?'checked':''}><label for="auto">每天自动运行</label></div>
+      <div class="grid2"><div><label for="as">开始时间（点）</label><input id="as" type="number" min="0" max="23" value="${s.active_start}"></div>
+      <div><label for="ae">结束时间（点）</label><input id="ae" type="number" min="1" max="24" value="${s.active_end}"></div></div>
+      <label for="gap">两次搜索间隔（分钟）</label><input id="gap" type="number" min="20" max="1440" value="${s.search_gap_minutes}">
+      <div class="hint">每 30 分钟检查一次，到间隔才搜索一个词；立即运行也遵守间隔与暂停。间隔越长，搜索越少，但仍可能触发风控。电脑休眠、运行时段和拆解耗时会影响完成时间。</div>
+      <div class="inline" style="margin-top:14px"><button class="primary" id="saveSet">保存设置</button></div></div>
+    <div class="card"><h3>运行记录</h3><div id="logs">${logHTML()}</div></div>
+  </div></div>`;
+  $('#run').onclick=async()=>{const j=await api('/api/run',{});toast(j.ok?'开始运行，搜索和拆解要几分钟':'正在忙：'+j.busy);refresh()};
+  $('#login').onclick=async()=>{const j=await api('/api/login',{});toast(j.ok?'扫码窗口打开中，请用小号扫码':'正在忙：'+j.busy);refresh()};
+  $('#challenge').onclick=async()=>{const j=await api('/api/challenge',{});toast(j.ok?'验证窗口打开中':'正在忙：'+j.busy);refresh()};
+  $('#saveSet').onclick=async()=>{try{await api('/api/settings',{field:$('#field').value,fixed_keywords:$('#fixed').value.split(/[,，、]+/),keywords_per_day:$('#kpd').value,per_keyword:$('#pk').value,min_likes:$('#ml').value,recent_days:$('#rd').value,auto:$('#auto').checked,active_start:$('#as').value,active_end:$('#ae').value,search_gap_minutes:$('#gap').value});toast('设置已保存');await loadState();if(view==='settings')renderSettings()}catch(e){toast(e.message)}};
+  updateSettingsStatus();
+}
+document.querySelectorAll('nav a').forEach(a=>{a.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();a.onclick()}};a.onclick=async()=>{const page=++pageVersion;view=a.dataset.view;current=null;await loadState();if(page!==pageVersion)return;await render();if(page===pageVersion&&(view==='today'||view==='library'))await loadList()}});
+loadState().then(async()=>{if(pageVersion)return;await render();if(!pageVersion)await loadList()}).catch(e=>{$('#main').innerHTML='<div class="empty-state">服务没有连上：'+esc(e.message)+'</div>';scheduleRefresh()});
+</script>
+</body>
+</html>

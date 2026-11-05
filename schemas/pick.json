@@ -1,0 +1,20 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["keywords"],
+  "properties": {
+    "keywords": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["word", "hot_word", "reason"],
+        "properties": {
+          "word": {"type": "string"},
+          "hot_word": {"type": "string"},
+          "reason": {"type": "string"}
+        }
+      }
+    }
+  }
+}

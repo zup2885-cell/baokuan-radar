@@ -1,0 +1,215 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "summary",
+    "hook",
+    "hook_type",
+    "structure",
+    "template",
+    "topic",
+    "audience",
+    "reasons",
+    "tags",
+    "gaps",
+    "analysis_version",
+    "account_field",
+    "opening_3s",
+    "takeaways",
+    "avoid_copying",
+    "adapted_topics"
+  ],
+  "properties": {
+    "summary": {
+      "type": "string"
+    },
+    "hook": {
+      "type": "string"
+    },
+    "hook_type": {
+      "type": "string"
+    },
+    "structure": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "template": {
+      "type": "string"
+    },
+    "topic": {
+      "type": "string"
+    },
+    "audience": {
+      "type": "string"
+    },
+    "reasons": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 4,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "point",
+          "evidence",
+          "is_hypothesis"
+        ],
+        "properties": {
+          "point": {
+            "type": "string",
+            "minLength": 1
+          },
+          "evidence": {
+            "type": "string",
+            "minLength": 1
+          },
+          "is_hypothesis": {
+            "type": "boolean",
+            "const": true
+          }
+        }
+      }
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "gaps": {
+      "type": "string"
+    },
+    "analysis_version": {
+      "type": "integer",
+      "const": 2
+    },
+    "account_field": {
+      "type": "string",
+      "minLength": 1
+    },
+    "opening_3s": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "evidence",
+        "technique",
+        "retention_reason",
+        "limitation"
+      ],
+      "properties": {
+        "evidence": {
+          "type": "string",
+          "minLength": 1
+        },
+        "technique": {
+          "type": "string",
+          "minLength": 1
+        },
+        "retention_reason": {
+          "type": "string",
+          "minLength": 1
+        },
+        "limitation": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "takeaways": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 4,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "point",
+          "evidence",
+          "application"
+        ],
+        "properties": {
+          "point": {
+            "type": "string",
+            "minLength": 1
+          },
+          "evidence": {
+            "type": "string",
+            "minLength": 1
+          },
+          "application": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "avoid_copying": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 4,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "point",
+          "reason",
+          "alternative"
+        ],
+        "properties": {
+          "point": {
+            "type": "string",
+            "minLength": 1
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1
+          },
+          "alternative": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "adapted_topics": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 3,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "title",
+          "opening",
+          "outline",
+          "source_mechanism"
+        ],
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "opening": {
+            "type": "string",
+            "minLength": 1
+          },
+          "outline": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 5,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "source_mechanism": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    }
+  }
+}
