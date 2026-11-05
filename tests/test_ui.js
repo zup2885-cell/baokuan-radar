@@ -369,5 +369,116 @@ async function main() {
   assert.match(html,/@media\(max-width:899px\)/);
   assert.doesNotMatch(html,/box-shadow|@keyframes|transition\s*:/);
   console.log('界面离线逻辑检查通过：五页签、新旧分析/任务状态、复制、收藏、备注保存/编辑保留、请求顺序、日期、收藏检索/标签、热榜筛选、设置及断线恢复。');
+  await staticChecks();
+}
+
+async function staticChecks() {
+  const demoHTML=fs.readFileSync(path.join(__dirname,'../docs/index.html'),'utf8');
+  const demoSource=demoHTML.split('<script>')[1].split('</script>')[0];
+  const video={aweme_id:'12345678901',day:'2026-11-05',desc:'养车账单 #汽车',author:'账单研究员',
+    status:'done',saved:true,tags:['汽车','成本'],likes:0,followers:null,ratio:null,keyword:'车评',
+    url:'https://www.douyin.com/video/12345678901',transcript_excerpt:'开头的逐字稿摘录 <需要转义>。',
+    analysis:{summary:'成本视角',template:'每月 ___ 花多少',reasons:[]}};
+  const fixture={snapshot_date:'2026-11-05',field:'汽车',tracks:['汽车','科技数码','美食'],
+    keywords:[{word:'车评',status:'done',found:0},{word:'保养',status:'queued'}],
+    hot:[{rank:1,word:'汽车热词',hot_value:0,track:'汽车',related:true},
+         {rank:2,word:'科技热词',hot_value:50,track:'科技数码',related:false},
+         {rank:3,word:'未分类热词',hot_value:null,track:'未分类',related:null}],
+    videos:[video,{...video,aweme_id:'12345678902',day:'2026-11-04',desc:'旧日保养',tags:['保养'],analysis:null,transcript_excerpt:''},
+      {...video,aweme_id:'12345678903',saved:false,desc:'今日未收藏',tags:[]}]};
+  let requests=[],delayed=[],copied=[];
+  const harness=(data,fail=false)=>{
+    elements.clear();
+    for(const id of ['main','status','nToday','nSaved','demoBanner'])elements.set('#'+id,element());
+    const sandbox=vm.createContext({
+      document:{querySelector:key=>elements.get(key),querySelectorAll:()=>[],createElement:element,body:{appendChild(){}}},
+      window:{addEventListener(){}},navigator:{clipboard:{writeText:async value=>copied.push(value)}},
+      URLSearchParams,setTimeout(callback){delayed.push(callback);return delayed.length},clearTimeout(){},
+      fetch:async (url,options)=>{
+        requests.push([url,options]);
+        assert.equal(url,'./data.json','静态模式只能从相对路径读取快照，禁止任何 /api 或外部网络请求');
+        assert.ok(!options?.method||options.method==='GET');
+        if(fail)return {ok:false};
+        return response(data);
+      },
+    });
+    vm.runInContext(demoSource,sandbox);
+    return code=>vm.runInContext(code,sandbox);
+  };
+  const demoRun=harness(fixture);
+  await settle();await settle();
+  const byId=id=>elements.get('#'+id);
+  assert.equal(demoRun('STATIC'),true);
+  assert.equal(requests.length,1);
+  assert.equal(delayed.length,0,'静态页面禁止后台轮询');
+  assert.equal(byId('demoBanner').hidden,false);
+  assert.match(byId('demoBanner').innerHTML,/2026-11-05 的真实快照，只能查看/);
+  assert.match(byId('demoBanner').innerHTML,/https:\/\/github.com\/zup2885-cell\/baokuan-radar/);
+  assert.equal(byId('nToday').textContent,2);
+  assert.equal(byId('nSaved').textContent,2);
+  assert.match(byId('list').innerHTML,/养车账单|今日未收藏/);
+  assert.doesNotMatch(byId('list').innerHTML,/旧日保养|<img/);
+  assert.match(byId('list').innerHTML,/demo-cover/);
+  assert.match(byId('keywords').innerHTML,/已搜 0 条/);
+  const detail=byId('detail');
+  assert.equal(detail.querySelectorAll('[role="tab"]').length,5);
+  assert.equal(detail.querySelectorAll('[role="tabpanel"]').filter(p=>!p.hidden).length,1);
+  assert.match(detail.innerHTML,/完整逐字稿只在本地工具里查看，原视频请点链接/);
+  assert.match(detail.innerHTML,/&lt;需要转义&gt;/);
+  assert.match(detail.innerHTML,/打开原视频/);
+  for(const id of ['redo','saveBtn','tags','note','saveNote'])assert.equal(detail.querySelector('#'+id),null,id+' 不应出现在演示页');
+  assert.doesNotMatch(detail.innerHTML,/重新拆解|保存标签|我的备注|<img/);
+  for(const key of ['analysis','copy','topics','transcript','notes']){
+    byId('tab-'+key).onclick();
+    assert.equal(byId('panel-'+key).hidden,false);
+    assert.equal(detail.querySelectorAll('[role="tabpanel"]').filter(p=>!p.hidden).length,1);
+  }
+  await byId('copyTpl').onclick();assert.equal(copied.at(-1),video.analysis.template);
+  await byId('copyTranscript').onclick();assert.equal(copied.at(-1),video.transcript_excerpt);
+
+  // 收藏库搜索与标签都在浏览器里完成，包含历史日的已完成收藏。
+  demoRun('view="library";++pageVersion');await demoRun('render();loadList()');
+  assert.match(byId('list').innerHTML,/旧日保养/);
+  assert.doesNotMatch(byId('list').innerHTML,/今日未收藏/);
+  byId('q').oninput({target:{value:'旧日'}});await delayed.at(-1)();await settle();
+  assert.match(byId('list').innerHTML,/旧日保养/);
+  assert.doesNotMatch(byId('list').innerHTML,/养车账单/);
+  demoRun('libQ=""');
+  const tag=byId('libraryTags').querySelectorAll('button').find(b=>b.dataset.tag==='成本');
+  await tag.onclick();await settle();
+  assert.match(byId('list').innerHTML,/养车账单/);
+  assert.doesNotMatch(byId('list').innerHTML,/旧日保养/);
+  demoRun('libQ="不存在"');await demoRun('loadList()');
+  assert.match(byId('list').innerHTML,/没有符合条件/);
+
+  demoRun('view="hot";++pageVersion');await demoRun('render()');
+  assert.equal(byId('classifyHot'),undefined);
+  assert.match(byId('main').innerHTML,/3<\/span>/);
+  assert.match(byId('main').innerHTML,/保留快照状态/);
+  assert.doesNotMatch(byId('main').innerHTML,/自动重试|补分类|小号/);
+  for(const [filter,expected,absent] of [['related','汽车热词','科技热词'],['科技数码','科技热词','汽车热词'],['未分类','未分类热词','科技热词'],['美食','这个筛选下暂时没有热词','汽车热词']]){
+    await byId('hotFilters').querySelectorAll('button').find(b=>b.dataset.filter===filter).onclick();
+    assert.ok(byId('main').innerHTML.includes(expected));assert.ok(!byId('main').innerHTML.includes(absent));
+  }
+  const before=byId('main').innerHTML;
+  demoRun('renderSettings()');assert.equal(byId('main').innerHTML,before);
+  for(const endpoint of ['/api/save','/api/note','/api/settings','/api/run','/api/login','/api/challenge','/api/reanalyze','/api/classify-hot']){
+    await assert.rejects(demoRun(`api(${JSON.stringify(endpoint)}, {})`),/只能查看/);
+  }
+  await demoRun('loadState();scheduleRefresh()');
+  assert.equal(requests.length,1,'切换页签、搜索、筛选和加载状态都不能再次发起网络请求');
+  assert.doesNotMatch(demoHTML,/<(?:script|link|img)\b[^>]*(?:src|href)=["'](?:https?:)?\/\//i,'不加载外部 CDN 或图片');
+
+  requests=[];delayed=[];
+  const failed=harness(fixture,true);await settle();
+  assert.match(byId('main').innerHTML,/演示快照加载失败/);
+  assert.equal(delayed.length,0,'快照失败也不能循环请求本机 API');
+  assert.equal(requests.length,1);
+  requests=[];
+  const empty=harness({...fixture,videos:[],hot:[],keywords:[]});await settle();await settle();
+  assert.match(byId('list').innerHTML,/没有已完成拆解/);
+  assert.doesNotMatch(byId('main').innerHTML,/undefined|设置|立即运行/);
+  assert.equal(requests.length,1);
+  console.log('静态模式检查通过：仅一次 data.json 请求、无 /api/外部资源/轮询，五页签、摘录复制、搜索、历史收藏、标签、赛道、只读防护、空状态及加载失败。');
 }
 main().catch(error => { console.error(error); process.exitCode = 1; });
