@@ -1,0 +1,27 @@
+[
+  {
+    "source": "bili_hot",
+    "ok": false,
+    "error": "RATE_LIMITED"
+  },
+  {
+    "source": "bili_search",
+    "ok": true,
+    "count": 5,
+    "metrics_present": {
+      "views": 5,
+      "likes": 5,
+      "followers": 5
+    }
+  },
+  {
+    "source": "youtube_search",
+    "ok": false,
+    "error": "UPSTREAM_BROKEN"
+  },
+  {
+    "source": "x_hot",
+    "ok": false,
+    "error": "RATE_LIMITED"
+  }
+]

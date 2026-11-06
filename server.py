@@ -59,7 +59,7 @@ def challenge_work():
         doc=radar.account(db)
         if doc.get('status')=='RATE_LIMITED' and time.time()-(doc.get('blocked_at') or 0)<24*3600:
             return '限流暂停 24 小时中，请等待暂停期结束'
-        word=(db.execute("select word from keywords where day=? and status='queued' order by rowid limit 1",(radar.today(),)).fetchone() or ['车评'])[0]
+        word=(db.execute("select word from keywords where day=? and platform='douyin' and status='queued' order by rowid limit 1",(radar.today(),)).fetchone() or ['车评'])[0]
         result=radar.dy('challenge',word)
         if result.get('ok'):
             radar.account_ready(db,'本人验证已完成，下一轮会按搜索间隔继续。');return '验证完成，已恢复搜索'
@@ -76,7 +76,9 @@ def reanalyze_work(ident):
 
 
 def classify_hot_work():
-    with closing(radar.connect()) as db:return radar.try_classify_hot(db,radar.today())
+    with closing(radar.connect()) as db:
+        return '；'.join(radar.platforms.NAMES[p]+'：'+radar.try_classify_hot(db,radar.today(),p) for p in radar.platforms.NAMES
+                       if db.execute('select 1 from hot where day=? and platform=?',(radar.today(),p)).fetchone()) or '热榜没有待分类词条'
 
 
 def validate_settings(data,current):
@@ -84,6 +86,10 @@ def validate_settings(data,current):
             'min_likes':(0,1000000000,'最低点赞数'),'recent_days':(1,180,'最近天数'),
             'search_gap_minutes':(20,1440,'搜索间隔分钟数'),'active_start':(0,23,'开始时间'),
             'active_end':(1,24,'结束时间')}
+    for platform in ('bilibili','youtube'):
+        limits[platform+'_search_gap_minutes']=(20,1440,'平台搜索间隔')
+        limits[platform+'_min_views']=(0,1000000000,'最低播放数')
+    limits['youtube_searches_per_day']=(1,50,'YouTube 每天 API 搜索上限')
     if any(k not in radar.DEFAULTS for k in data):raise ValueError('设置中包含未知项目')
     current=dict(current)
     for key,value in data.items():
@@ -91,17 +97,22 @@ def validate_settings(data,current):
             low,high,label=limits[key]
             if isinstance(value,str) and re.fullmatch(r'[0-9]+',value.strip()):value=int(value.strip())
             if type(value) is not int or not low<=value<=high:raise ValueError(f'{label}须为 {low}–{high} 之间的整数')
-        elif key=='auto':
+        elif key=='auto' or key.endswith('_enabled'):
             if type(value) is not bool:raise ValueError('自动运行须为开启或关闭')
-        elif key=='fixed_keywords':
+        elif key in ('fixed_keywords','youtube_fixed_keywords'):
             if not isinstance(value,list) or any(not isinstance(v,str) for v in value):raise ValueError('固定关键词须为文字列表')
-            if len(value)>10 or any(len(v.strip())>20 for v in value):raise ValueError('固定关键词最多 10 个，每个最多 20 字')
-            value=radar.unique_text(value,limit=10,width=20)
+            width=80 if key=='youtube_fixed_keywords' else 20
+            if len(value)>10 or any(len(v.strip())>width for v in value):raise ValueError(f'固定关键词最多 10 个，每个最多 {width} 字')
+            if key=='youtube_fixed_keywords' and any(v.strip() and (not re.search('[A-Za-z]',v) or re.search('[\u4e00-\u9fff]',v)) for v in value):raise ValueError('YouTube 固定关键词请填写英文搜索词')
+            value=radar.unique_text(value,limit=10,width=width)
+        elif key=='youtube_hot_category':
+            if value not in ('','2'):raise ValueError('YouTube 热榜分类须为总榜或汽车')
         elif key=='field':
             if not isinstance(value,str) or not 1<=len(value.strip())<=200:raise ValueError('账号领域须为 1–200 字')
             value=value.strip()
         current[key]=value
     if current['active_start']>=current['active_end']:raise ValueError('结束时间必须晚于开始时间，运行时段不能跨天')
+    if len(current['youtube_fixed_keywords'])>current['keywords_per_day']:raise ValueError('英文固定关键词数量不能超过每天关键词数')
     if len(current['fixed_keywords'])>current['keywords_per_day']:raise ValueError('固定关键词数量不能超过每天关键词数')
     return current
 
@@ -131,16 +142,20 @@ class Handler(BaseHTTPRequestHandler):
         except Exception:return self.send({'error':'读取本地数据失败，请检查后台日志'},500)
 
     def get_api(self,db,url,q):
+        platform=q.get('platform','')
+        if platform and platform not in radar.platforms.NAMES:return self.send({'error':'未知平台'},400)
         if url.path=='/api/state':
             day=q.get('day') or radar.today()
             keywords=[dict(r) for r in db.execute('select * from keywords where day=? order by rowid',(day,))]
             today_keywords=keywords if day==radar.today() else [dict(r) for r in db.execute('select * from keywords where day=? order by rowid',(radar.today(),))]
-            days=[r[0] for r in db.execute("select day from videos where status!='candidate' and day>'' union select day from keywords order by day desc limit 30")]
+            days=[r[0] for r in db.execute("select day from videos where status not in ('candidate','irrelevant') and day>'' union select day from keywords order by day desc limit 30")]
             logs=[dict(r) for r in db.execute('select * from log order by rowid desc limit 12')]
             counts={r[0]:r[1] for r in db.execute('select status,count(*) from videos where day=? group by 1',(day,))}
             with JOB_LOCK:job={'name':JOB['name'],'result':JOB['result']}
-            today_count=db.execute("select count(*) from videos where day=? and status!='candidate'",(radar.today(),)).fetchone()[0]
+            today_count=db.execute("select count(*) from videos where day=? and status not in ('candidate','irrelevant')",(radar.today(),)).fetchone()[0]
             return self.send({'today':radar.today(),'day':day,'days':days,'account':radar.account(db),'settings':radar.settings(db),
+                              'youtube_key_configured':bool(radar.platforms.youtube_key()),
+                              'platform_states':{p:radar.platform_state(db,p) for p in ('bilibili','youtube','x')},
                               'keywords':keywords,'today_keywords':today_keywords,'logs':logs,'counts':counts,'today_count':today_count,'job':job,
                               'saved':db.execute('select count(*) from videos where saved=1').fetchone()[0]})
         if url.path=='/api/videos':
@@ -151,8 +166,9 @@ class Handler(BaseHTTPRequestHandler):
                 items=[video_dict(r) for r in rows]
                 if tag:items=[v for v in items if tag in v['tags']]
             else:
-                rows=db.execute("select * from videos where day=? and status!='candidate' order by ratio is null, ratio desc, likes desc",(q.get('day') or radar.today(),)).fetchall()
+                rows=db.execute("select * from videos where day=? and status not in ('candidate','irrelevant') order by ratio is null, ratio desc, likes desc",(q.get('day') or radar.today(),)).fetchall()
                 items=[video_dict(r) for r in rows]
+            if platform:items=[v for v in items if v['platform']==platform]
             return self.send({'items':items})
         if url.path=='/api/video':
             row=db.execute('select * from videos where aweme_id=?',(q.get('id'),)).fetchone()
@@ -160,7 +176,8 @@ class Handler(BaseHTTPRequestHandler):
         if url.path=='/api/hot':
             day=q.get('day') or radar.today()
             context=radar.hot_context(db);field,tracks,_=context
-            items=radar.hot_items(db,day,context)
+            items=radar.hot_items(db,day,context,platform or None)
+            if not radar.platforms.youtube_key():items=[r for r in items if r['platform']!='youtube']
             counts={'all':len(items),'related':sum(r['related'] is True for r in items),
                     'tracks':{t:sum(r['track']==t for r in items) for t in tracks+['未分类']}}
             track=q.get('track','')
@@ -171,7 +188,7 @@ class Handler(BaseHTTPRequestHandler):
             return self.send({'items':items,'tracks':tracks,'counts':counts,'field':field,'day':day})
         if url.path=='/api/tags':
             tags={}
-            for (text,) in db.execute('select tags from videos where saved=1'):
+            for (text,) in db.execute('select tags from videos where saved=1'+(' and platform=?' if platform else ''),(platform,) if platform else ()):
                 for t in radar.unique_text(json.loads(text or '[]')):tags[t]=tags.get(t,0)+1
             return self.send({'items':sorted(tags.items(),key=lambda kv:-kv[1])})
         self.send({'error':'找不到这个地址'},404)

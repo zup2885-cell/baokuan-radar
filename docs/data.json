@@ -1,5 +1,5 @@
 {
-  "snapshot_date": "2026-11-05",
+  "snapshot_date": "2026-11-06",
   "field": "汽车、车评讲解",
   "tracks": [
     "汽车",
@@ -18,6 +18,458 @@
   ],
   "hot": [
     {
+      "platform": "bilibili",
+      "day": "2026-11-06",
+      "rank": 1,
+      "word": "杭州LGD.NBW 上海EDG.M",
+      "hot_value": null,
+      "track": "游戏",
+      "related": false
+    },
+    {
+      "platform": "bilibili",
+      "day": "2026-11-06",
+      "rank": 2,
+      "word": "2027年放假安排来了",
+      "hot_value": null,
+      "track": "社会民生",
+      "related": false
+    },
+    {
+      "platform": "bilibili",
+      "day": "2026-11-06",
+      "rank": 3,
+      "word": "F1世界冠军阿兰琼斯去世",
+      "hot_value": null,
+      "track": "体育",
+      "related": true
+    },
+    {
+      "platform": "bilibili",
+      "day": "2026-11-06",
+      "rank": 4,
+      "word": "6G不到1秒下载一部4K影片",
+      "hot_value": null,
+      "track": "科技数码",
+      "related": false
+    },
+    {
+      "platform": "bilibili",
+      "day": "2026-11-06",
+      "rank": 5,
+      "word": "张靓颖终于抵达心湖",
+      "hot_value": null,
+      "track": "娱乐明星",
+      "related": false
+    },
+    {
+      "platform": "bilibili",
+      "day": "2026-11-06",
+      "rank": 6,
+      "word": "三角洲新赛季3x3难度有多高",
+      "hot_value": null,
+      "track": "游戏",
+      "related": false
+    },
+    {
+      "platform": "bilibili",
+      "day": "2026-11-06",
+      "rank": 7,
+      "word": "IG vs GEN数据前瞻",
+      "hot_value": null,
+      "track": "游戏",
+      "related": false
+    },
+    {
+      "platform": "bilibili",
+      "day": "2026-11-06",
+      "rank": 8,
+      "word": "GEN LYON",
+      "hot_value": null,
+      "track": "游戏",
+      "related": false
+    },
+    {
+      "platform": "bilibili",
+      "day": "2026-11-06",
+      "rank": 9,
+      "word": "如何评价C罗国家队生涯",
+      "hot_value": null,
+      "track": "体育",
+      "related": false
+    },
+    {
+      "platform": "bilibili",
+      "day": "2026-11-06",
+      "rank": 10,
+      "word": "万字解析漫威新剧寻找幻视",
+      "hot_value": null,
+      "track": "娱乐明星",
+      "related": false
+    },
+    {
+      "platform": "bilibili",
+      "day": "2026-11-06",
+      "rank": 11,
+      "word": "我国三航母的战略意义是什么",
+      "hot_value": null,
+      "track": "时政国际",
+      "related": false
+    },
+    {
+      "platform": "bilibili",
+      "day": "2026-11-06",
+      "rank": 12,
+      "word": "乖乖待在我身边学英语不好吗",
+      "hot_value": null,
+      "track": "教育",
+      "related": false
+    },
+    {
+      "platform": "bilibili",
+      "day": "2026-11-06",
+      "rank": 13,
+      "word": "369为何圈粉外国观众",
+      "hot_value": null,
+      "track": "游戏",
+      "related": false
+    },
+    {
+      "platform": "bilibili",
+      "day": "2026-11-06",
+      "rank": 14,
+      "word": "解析S赛Wei与Tian野区博弈",
+      "hot_value": null,
+      "track": "游戏",
+      "related": false
+    },
+    {
+      "platform": "bilibili",
+      "day": "2026-11-06",
+      "rank": 15,
+      "word": "大肥鱼催你上早八",
+      "hot_value": null,
+      "track": "其他",
+      "related": false
+    },
+    {
+      "platform": "bilibili",
+      "day": "2026-11-06",
+      "rank": 16,
+      "word": "C罗宣布从葡萄牙国家队退役",
+      "hot_value": null,
+      "track": "体育",
+      "related": false
+    },
+    {
+      "platform": "bilibili",
+      "day": "2026-11-06",
+      "rank": 17,
+      "word": "从行业周期看内存何时降价",
+      "hot_value": null,
+      "track": "科技数码",
+      "related": false
+    },
+    {
+      "platform": "bilibili",
+      "day": "2026-11-06",
+      "rank": 18,
+      "word": "人生一串",
+      "hot_value": null,
+      "track": "美食",
+      "related": false
+    },
+    {
+      "platform": "bilibili",
+      "day": "2026-11-06",
+      "rank": 19,
+      "word": "三角洲黑伤详细测评",
+      "hot_value": null,
+      "track": "游戏",
+      "related": false
+    },
+    {
+      "platform": "bilibili",
+      "day": "2026-11-06",
+      "rank": 20,
+      "word": "IG对战TES赛事好声音",
+      "hot_value": null,
+      "track": "游戏",
+      "related": false
+    },
+    {
+      "platform": "bilibili",
+      "day": "2026-11-06",
+      "rank": 21,
+      "word": "球探爆料Smoogy转会BLG",
+      "hot_value": null,
+      "track": "游戏",
+      "related": false
+    },
+    {
+      "platform": "bilibili",
+      "day": "2026-11-06",
+      "rank": 22,
+      "word": "星铁即兴巡演PV",
+      "hot_value": null,
+      "track": "游戏",
+      "related": false
+    },
+    {
+      "platform": "bilibili",
+      "day": "2026-11-06",
+      "rank": 23,
+      "word": "广州TTG 重庆狼队",
+      "hot_value": null,
+      "track": "游戏",
+      "related": false
+    },
+    {
+      "platform": "bilibili",
+      "day": "2026-11-06",
+      "rank": 24,
+      "word": "文班亚马52分24板8帽",
+      "hot_value": null,
+      "track": "体育",
+      "related": false
+    },
+    {
+      "platform": "bilibili",
+      "day": "2026-11-06",
+      "rank": 25,
+      "word": "异环曳尔沐角色PV",
+      "hot_value": null,
+      "track": "游戏",
+      "related": false
+    },
+    {
+      "platform": "bilibili",
+      "day": "2026-11-06",
+      "rank": 26,
+      "word": "异环曳尔沐EP",
+      "hot_value": null,
+      "track": "游戏",
+      "related": false
+    },
+    {
+      "platform": "bilibili",
+      "day": "2026-11-06",
+      "rank": 27,
+      "word": "IG想赢GEN突破口在哪",
+      "hot_value": null,
+      "track": "游戏",
+      "related": false
+    },
+    {
+      "platform": "bilibili",
+      "day": "2026-11-06",
+      "rank": 28,
+      "word": "一条没下巴的鱼杀穿奥陶纪",
+      "hot_value": null,
+      "track": "教育",
+      "related": false
+    },
+    {
+      "platform": "bilibili",
+      "day": "2026-11-06",
+      "rank": 29,
+      "word": "C罗说后会有7告别国家队",
+      "hot_value": null,
+      "track": "体育",
+      "related": false
+    },
+    {
+      "platform": "bilibili",
+      "day": "2026-11-06",
+      "rank": 30,
+      "word": "DeepSeek Harness教学",
+      "hot_value": null,
+      "track": "科技数码",
+      "related": false
+    },
+    {
+      "platform": "bilibili",
+      "day": "2026-11-06",
+      "rank": 31,
+      "word": "画地为牢背后的十五年意难平",
+      "hot_value": null,
+      "track": "其他",
+      "related": false
+    },
+    {
+      "platform": "bilibili",
+      "day": "2026-11-06",
+      "rank": 32,
+      "word": "BLG超长瑞士轮VLOG",
+      "hot_value": null,
+      "track": "游戏",
+      "related": false
+    },
+    {
+      "platform": "bilibili",
+      "day": "2026-11-06",
+      "rank": 33,
+      "word": "72小时深度测评影之刃零",
+      "hot_value": null,
+      "track": "游戏",
+      "related": false
+    },
+    {
+      "platform": "bilibili",
+      "day": "2026-11-06",
+      "rank": 34,
+      "word": "DK vs BLG数据前瞻",
+      "hot_value": null,
+      "track": "游戏",
+      "related": false
+    },
+    {
+      "platform": "bilibili",
+      "day": "2026-11-06",
+      "rank": 35,
+      "word": "乖乖待在我身边学微积分不好吗",
+      "hot_value": null,
+      "track": "教育",
+      "related": false
+    },
+    {
+      "platform": "bilibili",
+      "day": "2026-11-06",
+      "rank": 36,
+      "word": "三角洲影之刃联动黑伤解析",
+      "hot_value": null,
+      "track": "游戏",
+      "related": false
+    },
+    {
+      "platform": "bilibili",
+      "day": "2026-11-06",
+      "rank": 37,
+      "word": "苹果新款产品上手体验",
+      "hot_value": null,
+      "track": "科技数码",
+      "related": false
+    },
+    {
+      "platform": "bilibili",
+      "day": "2026-11-06",
+      "rank": 38,
+      "word": "后会友期里的恨海情天盘点",
+      "hot_value": null,
+      "track": "娱乐明星",
+      "related": false
+    },
+    {
+      "platform": "bilibili",
+      "day": "2026-11-06",
+      "rank": 39,
+      "word": "三角洲微光赛季故事短片",
+      "hot_value": null,
+      "track": "游戏",
+      "related": false
+    },
+    {
+      "platform": "bilibili",
+      "day": "2026-11-06",
+      "rank": 40,
+      "word": "于谦现场秒变老鼠干",
+      "hot_value": null,
+      "track": "娱乐明星",
+      "related": false
+    },
+    {
+      "platform": "bilibili",
+      "day": "2026-11-06",
+      "rank": 41,
+      "word": "IG 半决赛我们来了",
+      "hot_value": null,
+      "track": "游戏",
+      "related": false
+    },
+    {
+      "platform": "bilibili",
+      "day": "2026-11-06",
+      "rank": 42,
+      "word": "永劫无间DLSS5实装效果",
+      "hot_value": null,
+      "track": "科技数码",
+      "related": false
+    },
+    {
+      "platform": "bilibili",
+      "day": "2026-11-06",
+      "rank": 43,
+      "word": "星铁阿哈综合测评",
+      "hot_value": null,
+      "track": "游戏",
+      "related": false
+    },
+    {
+      "platform": "bilibili",
+      "day": "2026-11-06",
+      "rank": 44,
+      "word": "369以一敌三极限守家",
+      "hot_value": null,
+      "track": "游戏",
+      "related": false
+    },
+    {
+      "platform": "bilibili",
+      "day": "2026-11-06",
+      "rank": 45,
+      "word": "LGD战胜EDG.M赛后数据",
+      "hot_value": null,
+      "track": "游戏",
+      "related": false
+    },
+    {
+      "platform": "bilibili",
+      "day": "2026-11-06",
+      "rank": 46,
+      "word": "因缘精灵",
+      "hot_value": null,
+      "track": "其他",
+      "related": false
+    },
+    {
+      "platform": "bilibili",
+      "day": "2026-11-06",
+      "rank": 47,
+      "word": "清华教授解读用数字人民币发工资",
+      "hot_value": null,
+      "track": "财经",
+      "related": false
+    },
+    {
+      "platform": "bilibili",
+      "day": "2026-11-06",
+      "rank": 48,
+      "word": "AMD财报AI算力需求爆发",
+      "hot_value": null,
+      "track": "财经",
+      "related": false
+    },
+    {
+      "platform": "bilibili",
+      "day": "2026-11-06",
+      "rank": 49,
+      "word": "60分钟解读无限流悬疑新剧",
+      "hot_value": null,
+      "track": "娱乐明星",
+      "related": false
+    },
+    {
+      "platform": "bilibili",
+      "day": "2026-11-06",
+      "rank": 50,
+      "word": "三角洲版本答案K437改装思路",
+      "hot_value": null,
+      "track": "游戏",
+      "related": false
+    },
+    {
+      "platform": "douyin",
+      "day": "2026-11-05",
       "rank": 1,
       "word": "2027年放假安排来了",
       "hot_value": 12096341,
@@ -25,6 +477,8 @@
       "related": false
     },
     {
+      "platform": "douyin",
+      "day": "2026-11-05",
       "rank": 2,
       "word": "一道热乎菜开启各地冬天",
       "hot_value": 12049279,
@@ -32,6 +486,8 @@
       "related": false
     },
     {
+      "platform": "douyin",
+      "day": "2026-11-05",
       "rank": 3,
       "word": "同赴进博之约共享东方机遇",
       "hot_value": 11893116,
@@ -39,6 +495,8 @@
       "related": false
     },
     {
+      "platform": "douyin",
+      "day": "2026-11-05",
       "rank": 4,
       "word": "C罗宣布从葡萄牙国家队退役",
       "hot_value": 11865699,
@@ -46,6 +504,8 @@
       "related": false
     },
     {
+      "platform": "douyin",
+      "day": "2026-11-05",
       "rank": 5,
       "word": "路漫漫终有归处",
       "hot_value": 10948636,
@@ -53,6 +513,8 @@
       "related": false
     },
     {
+      "platform": "douyin",
+      "day": "2026-11-05",
       "rank": 6,
       "word": "你怎么舍得让有趣的知识流走",
       "hot_value": 10773609,
@@ -60,6 +522,8 @@
       "related": false
     },
     {
+      "platform": "douyin",
+      "day": "2026-11-05",
       "rank": 7,
       "word": "黄之锋再获刑10年",
       "hot_value": 9425318,
@@ -67,6 +531,8 @@
       "related": false
     },
     {
+      "platform": "douyin",
+      "day": "2026-11-05",
       "rank": 8,
       "word": "当秋冬穿搭不再all black",
       "hot_value": 9357735,
@@ -74,6 +540,8 @@
       "related": false
     },
     {
+      "platform": "douyin",
+      "day": "2026-11-05",
       "rank": 9,
       "word": "更适合年轻人的文玩配饰",
       "hot_value": 9238406,
@@ -81,6 +549,8 @@
       "related": false
     },
     {
+      "platform": "douyin",
+      "day": "2026-11-05",
       "rank": 10,
       "word": "马刺险胜独行侠",
       "hot_value": 9216810,
@@ -88,6 +558,8 @@
       "related": false
     },
     {
+      "platform": "douyin",
+      "day": "2026-11-05",
       "rank": 11,
       "word": "一件单品穿两季穿搭技巧",
       "hot_value": 9190784,
@@ -95,6 +567,8 @@
       "related": false
     },
     {
+      "platform": "douyin",
+      "day": "2026-11-05",
       "rank": 12,
       "word": "A股收盘三大指数均上涨",
       "hot_value": 9130914,
@@ -102,6 +576,8 @@
       "related": false
     },
     {
+      "platform": "douyin",
+      "day": "2026-11-05",
       "rank": 13,
       "word": "互联护苗展播",
       "hot_value": 9128801,
@@ -109,6 +585,8 @@
       "related": false
     },
     {
+      "platform": "douyin",
+      "day": "2026-11-05",
       "rank": 14,
       "word": "GEN战胜LYON挺进半决赛",
       "hot_value": 9112461,
@@ -116,6 +594,8 @@
       "related": false
     },
     {
+      "platform": "douyin",
+      "day": "2026-11-05",
       "rank": 15,
       "word": "WTT法兰克福王楚钦vs温瑞博",
       "hot_value": 9090420,
@@ -123,6 +603,8 @@
       "related": false
     },
     {
+      "platform": "douyin",
+      "day": "2026-11-05",
       "rank": 16,
       "word": "民主党要求“必须结束”伊朗战争",
       "hot_value": 9078025,
@@ -130,6 +612,8 @@
       "related": false
     },
     {
+      "platform": "douyin",
+      "day": "2026-11-05",
       "rank": 17,
       "word": "常冰玉胜赵心童晋级国锦赛四强",
       "hot_value": 8910358,
@@ -137,6 +621,8 @@
       "related": false
     },
     {
+      "platform": "douyin",
+      "day": "2026-11-05",
       "rank": 18,
       "word": "三角洲新刀皮黑伤测评",
       "hot_value": 8833364,
@@ -144,6 +630,8 @@
       "related": false
     },
     {
+      "platform": "douyin",
+      "day": "2026-11-05",
       "rank": 19,
       "word": "76人战胜活塞迎五连胜",
       "hot_value": 8289575,
@@ -151,6 +639,8 @@
       "related": false
     },
     {
+      "platform": "douyin",
+      "day": "2026-11-05",
       "rank": 20,
       "word": "TheShy喊话把力量借给iG",
       "hot_value": 8271068,
@@ -158,6 +648,8 @@
       "related": false
     },
     {
+      "platform": "douyin",
+      "day": "2026-11-05",
       "rank": 21,
       "word": "吴磊一天骑行100公里",
       "hot_value": 8017917,
@@ -165,6 +657,8 @@
       "related": false
     },
     {
+      "platform": "douyin",
+      "day": "2026-11-05",
       "rank": 22,
       "word": "假装没关系转身后眼泪就决堤",
       "hot_value": 7922421,
@@ -172,6 +666,8 @@
       "related": false
     },
     {
+      "platform": "douyin",
+      "day": "2026-11-05",
       "rank": 23,
       "word": "袁成杰被列为失信被执行人",
       "hot_value": 7815806,
@@ -179,6 +675,8 @@
       "related": false
     },
     {
+      "platform": "douyin",
+      "day": "2026-11-05",
       "rank": 24,
       "word": "沈阳保洁大叔老钱风穿搭好飒",
       "hot_value": 7801634,
@@ -186,6 +684,8 @@
       "related": false
     },
     {
+      "platform": "douyin",
+      "day": "2026-11-05",
       "rank": 25,
       "word": "全网为许飞厉娜画地为牢",
       "hot_value": 7778513,
@@ -193,6 +693,8 @@
       "related": false
     },
     {
+      "platform": "douyin",
+      "day": "2026-11-05",
       "rank": 26,
       "word": "Chovy：今年的我确实有些不一样",
       "hot_value": 7768093,
@@ -200,6 +702,8 @@
       "related": false
     },
     {
+      "platform": "douyin",
+      "day": "2026-11-05",
       "rank": 27,
       "word": "谁懂影之刃零中华武术的含金量",
       "hot_value": 7733227,
@@ -207,6 +711,8 @@
       "related": false
     },
     {
+      "platform": "douyin",
+      "day": "2026-11-05",
       "rank": 28,
       "word": "好故事自有高光时刻",
       "hot_value": 7724528,
@@ -214,6 +720,8 @@
       "related": false
     },
     {
+      "platform": "douyin",
+      "day": "2026-11-05",
       "rank": 29,
       "word": "深度复盘GEN vs LYON",
       "hot_value": 7719994,
@@ -221,6 +729,8 @@
       "related": false
     },
     {
+      "platform": "douyin",
+      "day": "2026-11-05",
       "rank": 30,
       "word": "电视剧谷雨今日开播",
       "hot_value": 7719909,
@@ -228,6 +738,8 @@
       "related": false
     },
     {
+      "platform": "douyin",
+      "day": "2026-11-05",
       "rank": 31,
       "word": "特朗普中期选举失利后首露面",
       "hot_value": 7719152,
@@ -235,6 +747,8 @@
       "related": false
     },
     {
+      "platform": "douyin",
+      "day": "2026-11-05",
       "rank": 32,
       "word": "首款华为鸿蒙台式机抢先体验",
       "hot_value": 7713727,
@@ -242,6 +756,8 @@
       "related": false
     },
     {
+      "platform": "douyin",
+      "day": "2026-11-05",
       "rank": 33,
       "word": "异环曳尔沐",
       "hot_value": 7713189,
@@ -249,6 +765,8 @@
       "related": false
     },
     {
+      "platform": "douyin",
+      "day": "2026-11-05",
       "rank": 34,
       "word": "我的第五人格磷光症手记",
       "hot_value": 7692153,
@@ -256,6 +774,8 @@
       "related": false
     },
     {
+      "platform": "douyin",
+      "day": "2026-11-05",
       "rank": 35,
       "word": "三角洲新赛季的n种打法",
       "hot_value": 7691668,
@@ -263,6 +783,8 @@
       "related": false
     },
     {
+      "platform": "douyin",
+      "day": "2026-11-05",
       "rank": 36,
       "word": "厉娜剪了个新短发",
       "hot_value": 7688379,
@@ -270,6 +792,8 @@
       "related": false
     },
     {
+      "platform": "douyin",
+      "day": "2026-11-05",
       "rank": 37,
       "word": "毛茸茸的青稚有脾气",
       "hot_value": 7683131,
@@ -277,6 +801,8 @@
       "related": false
     },
     {
+      "platform": "douyin",
+      "day": "2026-11-05",
       "rank": 38,
       "word": "我家门口新开了一朵茉莉",
       "hot_value": 7682831,
@@ -284,6 +810,8 @@
       "related": false
     },
     {
+      "platform": "douyin",
+      "day": "2026-11-05",
       "rank": 39,
       "word": "一半青涩一半纯真",
       "hot_value": 7681342,
@@ -291,6 +819,8 @@
       "related": false
     },
     {
+      "platform": "douyin",
+      "day": "2026-11-05",
       "rank": 40,
       "word": "嫁金钗红线拿下大结果",
       "hot_value": 7676933,
@@ -298,6 +828,8 @@
       "related": false
     },
     {
+      "platform": "douyin",
+      "day": "2026-11-05",
       "rank": 41,
       "word": "后会友期reaction",
       "hot_value": 7676743,
@@ -305,6 +837,8 @@
       "related": false
     },
     {
+      "platform": "douyin",
+      "day": "2026-11-05",
       "rank": 42,
       "word": "iG对阵GEN前瞻分析",
       "hot_value": 7671975,
@@ -312,6 +846,8 @@
       "related": false
     },
     {
+      "platform": "douyin",
+      "day": "2026-11-05",
       "rank": 43,
       "word": "第一视角沉浸式体验天门山跑酷",
       "hot_value": 7671749,
@@ -319,6 +855,8 @@
       "related": false
     },
     {
+      "platform": "douyin",
+      "day": "2026-11-05",
       "rank": 44,
       "word": "买首饰是为了取悦自己",
       "hot_value": 7666819,
@@ -326,6 +864,8 @@
       "related": false
     },
     {
+      "platform": "douyin",
+      "day": "2026-11-05",
       "rank": 45,
       "word": "原来深秋是咕嘟的",
       "hot_value": 7665135,
@@ -333,6 +873,8 @@
       "related": false
     },
     {
+      "platform": "douyin",
+      "day": "2026-11-05",
       "rank": 46,
       "word": "今年立冬吃超长长长饺子",
       "hot_value": 7664770,
@@ -340,6 +882,8 @@
       "related": false
     },
     {
+      "platform": "douyin",
+      "day": "2026-11-05",
       "rank": 47,
       "word": "大摆羽绒服不用当肥粽子",
       "hot_value": 7664755,
@@ -347,6 +891,8 @@
       "related": false
     },
     {
+      "platform": "douyin",
+      "day": "2026-11-05",
       "rank": 48,
       "word": "就这么毛茸茸地上头了",
       "hot_value": 7660535,
@@ -354,52 +900,1691 @@
       "related": false
     },
     {
+      "platform": "douyin",
+      "day": "2026-11-05",
       "rank": 49,
       "word": "博主吉他弹唱旧亭台满是怀旧感",
       "hot_value": 7656318,
       "track": "娱乐明星",
       "related": false
+    },
+    {
+      "platform": "x",
+      "day": "2026-11-06",
+      "rank": 1,
+      "word": "Russell Brand",
+      "hot_value": null,
+      "track": "娱乐明星",
+      "related": false
+    },
+    {
+      "platform": "x",
+      "day": "2026-11-06",
+      "rank": 2,
+      "word": "Harmeet Dhillon",
+      "hot_value": null,
+      "track": "时政国际",
+      "related": false
+    },
+    {
+      "platform": "x",
+      "day": "2026-11-06",
+      "rank": 3,
+      "word": "Hegseth",
+      "hot_value": null,
+      "track": "时政国际",
+      "related": false
+    },
+    {
+      "platform": "x",
+      "day": "2026-11-06",
+      "rank": 4,
+      "word": "#OlandriaxRichLittleBrokeGirls",
+      "hot_value": null,
+      "track": "娱乐明星",
+      "related": false
+    },
+    {
+      "platform": "x",
+      "day": "2026-11-06",
+      "rank": 5,
+      "word": "Massie",
+      "hot_value": null,
+      "track": "时政国际",
+      "related": false
+    },
+    {
+      "platform": "x",
+      "day": "2026-11-06",
+      "rank": 6,
+      "word": "Nasdaq",
+      "hot_value": null,
+      "track": "财经",
+      "related": false
+    },
+    {
+      "platform": "x",
+      "day": "2026-11-06",
+      "rank": 7,
+      "word": "Paraguay",
+      "hot_value": null,
+      "track": "其他",
+      "related": false
+    },
+    {
+      "platform": "x",
+      "day": "2026-11-06",
+      "rank": 8,
+      "word": "LIV Golf",
+      "hot_value": null,
+      "track": "体育",
+      "related": false
+    },
+    {
+      "platform": "x",
+      "day": "2026-11-06",
+      "rank": 9,
+      "word": "Carson Wentz",
+      "hot_value": null,
+      "track": "体育",
+      "related": false
+    },
+    {
+      "platform": "x",
+      "day": "2026-11-06",
+      "rank": 10,
+      "word": "GPT-6 Cyber",
+      "hot_value": null,
+      "track": "科技数码",
+      "related": false
+    },
+    {
+      "platform": "x",
+      "day": "2026-11-06",
+      "rank": 11,
+      "word": "Rats",
+      "hot_value": null,
+      "track": "其他",
+      "related": false
+    },
+    {
+      "platform": "x",
+      "day": "2026-11-06",
+      "rank": 12,
+      "word": "Portugal",
+      "hot_value": null,
+      "track": "其他",
+      "related": false
+    },
+    {
+      "platform": "x",
+      "day": "2026-11-06",
+      "rank": 13,
+      "word": "Zelda",
+      "hot_value": null,
+      "track": "游戏",
+      "related": false
+    },
+    {
+      "platform": "x",
+      "day": "2026-11-06",
+      "rank": 14,
+      "word": "Jeffries",
+      "hot_value": null,
+      "track": "时政国际",
+      "related": false
+    },
+    {
+      "platform": "x",
+      "day": "2026-11-06",
+      "rank": 15,
+      "word": "Brysen Wright",
+      "hot_value": null,
+      "track": "体育",
+      "related": false
+    },
+    {
+      "platform": "x",
+      "day": "2026-11-06",
+      "rank": 16,
+      "word": "Fauci",
+      "hot_value": null,
+      "track": "社会民生",
+      "related": false
+    },
+    {
+      "platform": "x",
+      "day": "2026-11-06",
+      "rank": 17,
+      "word": "Santiago Peña",
+      "hot_value": null,
+      "track": "时政国际",
+      "related": false
+    },
+    {
+      "platform": "x",
+      "day": "2026-11-06",
+      "rank": 18,
+      "word": "5th of November",
+      "hot_value": null,
+      "track": "其他",
+      "related": false
+    },
+    {
+      "platform": "x",
+      "day": "2026-11-06",
+      "rank": 19,
+      "word": "Silver Slugger",
+      "hot_value": null,
+      "track": "体育",
+      "related": false
+    },
+    {
+      "platform": "x",
+      "day": "2026-11-06",
+      "rank": 20,
+      "word": "Marco",
+      "hot_value": null,
+      "track": "其他",
+      "related": false
+    },
+    {
+      "platform": "x",
+      "day": "2026-11-06",
+      "rank": 21,
+      "word": "$QQQ",
+      "hot_value": null,
+      "track": "财经",
+      "related": false
+    },
+    {
+      "platform": "x",
+      "day": "2026-11-06",
+      "rank": 22,
+      "word": "Alaska and Hawaii",
+      "hot_value": null,
+      "track": "其他",
+      "related": false
+    },
+    {
+      "platform": "x",
+      "day": "2026-11-06",
+      "rank": 23,
+      "word": "First Lady Melania Trump",
+      "hot_value": null,
+      "track": "时政国际",
+      "related": false
+    },
+    {
+      "platform": "x",
+      "day": "2026-11-06",
+      "rank": 24,
+      "word": "Civil Rights Division",
+      "hot_value": null,
+      "track": "时政国际",
+      "related": false
+    },
+    {
+      "platform": "x",
+      "day": "2026-11-06",
+      "rank": 25,
+      "word": "Cristiano Ronaldo",
+      "hot_value": null,
+      "track": "体育",
+      "related": false
+    },
+    {
+      "platform": "x",
+      "day": "2026-11-06",
+      "rank": 26,
+      "word": "#RHOSLC",
+      "hot_value": null,
+      "track": "娱乐明星",
+      "related": false
+    },
+    {
+      "platform": "x",
+      "day": "2026-11-06",
+      "rank": 27,
+      "word": "Kodak",
+      "hot_value": null,
+      "track": "科技数码",
+      "related": false
+    },
+    {
+      "platform": "x",
+      "day": "2026-11-06",
+      "rank": 28,
+      "word": "#ThursdayVibes",
+      "hot_value": null,
+      "track": "生活",
+      "related": false
+    },
+    {
+      "platform": "x",
+      "day": "2026-11-06",
+      "rank": 29,
+      "word": "Daybreak Red",
+      "hot_value": null,
+      "track": "其他",
+      "related": false
+    },
+    {
+      "platform": "x",
+      "day": "2026-11-06",
+      "rank": 30,
+      "word": "NVDA",
+      "hot_value": null,
+      "track": "财经",
+      "related": false
+    },
+    {
+      "platform": "x",
+      "day": "2026-11-06",
+      "rank": 31,
+      "word": "Ueno Bank",
+      "hot_value": null,
+      "track": "财经",
+      "related": false
+    },
+    {
+      "platform": "x",
+      "day": "2026-11-06",
+      "rank": 32,
+      "word": "Leopold",
+      "hot_value": null,
+      "track": "其他",
+      "related": false
+    },
+    {
+      "platform": "x",
+      "day": "2026-11-06",
+      "rank": 33,
+      "word": "#NajiMarshall",
+      "hot_value": null,
+      "track": "体育",
+      "related": false
+    },
+    {
+      "platform": "x",
+      "day": "2026-11-06",
+      "rank": 34,
+      "word": "The Independent",
+      "hot_value": null,
+      "track": "其他",
+      "related": false
+    },
+    {
+      "platform": "x",
+      "day": "2026-11-06",
+      "rank": 35,
+      "word": "Tom Coughlin",
+      "hot_value": null,
+      "track": "体育",
+      "related": false
+    },
+    {
+      "platform": "x",
+      "day": "2026-11-06",
+      "rank": 36,
+      "word": "Billy the Kid",
+      "hot_value": null,
+      "track": "其他",
+      "related": false
+    },
+    {
+      "platform": "x",
+      "day": "2026-11-06",
+      "rank": 37,
+      "word": "Susie Wiles",
+      "hot_value": null,
+      "track": "时政国际",
+      "related": false
+    },
+    {
+      "platform": "x",
+      "day": "2026-11-06",
+      "rank": 38,
+      "word": "Des Moines",
+      "hot_value": null,
+      "track": "其他",
+      "related": false
+    },
+    {
+      "platform": "x",
+      "day": "2026-11-06",
+      "rank": 39,
+      "word": "Raskin",
+      "hot_value": null,
+      "track": "时政国际",
+      "related": false
+    },
+    {
+      "platform": "x",
+      "day": "2026-11-06",
+      "rank": 40,
+      "word": "Perkz",
+      "hot_value": null,
+      "track": "游戏",
+      "related": false
+    },
+    {
+      "platform": "x",
+      "day": "2026-11-06",
+      "rank": 41,
+      "word": "Dark Universe",
+      "hot_value": null,
+      "track": "其他",
+      "related": false
+    },
+    {
+      "platform": "x",
+      "day": "2026-11-06",
+      "rank": 42,
+      "word": "So is MAGA",
+      "hot_value": null,
+      "track": "时政国际",
+      "related": false
+    },
+    {
+      "platform": "x",
+      "day": "2026-11-06",
+      "rank": 43,
+      "word": "#Klay",
+      "hot_value": null,
+      "track": "体育",
+      "related": false
+    },
+    {
+      "platform": "x",
+      "day": "2026-11-06",
+      "rank": 44,
+      "word": "Guy Fawkes",
+      "hot_value": null,
+      "track": "其他",
+      "related": false
+    },
+    {
+      "platform": "x",
+      "day": "2026-11-06",
+      "rank": 45,
+      "word": "$VIX",
+      "hot_value": null,
+      "track": "财经",
+      "related": false
+    },
+    {
+      "platform": "x",
+      "day": "2026-11-06",
+      "rank": 46,
+      "word": "Hyrule",
+      "hot_value": null,
+      "track": "游戏",
+      "related": false
+    },
+    {
+      "platform": "x",
+      "day": "2026-11-06",
+      "rank": 47,
+      "word": "Thirsty Thursday",
+      "hot_value": null,
+      "track": "生活",
+      "related": false
+    },
+    {
+      "platform": "x",
+      "day": "2026-11-06",
+      "rank": 48,
+      "word": "Musetti",
+      "hot_value": null,
+      "track": "体育",
+      "related": false
+    },
+    {
+      "platform": "x",
+      "day": "2026-11-06",
+      "rank": 49,
+      "word": "Hawaii and Alaska",
+      "hot_value": null,
+      "track": "其他",
+      "related": false
+    },
+    {
+      "platform": "x",
+      "day": "2026-11-06",
+      "rank": 50,
+      "word": "lottie",
+      "hot_value": null,
+      "track": "其他",
+      "related": false
+    },
+    {
+      "platform": "youtube",
+      "day": "2026-11-06",
+      "rank": 1,
+      "word": "Kevin Gates - This Dat",
+      "hot_value": 288437,
+      "track": "娱乐明星",
+      "related": false
+    },
+    {
+      "platform": "youtube",
+      "day": "2026-11-06",
+      "rank": 2,
+      "word": "Lords of War | Official Teaser #1 (HD) | Vertical",
+      "hot_value": 559784,
+      "track": "娱乐明星",
+      "related": false
+    },
+    {
+      "platform": "youtube",
+      "day": "2026-11-06",
+      "rank": 3,
+      "word": "🔴LIVE | AOE TOURNAMENT | VS FITZ (IMAGINARY FRIENDS) | ME X JOHN X HABIBI X KARMA | #BUNGULATE",
+      "hot_value": 956300,
+      "track": "游戏",
+      "related": false
+    },
+    {
+      "platform": "youtube",
+      "day": "2026-11-06",
+      "rank": 4,
+      "word": "Overload",
+      "hot_value": 72295,
+      "track": "其他",
+      "related": false
+    },
+    {
+      "platform": "youtube",
+      "day": "2026-11-06",
+      "rank": 5,
+      "word": "AVENGERS 5: DOOMSDAY Official “Gambit Meets Herbie\" Promo Clip (2026)",
+      "hot_value": 1126414,
+      "track": "娱乐明星",
+      "related": false
+    },
+    {
+      "platform": "youtube",
+      "day": "2026-11-06",
+      "rank": 6,
+      "word": "I Can’t Believe This Happened…",
+      "hot_value": 475577,
+      "track": "其他",
+      "related": false
+    },
+    {
+      "platform": "youtube",
+      "day": "2026-11-06",
+      "rank": 7,
+      "word": "LITE (remix)",
+      "hot_value": 108480,
+      "track": "娱乐明星",
+      "related": false
+    },
+    {
+      "platform": "youtube",
+      "day": "2026-11-06",
+      "rank": 8,
+      "word": "The Angry Birds Movie 3 | Official Trailer 2 (2026 Movie) | Paramount Pictures UK",
+      "hot_value": 313779,
+      "track": "娱乐明星",
+      "related": false
+    },
+    {
+      "platform": "youtube",
+      "day": "2026-11-06",
+      "rank": 9,
+      "word": "Our Defense Came Up Clutch! Wheel of MUT! Ep. #12",
+      "hot_value": 354216,
+      "track": "游戏",
+      "related": false
+    },
+    {
+      "platform": "youtube",
+      "day": "2026-11-06",
+      "rank": 10,
+      "word": "Make It Easy",
+      "hot_value": 41104,
+      "track": "其他",
+      "related": false
+    },
+    {
+      "platform": "youtube",
+      "day": "2026-11-06",
+      "rank": 11,
+      "word": "Visionquest Episode 8 Finale Trailer Breakdown & Easter Eggs",
+      "hot_value": 309156,
+      "track": "娱乐明星",
+      "related": false
+    },
+    {
+      "platform": "youtube",
+      "day": "2026-11-06",
+      "rank": 12,
+      "word": "GEN vs LYON | WORLDS 2026 | Quarters Day 2",
+      "hot_value": 1553816,
+      "track": "游戏",
+      "related": false
+    },
+    {
+      "platform": "youtube",
+      "day": "2026-11-06",
+      "rank": 13,
+      "word": "Quavo - Watuhname (Official Music Video)",
+      "hot_value": 140925,
+      "track": "娱乐明星",
+      "related": false
+    },
+    {
+      "platform": "youtube",
+      "day": "2026-11-06",
+      "rank": 14,
+      "word": "BTS WORLD TOUR 'ARIRANG' LIVE VIEWING FROM KAOHSIUNG & JAKARTA - Official Trailer",
+      "hot_value": 254013,
+      "track": "娱乐明星",
+      "related": false
+    },
+    {
+      "platform": "youtube",
+      "day": "2026-11-06",
+      "rank": 15,
+      "word": "Teaching My LITTLE SISTER How To Drive..",
+      "hot_value": 780385,
+      "track": "汽车",
+      "related": true
+    },
+    {
+      "platform": "youtube",
+      "day": "2026-11-06",
+      "rank": 16,
+      "word": "Saii Kay - Sarah (Visualizer)",
+      "hot_value": 30610,
+      "track": "娱乐明星",
+      "related": false
+    },
+    {
+      "platform": "youtube",
+      "day": "2026-11-06",
+      "rank": 17,
+      "word": "XBOX SERIES X-BITE | Sweepstakes Trailer",
+      "hot_value": 979534,
+      "track": "游戏",
+      "related": false
+    },
+    {
+      "platform": "youtube",
+      "day": "2026-11-06",
+      "rank": 18,
+      "word": "Melodie at the beach! (Brawl Vice Season)",
+      "hot_value": 1356977,
+      "track": "游戏",
+      "related": false
+    },
+    {
+      "platform": "youtube",
+      "day": "2026-11-06",
+      "rank": 19,
+      "word": "JISOO - ‘ADDICTED’ DANCE PERFORMANCE VIDEO",
+      "hot_value": 2000070,
+      "track": "娱乐明星",
+      "related": false
+    },
+    {
+      "platform": "youtube",
+      "day": "2026-11-06",
+      "rank": 20,
+      "word": "AVENGERS: DOOMSDAY Gambit Trailer (2026) New",
+      "hot_value": 154676,
+      "track": "娱乐明星",
+      "related": false
+    },
+    {
+      "platform": "youtube",
+      "day": "2026-11-06",
+      "rank": 21,
+      "word": "Exposing EVERY SECRET in PINKIE PROMISE!",
+      "hot_value": 702574,
+      "track": "其他",
+      "related": false
+    },
+    {
+      "platform": "youtube",
+      "day": "2026-11-06",
+      "rank": 22,
+      "word": "You cannot control",
+      "hot_value": 333794,
+      "track": "其他",
+      "related": false
+    },
+    {
+      "platform": "youtube",
+      "day": "2026-11-06",
+      "rank": 23,
+      "word": "Honest Trailers | Monsters, Inc.",
+      "hot_value": 585999,
+      "track": "娱乐明星",
+      "related": false
+    },
+    {
+      "platform": "youtube",
+      "day": "2026-11-06",
+      "rank": 24,
+      "word": "Collecting ALL 300+ CHARACTERS in FNAF World ULTRA",
+      "hot_value": 151743,
+      "track": "游戏",
+      "related": false
+    },
+    {
+      "platform": "youtube",
+      "day": "2026-11-06",
+      "rank": 25,
+      "word": "Top 1 Hour Christmas Songs Playlist 🎄 Best Christmas Music",
+      "hot_value": 166591,
+      "track": "娱乐明星",
+      "related": false
+    },
+    {
+      "platform": "youtube",
+      "day": "2026-11-06",
+      "rank": 26,
+      "word": "Fans Are Tired...",
+      "hot_value": 533530,
+      "track": "其他",
+      "related": false
+    },
+    {
+      "platform": "youtube",
+      "day": "2026-11-06",
+      "rank": 27,
+      "word": "Our First Time Playing Resident Evil 9 (Part 3)",
+      "hot_value": 534577,
+      "track": "游戏",
+      "related": false
+    },
+    {
+      "platform": "youtube",
+      "day": "2026-11-06",
+      "rank": 28,
+      "word": "MI YO",
+      "hot_value": 16674,
+      "track": "其他",
+      "related": false
+    },
+    {
+      "platform": "youtube",
+      "day": "2026-11-06",
+      "rank": 29,
+      "word": "ENE Repeat Trailer | Tharun Bhascker | Vishwaksen | Srinath | Abhinav | Venkatesh | Vivek Sagar",
+      "hot_value": 3542751,
+      "track": "娱乐明星",
+      "related": false
+    },
+    {
+      "platform": "youtube",
+      "day": "2026-11-06",
+      "rank": 30,
+      "word": "We Played The Weirdest Backrooms Game",
+      "hot_value": 285471,
+      "track": "游戏",
+      "related": false
+    },
+    {
+      "platform": "youtube",
+      "day": "2026-11-06",
+      "rank": 31,
+      "word": "Jarahn - Maski Lo Luv (Audio) feat. BMT",
+      "hot_value": 105566,
+      "track": "娱乐明星",
+      "related": false
+    },
+    {
+      "platform": "youtube",
+      "day": "2026-11-06",
+      "rank": 32,
+      "word": "LORDS OF WAR 2 Official Teaser Trailer (2027) Nicolas Cage",
+      "hot_value": 355748,
+      "track": "娱乐明星",
+      "related": false
+    },
+    {
+      "platform": "youtube",
+      "day": "2026-11-06",
+      "rank": 33,
+      "word": "The Legend of Zelda: Ocarina of Time Review",
+      "hot_value": 1372552,
+      "track": "游戏",
+      "related": false
+    },
+    {
+      "platform": "youtube",
+      "day": "2026-11-06",
+      "rank": 34,
+      "word": "Los no sabo kids",
+      "hot_value": 34114,
+      "track": "其他",
+      "related": false
+    },
+    {
+      "platform": "youtube",
+      "day": "2026-11-06",
+      "rank": 35,
+      "word": "Trinity | Official Trailer | Netflix",
+      "hot_value": 312047,
+      "track": "娱乐明星",
+      "related": false
+    },
+    {
+      "platform": "youtube",
+      "day": "2026-11-06",
+      "rank": 36,
+      "word": "The most beautiful Minecraft piston door",
+      "hot_value": 1090670,
+      "track": "游戏",
+      "related": false
+    },
+    {
+      "platform": "youtube",
+      "day": "2026-11-06",
+      "rank": 37,
+      "word": "Eagles - Hotel California (Lyrics)",
+      "hot_value": 715839,
+      "track": "娱乐明星",
+      "related": false
+    },
+    {
+      "platform": "youtube",
+      "day": "2026-11-06",
+      "rank": 38,
+      "word": "RISING STAR - OFFICIAL TRAILER",
+      "hot_value": 73296,
+      "track": "娱乐明星",
+      "related": false
+    },
+    {
+      "platform": "youtube",
+      "day": "2026-11-06",
+      "rank": 39,
+      "word": "I turned my stream into a sliding puzzle game",
+      "hot_value": 404701,
+      "track": "游戏",
+      "related": false
+    },
+    {
+      "platform": "youtube",
+      "day": "2026-11-06",
+      "rank": 40,
+      "word": "BEDJINE - J'AVOUE (OFFICIAL VIDEO)",
+      "hot_value": 406165,
+      "track": "娱乐明星",
+      "related": false
+    },
+    {
+      "platform": "youtube",
+      "day": "2026-11-06",
+      "rank": 41,
+      "word": "Itllu Arjuna Official Trailer | Aniesh | Anaswara Rajan | Thaman S | Mahesh Uppala | Venky Kudumula",
+      "hot_value": 7556702,
+      "track": "娱乐明星",
+      "related": false
+    },
+    {
+      "platform": "youtube",
+      "day": "2026-11-06",
+      "rank": 42,
+      "word": "Fortnite JUST *REVEALED* PIRATE SHOP TOKEN SECRETS!",
+      "hot_value": 497547,
+      "track": "游戏",
+      "related": false
+    },
+    {
+      "platform": "youtube",
+      "day": "2026-11-06",
+      "rank": 43,
+      "word": "Ramayana: Shree Hanuman Chalisa | Namit M, Nitesh T | Ranbir Kapoor, Sunny Deol | AR Rahman",
+      "hot_value": 6350545,
+      "track": "娱乐明星",
+      "related": false
+    },
+    {
+      "platform": "youtube",
+      "day": "2026-11-06",
+      "rank": 44,
+      "word": "Percy Jackson & the Olympians Season 3 | Trailer | Disney+",
+      "hot_value": 7650452,
+      "track": "娱乐明星",
+      "related": false
+    },
+    {
+      "platform": "youtube",
+      "day": "2026-11-06",
+      "rank": 45,
+      "word": "Zelda Ocarina of Time Remake is FINALLY HERE..",
+      "hot_value": 167154,
+      "track": "游戏",
+      "related": false
+    },
+    {
+      "platform": "youtube",
+      "day": "2026-11-06",
+      "rank": 46,
+      "word": "\"Alpine Autumn Lake\" Beautiful Relaxing Music, Peaceful Soothing Instrumental Music by Tim Janis",
+      "hot_value": 298954,
+      "track": "娱乐明星",
+      "related": false
+    },
+    {
+      "platform": "youtube",
+      "day": "2026-11-06",
+      "rank": 47,
+      "word": "G.O.A.T - Official Trailer | Sudheer Anand, Divya Bharathi | Leon James | Mogulla Chandrashekar",
+      "hot_value": 885148,
+      "track": "娱乐明星",
+      "related": false
+    },
+    {
+      "platform": "youtube",
+      "day": "2026-11-06",
+      "rank": 48,
+      "word": "Serve or Die, Can 'Em All #1, & Playable Archive | Joe Bartolozzi",
+      "hot_value": 235162,
+      "track": "游戏",
+      "related": false
+    },
+    {
+      "platform": "youtube",
+      "day": "2026-11-06",
+      "rank": 49,
+      "word": "Enamorado De Tus Ojos",
+      "hot_value": 62639,
+      "track": "其他",
+      "related": false
+    },
+    {
+      "platform": "youtube",
+      "day": "2026-11-06",
+      "rank": 50,
+      "word": "Delicious in Dungeon × Dragon's Dogma 2: Dark Arisen | Collaboration Trailer",
+      "hot_value": 527146,
+      "track": "游戏",
+      "related": false
     }
   ],
   "keywords": [
     {
+      "platform": "bilibili",
       "word": "车评",
       "status": "done",
       "found": 3,
       "hot_word": ""
     },
     {
-      "word": "假期自驾攻略",
+      "platform": "bilibili",
+      "word": "F1赛车技术",
+      "status": "queued",
+      "found": null,
+      "hot_word": "F1世界冠军阿兰琼斯去世"
+    },
+    {
+      "platform": "bilibili",
+      "word": "长途自驾选车",
       "status": "queued",
       "found": null,
       "hot_word": "2027年放假安排来了"
     },
     {
-      "word": "冬季用车技巧",
+      "platform": "bilibili",
+      "word": "6G车联网",
       "status": "queued",
       "found": null,
-      "hot_word": "一道热乎菜开启各地冬天"
+      "hot_word": "6G不到1秒下载一部4K影片"
     },
     {
-      "word": "鸿蒙座舱测评",
+      "platform": "bilibili",
+      "word": "车机互联体验",
       "status": "queued",
       "found": null,
-      "hot_word": "首款华为鸿蒙台式机抢先体验"
+      "hot_word": "苹果新款产品上手体验"
     },
     {
-      "word": "骑行车载架",
+      "platform": "bilibili",
+      "word": "智驾算力解析",
       "status": "queued",
       "found": null,
-      "hot_word": "吴磊一天骑行100公里"
+      "hot_word": "AMD财报AI算力需求爆发"
     },
     {
-      "word": "汽车冷知识",
-      "status": "queued",
-      "found": null,
-      "hot_word": "你怎么舍得让有趣的知识流走"
+      "platform": "youtube",
+      "word": "teaching sister to drive",
+      "status": "done",
+      "found": 3,
+      "hot_word": "Teaching My LITTLE SISTER How To Drive.."
+    },
+    {
+      "platform": "youtube",
+      "word": "car review",
+      "status": "done",
+      "found": 3,
+      "hot_word": ""
+    },
+    {
+      "platform": "youtube",
+      "word": "2026 SUV review",
+      "status": "done",
+      "found": 3,
+      "hot_word": ""
     }
   ],
   "videos": [
+    {
+      "aweme_id": "bilibili:BV1WTxQ6SEzh",
+      "day": "2026-11-06",
+      "desc": "国产尺寸最大的SUV top5",
+      "author": "No专业车评",
+      "keyword": "车评",
+      "published_at": "2026-11-04T09:48:25+00:00",
+      "platform": "bilibili",
+      "followers": 576,
+      "likes": 134,
+      "views": 16533,
+      "coins": 4,
+      "comments": 46,
+      "favorites": 32,
+      "shares": 5,
+      "ratio": 28.703125,
+      "url": "https://www.bilibili.com/video/BV1WTxQ6SEzh",
+      "status": "done",
+      "saved": false,
+      "tags": [
+        "数字反差",
+        "倒数榜单",
+        "递进兑现",
+        "SUV尺寸",
+        "参数讲解"
+      ],
+      "analysis": {
+        "summary": "最值得借鉴的是用“尺寸门槛反差＋倒数揭榜”把参数介绍变成等待答案的过程，但这只是文本层面的传播假设，不能据播放倍数证明效果或排名准确性。",
+        "hook": "国产尺寸最大SUV TOP5\n国产SUV越做越大",
+        "hook_type": "极值榜单 + 数字反差 + 倒数悬念",
+        "structure": [
+          "开场：提出国产SUV越来越大的趋势，用“5米3只能当入门、5米7才是天花板”制造反差，预告五款车型递进揭晓。",
+          "第5名：从稿称车长5301毫米的车型起榜，依次介绍尺寸、轴距、动力续航及配置，建立后续比较框架。",
+          "第4名：将稿称车长推进到5365毫米，补充纯电补能、底盘和后排舒适配置。",
+          "第3名：将稿称车长推进到5400毫米，用越野能力与行政座椅组合补充车型特点。",
+          "第2名：将稿称车长推进到5402毫米，集中介绍辅助驾驶、底盘及座舱配置。",
+          "第1名：以稿称5695毫米的车型回收开头接近5米7的预告，再用动力、外观气场和内饰评价收尾。"
+        ],
+        "template": "___越做越___，___只能算___，___才是___。今天按___口径、截至___，看这___款___。从第___名开始：___，核心数据是___，相关配置有___。接下来一款，___又推进到了___。最后第1名是___，用___兑现开头的预告。（比较范围、参数和结论须有对应材料支持。）",
+        "topic": "以国产SUV的极端车长切入，按照识别稿中的车长递增组织TOP5，再用旗舰配置补充看点；“尺寸最大”的范围和排序口径未交代。",
+        "audience": "可能吸引关注大型国产SUV、旗舰配置和车型排名的汽车爱好者，也可能覆盖正在初步了解六座SUV的购车者；无法确认实际观众构成。",
+        "reasons": [
+          {
+            "point": "数字反差可能制造好奇：把通常显得很大的5米3降为“入门”，再设置5米7的终点，让观众产生“还能大到什么程度”的疑问。",
+            "evidence": "车长5米3只能当入门\n5米7才是天花板",
+            "is_hypothesis": true
+          },
+          {
+            "point": "倒数榜单与递增承诺可能提供继续观看的理由：观众知道还有几款没揭晓，最大车型被放在末尾；稿中逐步增加的车长也回应了预告。",
+            "evidence": "今天这5台巨无霸\n尺寸1台比1台夸张\n1台比1台敢堆料",
+            "is_hypothesis": true
+          }
+        ],
+        "tags": [
+          "数字反差",
+          "倒数榜单",
+          "递进兑现",
+          "SUV尺寸",
+          "参数讲解"
+        ],
+        "gaps": "本次仅分析所给文字和公开计数，未独立核验车型或参数。识别稿中的车型名、配置名存在疑似错字，年款、上市状态、续航和配置归属均待核。“国产”“最大”的样本范围不明；排序看起来依据车长，车宽、车高并未同步递增，不能据此判断乘坐空间或综合实力。没有视频、音频、逐句时间戳、完播率、留存曲线和评论正文，无法判断真实前3秒、剪辑与口播贡献、具体流失点、评论情绪或分享动机。给定播放16,533、粉丝576，对应约28.7倍，但粉丝统计时点、发布时长及同账号作品基线未知；点赞134、评论46、收藏32、投币4、分享5也不能单独证明内容机制有效，尤其不能据5次分享认定分享驱动传播。热点时机、站内外入口、投流、粉丝基础与观看构成均未知，也无法排除随机波动。只有这一条被挑出的样本，存在幸存者偏差，不能证明通用规律。反事实检查：删去“5米3只能当入门／5米7才是天花板”，开头可能更接近普通车型清单；开头直接报出第一名，等待揭榜的理由可能减弱，但两项判断都未经对照验证。",
+        "analysis_version": 2,
+        "account_field": "汽车、车评讲解",
+        "opening_3s": {
+          "evidence": "国产尺寸最大SUV TOP5\n国产SUV越做越大\n车长5米3只能当入门\n5米7才是天花板",
+          "technique": "先用“最大＋TOP5”明确比较主题，再用5米3与5米7建立尺寸门槛反差，同时暂不揭晓对应车型。",
+          "retention_reason": "对关注大型SUV的人，这组文字可能同时产生尺度上的意外感和车型身份的信息缺口，使其愿意继续寻找第一名。",
+          "limitation": "没有时间戳，仅按开头文字推测，无法确认真实前 3 秒；也无法判断上述文字实际占用时长、口播表现和画面呈现。"
+        },
+        "takeaways": [
+          {
+            "point": "用一个容易理解的数字反差建立观看问题。",
+            "evidence": "车长5米3只能当入门\n5米7才是天花板",
+            "application": "做大SUV停车讲解时，把问题改为“车身放得进，车门能不能打开？”先展示已实测的车位与车辆尺寸，再解释开门和进出的约束，让参数对应具体用车场景；缺测量素材时先保留为问题。"
+          },
+          {
+            "point": "固定比较字段，让观众能沿同一标准跟随榜单。",
+            "evidence": "Number 5 易静X9\n尺寸5301乘以2015乘以1805毫米\n轴距3120毫米",
+            "application": "做三款家庭SUV对比时，每款固定呈现“官方尺寸—统一坐姿下的第三排—相同箱包的装载情况”，每次只推进同一组问题；官方参数与现场观察分别标注，避免车型之间随意切换评价标准。"
+          },
+          {
+            "point": "结尾用具体数据回收开头承诺。",
+            "evidence": "尺寸5695乘以2095乘以2010毫米\n轴距3309毫米\n国产SUV尺寸绝对天花板",
+            "application": "做车位适配或后备厢对比时，开头明确最终要回答的问题，结尾回到同一条件下的测量或装载结果；只有取得可比素材后才揭晓结果，并注明适用车辆与场地。"
+          }
+        ],
+        "avoid_copying": [
+          {
+            "point": "直接沿用“国产尺寸最大”的绝对排名。",
+            "reason": "材料未说明车型覆盖范围、统计日期和尺寸定义；第3名到第2名的稿中车长仅增加2毫米，车宽和车高反而下降，不能自然推导出整体更大或更实用。",
+            "alternative": "明确为“截至___、在___候选范围内、按官方车长排序”；若讲空间，另补统一座椅位置与装载条件的材料。"
+          },
+          {
+            "point": "把语音识别稿当成可直接发布的车型资料。",
+            "reason": "“易静X9”“全驴底盘”“移动行功”等存在疑似识别问题，其余参数也未经核验；直接复述会把转写错误带入车评。",
+            "alternative": "制作新稿前，按品牌官方资料核对车型、年款、版本、尺寸与配置，区分CLTC标称续航和实测续航；无法核实的条目暂不下结论。"
+          },
+          {
+            "point": "用配置堆叠和“拉满”代替体验判断。",
+            "reason": "配置名称能够增加信息量，却不能单独证明舒适、好开或适合家用；原稿缺少对应体验材料。",
+            "alternative": "每款只选与目标用户有关的两项配置，各配一个可观察场景，例如窄路掉头或后排乘坐；没有实拍或测量时，只讲配置用途及待验证的问题。"
+          }
+        ],
+        "adapted_topics": [
+          {
+            "title": "5米级SUV，进得了车位就算好停吗？",
+            "opening": "车长进了5米级，车位放得下，就算好停吗？先过三道关：车身能不能进、车门能不能开、进出要怎么转。",
+            "outline": [
+              "待补素材：选定候选车型，核对年款和官方尺寸，测量同一车位及入口条件。",
+              "第一关比较车身与车位的尺寸关系，注明车辆宽度是否包含后视镜。",
+              "第二关在统一停车位置展示开门净空，注明乘员及观察条件。",
+              "第三关由同一驾驶员按统一路线展示进出过程，记录调整次数及现场限制。",
+              "用三关结果回答各车在该场地的适配情况，不扩展成全场景好停排名。"
+            ],
+            "source_mechanism": "把尺寸门槛反差转化为停车问题，用三关递进保留等待最终判断的理由。"
+          },
+          {
+            "title": "6座SUV第三排坐人后，行李厢还剩多少？",
+            "opening": "一台6座SUV够不够全家用，车长这个数字还答不完。第三排坐人以后，同一组行李能放下多少？",
+            "outline": [
+              "待补素材：取得候选车型同条件实拍，固定体验者、前两排坐姿及第三排状态，记录体验者身高。",
+              "每款按同一顺序展示第三排进入方式、乘坐姿态和剩余行李空间。",
+              "使用同一组标明尺寸的箱包演示装载，保留尾门正常关闭的过程。",
+              "最后汇总已观察到的差异，分别回应经常六人出行和偶尔使用第三排的需求；缺少可比实拍时不做装载排名。"
+            ],
+            "source_mechanism": "保留固定字段比较和末尾兑现答案的结构，把极端车长的猎奇转成家庭出行的实际问题。"
+          }
+        ]
+      },
+      "transcript_excerpt": "国产尺寸最大SUV TOP5\n国产SUV越做越大\n车长5米3只能当入门\n5米7才是天花板\n今天这5台巨无霸\n尺寸1台比1台夸张\n1台比1台敢堆料\nNumber "
+    },
+    {
+      "aweme_id": "bilibili:BV1p4x864Eqd",
+      "day": "2026-11-06",
+      "desc": "特斯拉车主嘴真严",
+      "author": "车事荟",
+      "keyword": "车评",
+      "published_at": "2026-11-01T19:50:03+00:00",
+      "platform": "bilibili",
+      "followers": 7812,
+      "likes": 6809,
+      "views": 195968,
+      "coins": 220,
+      "comments": 1339,
+      "favorites": 557,
+      "shares": 405,
+      "ratio": 25.085509472606248,
+      "url": "https://www.bilibili.com/video/BV1p4x864Eqd",
+      "status": "done",
+      "saved": false,
+      "tags": [
+        "预算限定",
+        "反向挑战",
+        "连续槽点",
+        "品牌争议",
+        "汽车体验"
+      ],
+      "analysis": {
+        "summary": "最值得借鉴的是用限定预算的反向挑战引出争议，再用连续具体槽点兑现关注，但这些只是传播机制假设，不能证明高播放的成因或作者对车辆的判断成立。",
+        "hook": "移民火星资格我不要了,30万以内你能找得出第二台比这个车更拉垮的车吗?\n你唯一能找到的就是他的弟弟Model3,真的。",
+        "hook_type": "戏谑表态 + 预算限定 + 反向挑战 + 追加反转",
+        "structure": [
+          "用放弃“移民火星资格”的表态和30万元以内的负面挑战开场，再以Model3追加反转。",
+          "围绕400V架构和充电速度提出批评，并把争论对象引向品牌支持者。",
+          "从内饰风格转到氛围灯，用萤火虫作夸张类比。",
+          "承认座椅通风这一升级，再用按摩配置提出更高期待。",
+          "借上车查看功能的文字引导，转入屏幕换挡及倒车影像覆盖问题。",
+          "从缺少环绕影像转向FSD，对价格和可用性提出质疑，但没有提供验证材料。",
+          "用晴天、大雨、小雨三个条件概括作者对自动雨刮的负面评价。",
+          "再次挑战品牌支持者，预告后续动态感受内容，并用“地球人要睡觉”呼应开头的火星梗。"
+        ],
+        "template": "预算___，主要用来___，你能接受一台车在___上有这样的表现吗？先看___：在___条件下，出现了___；再看___，它会影响___；还有___，需要结合___判断。对___人群，我更在意___；至于___，补齐___材料后再下结论。",
+        "topic": "以30万元以内的购车期待为参照，集中质疑特斯拉的配置与日常使用体验，并将产品评价组织成对品牌支持者的挑战。",
+        "audience": "可能吸引30万元以内纯电车潜在买家、特斯拉关注者，以及关心补能、泊车、座椅和雨天用车的用户；支持者与批评者都可能产生回应动机，实际受众构成无法确认。",
+        "reasons": [
+          {
+            "point": "主要机制一：预算限定让争议与购车选择发生联系，反向挑战则邀请观众寻找反例、赞同或反驳；转发也可能成为表达立场的方式。反事实看，删去这句挑战，只保留后面的配置清单，文本中的对抗张力可能明显减弱，但不能据此判断实际互动动机。",
+            "evidence": "30万以内你能找得出第二台比这个车更拉垮的车吗?",
+            "is_hypothesis": true
+          },
+          {
+            "point": "主要机制二：连续把评价落到可理解的使用问题，给观众多个判断节点；雨刮段尤其用三种天气条件形成简短、易复述的表达。反事实看，若把这些具体说法改成反复说“体验不好”，可讨论性可能下降。不过，表达具体不等于指控已经得到验证。",
+            "evidence": "晴天猛刮,大雨小刮,小雨压根就不刮,我真是服了。",
+            "is_hypothesis": true
+          }
+        ],
+        "tags": [
+          "预算限定",
+          "反向挑战",
+          "连续槽点",
+          "品牌争议",
+          "汽车体验"
+        ],
+        "gaps": "材料只含标题、识别稿和公开计数。所给播放195,968、粉丝7,812及约25.1倍，只描述播放与粉丝数的比例，不能证明文案带来了这些播放；粉丝数是否对应发布当时也不明。点赞、评论、收藏、投币和分享计数不能说明互动情绪、分享理由或平台推荐依据。缺少画面、音频、逐句时间戳、完播率、留存曲线和评论正文，无法判断实际前3秒、表演语境、剪辑节奏、观众流失点及争论内容。具体车型、年款、地区、价格口径、软件版本及拍摄和发布时间不清；“国下新路约车”“换新弯”“道道”等疑似识别错误不能自行校正为事实。充电表现、功能配置、FSD价格与可用性、雨刮表现均只是稿中主张，缺少对应核验材料。既有粉丝、热点时机、账号历史、站外传播、投流未知及随机性都可能影响表现；还存在幸存者偏差，单条内容不能证明通用规律。",
+        "analysis_version": 2,
+        "account_field": "汽车、车评讲解",
+        "opening_3s": {
+          "evidence": "移民火星资格我不要了,30万以内你能找得出第二台比这个车更拉垮的车吗?",
+          "technique": "文字先用放弃某种资格的戏谑表态制造反差，再设置30万元预算边界，抛出需要观众寻找反例的负面挑战。",
+          "retention_reason": "可能让相关购车者想知道具体缺点，也让持不同立场的人等待作者拿出依据；这是对文本作用的推测。",
+          "limitation": "没有时间戳，仅按开头文字推测，无法确认真实前 3 秒；也无法确认这整句话是否落在前3秒内。"
+        },
+        "takeaways": [
+          {
+            "point": "用预算和比较问题限定讨论范围，让观点与具体购车决策发生联系。",
+            "evidence": "30万以内你能找得出第二台比这个车更拉垮的车吗?",
+            "application": "做汽车讲解时，把“这车值不值”改成“预算25—30万元、没有家充、每月跑长途，先比较哪些补能条件”；明确价格口径、候选版本和使用场景，再给判断。"
+          },
+          {
+            "point": "把抽象评价改成能理解、能核对的场景问题。",
+            "evidence": "他连个360影像都没有,他连3D立体环绕都没有,",
+            "application": "面向经常停窄车位的新手，改讲“驾驶员能从哪里发现车侧低矮障碍”；补齐屏幕、后视镜和车外位置的对应素材，再解释某项配置对这个场景的帮助与限制。"
+          },
+          {
+            "point": "用条件变化组织短段落，使每段都有新的判断内容。",
+            "evidence": "晴天猛刮,大雨小刮,小雨压根就不刮,我真是服了。",
+            "application": "讲自动雨刮时，按不同雨量分别展示触发和刮刷表现，注明车型、软件版本、设置及观察次数；每段回答一个问题，避免只重复“好用”或“不好用”。"
+          }
+        ],
+        "avoid_copying": [
+          {
+            "point": "不照搬针对车主或品牌支持者的群体嘲讽。",
+            "reason": "文本把产品问题升级为身份对抗，可能引出争论，也可能让讨论偏离购车判断；没有评论正文，不能确认它带来了什么质量的互动。",
+            "alternative": "把挑战对象改成具体判断，例如“仅凭配置表，这个泊车方案能否满足窄车位需求”，邀请用户补充版本和场景。"
+          },
+          {
+            "point": "不直接复述充电、FSD和雨刮方面的断言。",
+            "reason": "材料未提供对应测试、版本或时间条件，识别稿也可能有误，无法支持跨车型、跨地区或跨版本概括。",
+            "alternative": "先核对具体车辆与功能条件；有实测就展示记录，缺实测就明确作为待验证问题，不宣布性能高低或功能可用性结论。"
+          },
+          {
+            "point": "不把个人配置期待扩展成整车优劣排名。",
+            "reason": "“更拉垮”的整体判断需要比较范围和评价标准；按摩、氛围灯等项目在不同用户心中的权重也可能不同。",
+            "alternative": "明确说“对经常夜间泊车的新手，这项更值得优先检查”，并交代结论适用的人群与场景。"
+          }
+        ],
+        "adapted_topics": [
+          {
+            "title": "800V就一定充得更快？买电车先看清比较条件",
+            "opening": "30万以内买电车，看到800V就能下结论吗？先把比较条件摆出来，再看充电速度该怎么比。",
+            "outline": [
+              "限定候选车型、具体版本和价格口径，说明面向经常公共补能的用户。",
+              "列出需要记录的电量区间、充电桩、温度及车辆状态。",
+              "需补可比条件下的连续充电记录，展示用时、充入电量和功率变化；缺材料时只解释比较方法。",
+              "根据已取得的材料给出有条件的判断，标出尚不能比较的项目。"
+            ],
+            "source_mechanism": "借鉴预算限定和反向提问，把品牌争执改成对比较条件的追问，再用具体材料逐项回应。"
+          },
+          {
+            "title": "三路倒车画面和360影像，窄车位该怎么比较？",
+            "opening": "后方和两侧都有画面，窄车位就够用了吗？先看一个具体问题：贴近车身的矮障碍，驾驶员从哪里发现？",
+            "outline": [
+              "限定新手在窄车位泊车的需求，核对候选车辆的具体影像功能。",
+              "用静态车辆和软质标记物设置同一场景，对照屏幕、后视镜与车外位置。",
+              "需补驾驶位视角、屏幕录制及车外对应素材，展示哪些位置可见、哪些仍需观察。",
+              "围绕这个场景解释使用差异，不由单项配置推导整车高下。"
+            ],
+            "source_mechanism": "借鉴具体槽点带来的判断欲，把配置有无转化为观众能理解的场景任务。"
+          },
+          {
+            "title": "30万家用车，通风、按摩、氛围灯怎么排优先级？",
+            "opening": "同样30万预算，座椅通风、按摩和氛围灯，你会先保留哪一项？先把用车场景说清楚，再谈少了什么算缺点。",
+            "outline": [
+              "按夏季通勤、长时间乘坐和夜间使用列出不同需求。",
+              "需补候选版本的配置表、选装价格和对应功能演示，避免混用版本。",
+              "把配置有无、实际体验和个人偏好分别说明；没有体验素材时不评价舒适效果。",
+              "给不同需求的人提供取舍顺序，并说明仍需本人体验的部分。"
+            ],
+            "source_mechanism": "借鉴预算约束和逐项回应的结构，把单向吐槽改成家用车配置取舍问题。"
+          }
+        ]
+      },
+      "transcript_excerpt": "移民火星资格我不要了,30万以内你能找得出第二台比这个车更拉垮的车吗?\n你唯一能找到的就是他的弟弟Model3,真的。\n先说这个充电速度,400V架构。\n你现在"
+    },
+    {
+      "aweme_id": "bilibili:BV1W4x864Etw",
+      "day": "2026-11-06",
+      "desc": "没有谁比油车车主更懂电车",
+      "author": "车事荟",
+      "keyword": "车评",
+      "published_at": "2026-11-01T19:47:14+00:00",
+      "platform": "bilibili",
+      "followers": 7812,
+      "likes": 8140,
+      "views": 83941,
+      "coins": 794,
+      "comments": 1584,
+      "favorites": 788,
+      "shares": 452,
+      "ratio": 10.745135688684076,
+      "url": "https://www.bilibili.com/video/BV1W4x864Etw",
+      "status": "done",
+      "saved": false,
+      "tags": [
+        "身份反转",
+        "反讽",
+        "标准对照",
+        "结尾例外",
+        "油电争论"
+      ],
+      "analysis": {
+        "summary": "最值得学的是用反讽呈现评价标准的不一致，再用结尾的“例外对象”回收前文；但它是否促成高播放，仅凭单条逐字稿和公开计数无法证明。",
+        "hook": "没有人能比油车车主更努电车了。",
+        "hook_type": "身份反转 + 反常识反讽",
+        "structure": [
+          "开头将油车车主设成电车的权威解释者，结合标题与后文形成反讽。",
+          "围绕长途出行，连续列出每逢假期跑高速、不能下高速充电、必须保持120码等绝对化设定。",
+          "转向车企经营，以新能源车企被预言倒闭、老牌车企被认为有底蕴作对照。",
+          "转向配置价值，直接对照同样的功能在油车和电车上获得的不同评价。",
+          "转向能源成本，以不断抬高的假设电价继续放大被讽刺论断的荒诞感。",
+          "用反复强调“重点”引出特斯拉例外，为前面的批评清单增加一个待解释的矛盾。",
+          "以识别不清的结尾短句解释例外，再接关注引导；具体包袱无法可靠还原。"
+        ],
+        "template": "没有谁比___更懂___。听了___的说法，我才知道，原来___一定要___，还必须___。同样的___，放在___上叫___，放在___上却成了___。至于___，据说只要___就必然___。重点来了：为什么___偏偏没有这些问题？最后用___解释这个例外，回扣前面暴露的评价标准。",
+        "topic": "借油电争论中的绝对化说法与配置评价差异，讽刺稿件所描绘的选择性评价标准，而非提供系统的车型测评。",
+        "audience": "经常接触油电争论、关注高速补能、车辆配置和用车成本的汽车用户。文本可能同时吸引认同该立场的人与想反驳的人，实际观众构成未知。",
+        "reasons": [
+          {
+            "point": "反讽将抽象的“双重标准”变成容易复述的具体对照，可能让熟悉类似争论的人产生认同表达、反驳或转发给他人讨论的动机；这些实际反应尚无评论正文支持。",
+            "evidence": "这些功能放在油车上面是尊贵的代表,但是放在电车上面就是花里胡哨,一点用也没有。",
+            "is_hypothesis": true
+          },
+          {
+            "point": "连续铺陈批评后，突然抛出一个被宣布不受这些批评影响的品牌，形成需要解释的例外，可能促使观众等待收尾并重新理解前文；结尾识别不清，无法确认完整笑点及其实际效果。",
+            "evidence": "特斯拉没有以上我说的任意一个缺点,为什么呢?为什么特斯拉没有这个缺点呢?",
+            "is_hypothesis": true
+          }
+        ],
+        "tags": [
+          "身份反转",
+          "反讽",
+          "标准对照",
+          "结尾例外",
+          "油电争论"
+        ],
+        "gaps": "可观察材料是标题、疑有错字的识别稿及B站公开计数。83,941播放÷7,812粉丝约为10.7，但发布时粉丝数、既有活跃受众、发布时间、统计时点、热点位置、站外导流及投流情况均未知，倍数不能证明传播机制或因果。1,584条评论、452次分享不能说明评论立场、分享理由或传播路径。没有画面、音频、逐句时间戳、曝光点击数据、完播率和留存曲线，无法判断真实前3秒、表演方式、剪辑贡献、流失位置或平台分发依据。“更努”“油脆脆,不过特脆”等疑似识别错误不能擅自还原；稿尾“关注两哥哥”与作者标注“车事荟”也需核对原视频，无法据此判断昵称、转载或识别问题。稿中的电价暴涨、车企即将倒闭等是反讽叙事中的说法，没有材料证明其事实成立，也没有原始评论证明这些观点代表油车车主。单一样本缺少低播放对照，无法排除随机性、幸存者偏差及其他分发变量，不能推出通用爆款规律。",
+        "analysis_version": 2,
+        "account_field": "汽车、车评讲解",
+        "opening_3s": {
+          "evidence": "没有人能比油车车主更努电车了。",
+          "technique": "结合标题“没有谁比油车车主更懂电车”理解，开头把油车车主设成电车的权威解释者，制造身份错位；结合后文的夸张论断，可识别为反讽。“更努”疑似识别错误，未按猜测改写引文。",
+          "retention_reason": "它先提出“谁更懂电车”的立场冲突，可能让熟悉油电争论的人继续确认作者准备如何举例、反驳谁；不能据此认定观众已经被留住。",
+          "limitation": "没有时间戳，仅按开头文字推测，无法确认真实前 3 秒；也无法判断这句话是否配合停顿、字幕或其他视听表达。"
+        },
+        "takeaways": [
+          {
+            "point": "用一句身份反转建立讨论入口。反事实检查：移除这句，后面的连续论断更容易显得零散，反讽立场也可能更晚才被识别。",
+            "evidence": "没有人能比油车车主更努电车了。",
+            "application": "在汽车、车评讲解中，把入口落到具体判断，例如“还没问路线和补能条件，就能判一辆电车跑不了长途？”随后只回答这个问题，列出路线、气温、补能条件等需要核对的变量，避免泛指整个车主群体。"
+          },
+          {
+            "point": "把争议整理成同一对象、两套评价的对照，让观众容易理解分歧在哪里；这种文本对照本身不证明现实中存在普遍偏见。",
+            "evidence": "这些功能放在油车上面是尊贵的代表,但是放在电车上面就是花里胡哨,一点用也没有。",
+            "application": "讲解座椅按摩、车载冰箱等配置时，先固定用户场景，再统一比较使用频率、操作便利性和选装成本。补齐实际演示及配置来源后，说明哪些人用得上、哪些人可以省下这笔钱。"
+          },
+          {
+            "point": "让结尾回收前面的论据。反事实检查：移除特斯拉例外，稿件仍有反讽，但会失去一次重新解释前文的转折。",
+            "evidence": "特斯拉没有以上我说的任意一个缺点,为什么呢?为什么特斯拉没有这个缺点呢?",
+            "application": "做配置评价时，可以先展示隐去品牌与动力形式的配置资料，最后揭示车型，再检查同一套标准能否继续成立。需先核实配置和价格；揭晓只能引导自查，不能声称观众已经表现出双重标准。"
+          }
+        ],
+        "avoid_copying": [
+          {
+            "point": "把“油车车主”整体当成持有同一种观点的群体。",
+            "reason": "材料只有作者对一类观点的转述，没有原始评论及样本范围，无法证明群体代表性；直接照搬也容易让车型讨论变成人群对立。",
+            "alternative": "明确回应一条具体论断。取得原始材料后交代出处与语境；暂时没有材料时，用“假设有人提出……”标明讨论设定。"
+          },
+          {
+            "point": "把电价暴涨、车企即将倒闭等夸张断言写成车评事实。",
+            "reason": "这些内容在稿中承担反讽作用，提供的材料没有事实依据；脱离语境传播可能造成误解。",
+            "alternative": "谈成本时注明能源价格的时间、地点与适用条件；谈车企经营时补充可核查资料，并区分已经发生的事实与未来判断。"
+          },
+          {
+            "point": "照搬多话题堆叠和反复喊“重点”的节奏。",
+            "reason": "本稿跨越高速、经营、配置和电价，缺少留存数据，无法证明每一段都有效；用于车评讲解可能挤占必要的解释空间。",
+            "alternative": "每条只选一个判断，安排两个可对照场景，再给出带条件的结论；需要悬念时，直接说明尚未回答的具体问题。"
+          },
+          {
+            "point": "擅自还原结尾谐音梗及其品牌指向。",
+            "reason": "“因为油脆脆,不过特脆”的识别结果不清楚，无法确认原话及作者具体意图。",
+            "alternative": "改用能由正文支撑的原创收尾，例如“换了车标，这套评价标准还成立吗？”并明确哪些判断已有证据、哪些仍待验证。"
+          }
+        ],
+        "adapted_topics": [
+          {
+            "title": "电车长途车评，只看能不能跑120够吗？",
+            "opening": "一场长途车评，如果只回答“能不能一直跑120”，还没回答另一个问题：这趟行程需要怎么安排补能，又要花多少时间？",
+            "outline": [
+              "提出待检验的问题：持续车速能否独立代表长途使用体验，先不预设车型结论。",
+              "选定具体路线和车辆，记录气温、载荷、起终点电量及补能安排，把行驶时间和停留时间分开。",
+              "分别解释赶时间的跨城用户与本来需要中途休息的家庭用户，会如何评价同一份行程记录。",
+              "素材待补：完整行程记录、车辆信息和补能凭证；补齐前只讲评估方法，不报告未经实测的耗时或续航。"
+            ],
+            "source_mechanism": "借鉴开头质疑默认判断、后文用具体条件拆解绝对化标准的方式，把身份争论改成可核对的使用场景。"
+          },
+          {
+            "title": "把车标遮住，你会留下哪些配置？",
+            "opening": "先不看车标和动力形式。只看你每天怎么用车，这几项配置你会保留哪些？选完，再看它们装在哪辆车上。",
+            "outline": [
+              "明确使用场景，例如日常独自通勤，或经常带家人跨城出行。",
+              "展示隐去品牌的真实配置资料，让取舍围绕使用频率、操作便利性和成本展开。",
+              "结尾揭示车型信息，再检查原先的取舍理由是否仍然适用，并说明配置名称相同也未必代表体验相同。",
+              "素材待补：可核对的配置表、价格资料及必要的功能演示；将互动标为取舍练习，不虚构参与者反应或宣称完成盲测。"
+            ],
+            "source_mechanism": "借鉴同一配置的评价对照与结尾揭晓，让观众检查自己的标准；避免预先给任何车主群体定性。"
+          },
+          {
+            "title": "油车电车谁省钱，先把这几个条件说清楚",
+            "opening": "还没问能不能装家充、每年开多少公里，就给出“一定更省钱”？先把账本的条件补全，再给结论。",
+            "outline": [
+              "选定可比车型和用户使用周期，明确比较的是能源支出，还是包含购车差价等项目的总成本。",
+              "分别列出不同充电条件，使用可核实的能源价格与有出处的能耗资料，统一计算口径。",
+              "改变年里程和能源价格等条件，展示结论对哪些变量敏感，不预设油车或电车必胜。",
+              "素材待补：车型报价、价格适用日期与地点、能耗来源及用户里程假设；缺失的成本项目明确列出，不能把能源支出等同于全部用车成本。"
+            ],
+            "source_mechanism": "借鉴反讽绝对化断言的入口，将稿中的电价争论重新组织为有条件、可复算的车评讲解。"
+          }
+        ]
+      },
+      "transcript_excerpt": "没有人能比油车车主更努电车了。\n我也是上网看到了油车车主说的,才知道我的电车每个周末节假日都要跑一千公里高速出油,而且高速上一定没有充电装。\n上了高速之后,在到"
+    },
+    {
+      "aweme_id": "youtube:EfOCz-x5_GE",
+      "day": "2026-11-06",
+      "desc": "BYD ATTO 2 DM-i Review: Should you buy this instead of an EV?\n\nSee the latest BYD ATTO 2 offers at Vertu: https://www.vertumotors.com/new-car-deals/byd/atto-2/\n\nThe BYD ATTO 2 DM-i brings BYD's Super DM plug-in hybrid technology to its compact SUV, offering electric driving for everyday journeys with the flexibility of a petrol engine when you need to travel further.\n\nIn this full review, we take a closer look at the BYD ATTO 2 DM-i Boost to find out whether it could be the sweet spot between a conventional hybrid and a fully electric SUV.\n\nThe Boost combines BYD's DM-i plug-in hybrid system with the larger battery option, giving it significantly more electric driving capability than the entry-level version. It produces 212PS, can accelerate from 0-62mph in 7.5 seconds, and offers a combined driving range of up to 621 miles.\n\nThere's plenty to explore inside too. The Boost adds features including 17-inch alloy wheels, a panoramic sunroof, vegan leather upholstery, heated front seats and steering wheel, a 360-degree camera, wireless phone charging and Vehicle-to-Load capability.\n\nBYD also gives the ATTO 2 DM-i a 12.8-inch touchscreen with Google Automotive Services, bringing Google Maps, Google Assistant and compatible apps directly into the infotainment system.\n\nAt around 4.3 metres long, it's designed to combine compact dimensions with useful passenger space, making it an interesting alternative for buyers who want a practical electrified SUV without moving into a much larger car.\n\nBut does BYD's DM-i system actually make the ATTO 2 better suited to everyday UK driving? What's it like inside, how practical is it, and could this be a better option than going fully electric?\n\nWatch our full BYD ATTO 2 DM-i review to find out.\n\n👉 Find your next BYD: https://www.vertumotors.com/new-car-deals/byd/atto-2/\n👍 Like this video if you found it useful\n🔔 Subscribe to Vertu for more new car reviews, comparisons and buying advice!\n\n0:00 BYD ATTO 2 Review – Introduction\n0:47 BYD ATTO 2 Price\n1:00 BYD ATTO 2 Exterior\n2:27 BYD ATTO 2 Boot Space\n3:07 BYD ATTO 2 Interior & Technology\n6:45 BYD ATTO 2 Storage & Practicality\n7:58 BYD ATTO 2 Rear Seats & Passenger Space\n8:52 BYD ATTO 2 Driving Review\n14:46 BYD ATTO 2 Verdict – Is It Worth Buying?\n\nVertu is one of the UK's largest motor retailers with over 200 dealerships nationwide, representing more than 30 of the world's leading manufacturers. New and Used cars, vans and motorcycles, MOTs, Servicing, repairs, parts and accessories. In our dealerships, on the phone and online - www.vertumotors.com\n\nWe are #Vertu #BYD #BYDATTO2 #BYDReview #PlugInHybrid #PHEV #HybridSUV #HybridCar #SUVReview #CarReview #NewCar",
+      "author": "Vertu",
+      "keyword": "2026 SUV review",
+      "published_at": "2026-10-30T16:00:10+00:00",
+      "platform": "youtube",
+      "followers": 22500,
+      "likes": 42,
+      "views": 48433,
+      "coins": null,
+      "comments": 4,
+      "favorites": null,
+      "shares": null,
+      "ratio": 2.1525777777777777,
+      "url": "https://www.youtube.com/watch?v=EfOCz-x5_GE",
+      "status": "done",
+      "saved": false,
+      "tags": [
+        "购车选择题",
+        "价格质感反差",
+        "插混与纯电",
+        "小型SUV",
+        "场景评测"
+      ],
+      "analysis": {
+        "summary": "最值得学的是用“插混能否替代纯电”的购车选择吸引关注，再用价格与内饰质感的预期差推进评测，但材料不完整，无法证明这两个机制带来了高播放。",
+        "hook": "Welcome back to the Virtue YouTube channel and yes the weather has changed, long sleeves from now on. Right we're back with another SUV and this time it's from BYD.",
+        "hook_type": "寒暄式开场 + 品牌引入；标题另用替代选择提问",
+        "structure": [
+          "开场：先聊天气，再介绍比亚迪车型，回顾此前评测的好印象，并请求点赞订阅。",
+          "价格：报出拍摄当天经销商提供的入门版价格，不能将它当成所展示高配版本的售价。",
+          "外观：评价设计，再用福特Puma和现代Kona帮助观众理解车辆尺寸与定位。",
+          "后备厢：给出入门版和Boost版容量差异，并将其与电池大小联系起来，形成版本取舍。",
+          "内饰：介绍屏幕、座椅和舒适配置，再回应价格便宜是否意味着内饰廉价的疑问。",
+          "中间缺失：描述列出6:45储物便利性、7:58后排空间、8:52驾驶体验，但对应正文未提供，无法分析具体论证与转折。",
+          "已提供的结尾片段：围绕充电、原稿宣称的55英里纯电行驶能力和汽油机后备，解释日常通勤与远行用途。",
+          "结论与行动：描述将结论标在14:46；已给结尾把目标用户归为家庭及城市通勤人群，并引导到经销商试驾。"
+        ],
+        "template": "改编模板，将标题选择题前置，并非还原原片开场：你平时___，偶尔还要___，该选___还是___？先看本次比较的市场、版本和价格：___。你可能担心___，我们检查___来回答；但这只能说明___，还不能证明___。入门版提供___，高配多出___，同时需要接受___。最后回到你的用车条件：如果___，可以优先考虑___；如果___，还需要补充___再判断。",
+        "topic": "以小型插混SUV为切口，讨论尚未决定购买纯电的用户，能否用一种动力方案兼顾通勤与远行。",
+        "audience": "从标题和结尾判断，主要面向英国市场中考虑小型SUV、关心家庭实用性、仍在插混与纯电之间犹豫的购车者。迁移到中文账号时，应重新限定预算、补能条件和用车路线。",
+        "reasons": [
+          {
+            "point": "把车型介绍变成购买选择，可能承接观众对充电和远行的不确定感，也有供家人共同选车时转发讨论的用途，但没有分享证据。反事实：删去“替代纯电”的比较，标题只剩车型介绍，决策悬念可能减弱。",
+            "evidence": "BYD ATTO 2 DM-i Review: Should you buy this instead of an EV?",
+            "is_hypothesis": true,
+            "evidence_translation": "比亚迪ATTO 2 DM-i评测：你应该买它来代替纯电车吗？"
+          },
+          {
+            "point": "先提出“价格低，车内会不会廉价”的怀疑，再给出积极评价，可能制造意外感。反事实：删去这处质疑与否定转折，软包、屏幕和座椅介绍更容易变成配置罗列。不过，目前只能确认作者表达了认可，不能确认观众被说服。",
+            "evidence": "Everything is put together so so nicely and I think there is a misconception amongst BYDs and sort of cherry a molder jacos etc that it's going to be cheap on the inside because of those real competitive prices. No no no no that is a misconception because this is very nice indeed.",
+            "is_hypothesis": true,
+            "evidence_translation": "所有东西都装配得很好。我觉得，很多人对比亚迪和文中提到的其他品牌有个误解：价格这么有竞争力，车内一定很廉价。不不不，这是误解，因为这里面确实很不错。"
+          }
+        ],
+        "tags": [
+          "购车选择题",
+          "价格质感反差",
+          "插混与纯电",
+          "小型SUV",
+          "场景评测"
+        ],
+        "gaps": "逐字稿共 13822 字，已截断为开头 6000 字和结尾 1500 字；中间内容未提供，不能推断完整结构。 逐字稿共13822字，材料说明仅提供开头6000字和结尾1500字，中间内容已省略；不能推断完整结构、驾驶论证、负面评价或标题问题是否得到充分回答，章节表只能证明标注的主题顺序。没有视频画面、音频、逐句时间戳、完播率、留存曲线或评论正文，不能判断实际前三秒、镜头、剪辑、语气及观众反应。公开计数为48433播放、22500订阅、42赞、4评；播放除以订阅约2.15，取一位小数为2.2，但这不是相对账号历史播放基线的爆款倍数，也不能证明强共鸣或分享。缺少发布时间、统计时点、历史表现、流量来源和投流信息，无法分离粉丝基础、热点时机、搜索需求与随机性的作用；搜索关键词“2026 SUV review”不能证明车型年款或发布年份。作者为汽车零售商，描述附购车链接，存在销售导向，但不能据此认定付费投流。价格、配置、续航、充电和品牌增长等均为材料中的说法，未独立核验；起售价对应入门版，展示配置涉及Boost版，不能混用。语音识别存在疑点，例如频道名及其他品牌名；原稿也有先称没有硬塑料、随后承认门板有一小处的表述，不能直接当检测结论。按关键词筛选的单样本可能存在筛选与幸存者偏差，不能证明通用传播规律。",
+        "analysis_version": 2,
+        "account_field": "汽车、车评讲解",
+        "opening_3s": {
+          "evidence": "Welcome back to the Virtue YouTube channel and yes the weather has changed, long sleeves from now on.",
+          "technique": "用欢迎回归和天气闲聊建立熟悉感。该句尚未提出车型、购买难题或比较结果，不能把标题的选择题算作实际口播开场。",
+          "retention_reason": "对熟悉主持人的老观众，日常寒暄可能维持亲近感；对首次接触账号的购车用户，这句话提供的决策价值有限，留人作用无法确认。",
+          "limitation": "没有时间戳，仅按开头文字推测，无法确认真实前 3 秒；已有章节时间不能定位这句话的起止位置，也没有留存数据可验证效果。",
+          "evidence_translation": "欢迎回到Virtue的YouTube频道。是的，天气变了，从现在开始要穿长袖了。"
+        },
+        "takeaways": [
+          {
+            "point": "把动力技术翻译成日常任务，让观众知道它与自己的生活有什么关系；这是文案组织方法，不能替代实际测试。",
+            "evidence": "The BYD ATTO 2 DM-i brings BYD's Super DM plug-in hybrid technology to its compact SUV, offering electric driving for everyday journeys with the flexibility of a petrol engine when you need to travel further.",
+            "application": "中文车评围绕“平时通勤、偶尔跨城、能否稳定充电”组织。口播可以说：“先说你在哪充电，再看这辆插混适不适合你。”实拍常用停车位、充电过程和用车路线；涉及省钱或续航结论时，补充能耗、费用及测试条件，不能只用厂商参数作结。",
+            "evidence_translation": "比亚迪ATTO 2 DM-i将超级插混技术带入小型SUV，日常出行可以用电，需要走得更远时则可使用汽油发动机。"
+          },
+          {
+            "point": "回应廉价感的疑问时，要指向具体接触部位，让评价有可检查的对象。",
+            "evidence": "But everywhere else in the dash is a squidgy sort of leather of backed material all across there as well.",
+            "application": "面向预算有限、第一次买车的人，口播改成：“价格能接受，常摸的地方做得怎么样？”实拍门板扶手、中控台和接缝，并展示同一部位的按压过程。把“触感软”“装配是否整齐”分开说，不能凭软包推断耐用性或整车可靠性。",
+            "evidence_translation": "但仪表台其他地方，覆盖的都是一种软软的、有皮质包覆感的材料。"
+          },
+          {
+            "point": "把版本差异写成取舍，帮助观众判断多花的钱是否符合用途。",
+            "evidence": "On the entry level trim you do get a very big boot. 425 litres. On the boost trim you get 400 litres because this has got a bigger battery.",
+            "application": "选择国内同一车型的两个版本，口播：“多花___元，换来___，同时需要接受___，对你有用吗？”先核对同年款配置表和同期报价，再用同一组行李箱或婴儿车实拍装载。官方容积与实拍装载结果分开标注，不把海外版本差异直接套到国内。",
+            "evidence_translation": "入门版的后备厢很大，有425升。Boost版是400升，因为它使用了更大的电池。"
+          }
+        ],
+        "avoid_copying": [
+          {
+            "point": "照搬天气寒暄和提前请求点赞订阅。",
+            "reason": "这依赖观众对主持人的熟悉程度，也推迟了购车问题的出现；没有留存曲线，不能断言它造成了流失。",
+            "alternative": "中文短视频先问：“有固定充电条件、偶尔跑长途，该选插混还是纯电？”再交代车型和比较范围。"
+          },
+          {
+            "point": "把密集赞美当成测评证据。",
+            "reason": "“很高级”“很舒服”等评价主要是个人感受；作者还有经销商销售场景，材料不足以证明长期品质或同级优势。",
+            "alternative": "每个评价紧跟可见依据。响应速度拍操作过程，空间拍实际乘坐或装载，能耗展示记录；没有测试的部分直接标注。"
+          },
+          {
+            "point": "把入门价格、高配配置和宣称续航拼成同一个购买承诺。",
+            "reason": "材料中的价格与展示版本不同，市场、年款和测试口径也会影响结论。",
+            "alternative": "画面同时标注市场、年款、版本及报价日期；厂商标称、仪表显示与实际测试分别呈现。"
+          },
+          {
+            "point": "把长评章节顺序完整压进一条短视频。",
+            "reason": "原材料按外观、空间、内饰、驾驶展开，信息范围较大；缺失中段也无法证明每个章节都在留人。",
+            "alternative": "一条中文短视频处理一个问题，例如“是否适合没有固定充电条件的人”；只保留回答它所需的配置、补能和路线证据。"
+          }
+        ],
+        "adapted_topics": [
+          {
+            "title": "有固定车位、偶尔跑长途，插混还是纯电？",
+            "opening": "平时通勤，假期跑长途，你该选插混还是纯电？先看你能在哪充电，再看你最常跑的路线。",
+            "outline": [
+              "面向首次买新能源的小家庭，列出通勤需求、长途频次和实际充电条件；示例里程必须标注为假设场景。",
+              "选择同预算、同市场的候选车型，补齐同期报价和配置来源，用图示解释各自的补能流程。",
+              "实拍常用停车位或充电点；比较能耗和费用前，补充同路线记录，并交代出发电量、气温和路况。",
+              "按稳定充电条件与长途频次给出条件化建议；缺少完整记录时，只讲选择条件，不报成本胜负或实测续航。"
+            ],
+            "source_mechanism": "借鉴标题的替代选择题，把动力方案落实到中文家庭用户的补能条件和出行路线。"
+          },
+          {
+            "title": "同一辆车，入门版和高配的差价该不该花？",
+            "opening": "看车别只记起售价。你每天用的功能在哪一版，多花的钱换来了什么，咱们对着配置和实车一项项看。",
+            "outline": [
+              "选择同年款的两个版本，明确目标观众是预算有限、兼顾通勤和家庭出行的购车者。",
+              "用同一报价口径列出差价，确认观众关心的配置分别属于哪个版本。",
+              "实拍常用功能及同一组行李的装载；若两版本有电池或空间差异，先核对官方资料再展示。",
+              "按日常使用频次讨论配置价值，给出适合不同需求的版本建议。",
+              "需要补充有效报价、官方配置表和对应版本实拍；未拿到的资料明确留空，不预设高配一定更值。"
+            ],
+            "source_mechanism": "借鉴原稿对版本配置与空间取舍的交代，把配置介绍改成观众能实际使用的购买比较。"
+          }
+        ],
+        "hook_translation": "欢迎回到Virtue的YouTube频道。是的，天气变了，从现在开始要穿长袖了。好了，我们又带来一辆SUV，这次来自比亚迪。"
+      },
+      "transcript_excerpt": "Welcome back to the Virtue YouTube channel and yes the weather has changed, long"
+    },
+    {
+      "aweme_id": "youtube:S1TAOI1TBcc",
+      "day": "2026-11-06",
+      "desc": "2026 Toyota RAV4 ADV Review | Zigwheels.Ph\n\nIs this the best Toyota you can buy today?\n\nThe 2026 RAV4 ADV comes with a lot of tech, performance, and looks without even having to be the top-spec model–and it's been flying off the showroom floor as a result.\n\nBut is it just fan hype or is this actually a legit contender for COTY awards this season? Check out our Review and let us know what you think!\n\n00:00 Car of the Year?\n00:27 Exterior\n04:00 Interior\n11:51 Driving Impressions\n16:40 Fuel Economy\n18:49 Safety Tech\n20:03 Pricing and \"Toyota Tax\" Thoughts\n\nIf you love this video, make sure to leave us a like and please subscribe to our channel and hit that notification icon to be alerted whenever we upload a new video! Can we make it to #100ksubscribers this time?\n\nSubscribe to our channels!\n\nWebsite: #ZigWheelsPH: https://zigwheels.ph\nYouTube: https://bit.ly/3NOKZ02  \nFacebook: https://www.facebook.com/ZigWheelsPhilippines\nInstagram: https://www.instagram.com/zigwheelsph/\nTwitter: https://twitter.com/ZigwheelsPH",
+      "author": "ZigWheels Philippines",
+      "keyword": "2026 SUV review",
+      "published_at": "2026-10-30T10:00:38+00:00",
+      "platform": "youtube",
+      "followers": 56100,
+      "likes": 253,
+      "views": 47481,
+      "coins": null,
+      "comments": 61,
+      "favorites": null,
+      "shares": null,
+      "ratio": 0.8463636363636363,
+      "url": "https://www.youtube.com/watch?v=S1TAOI1TBcc",
+      "status": "done",
+      "saved": false,
+      "tags": [
+        "悬念提问",
+        "热度质疑",
+        "条件式结论",
+        "购车取舍",
+        "长篇车评"
+      ],
+      "analysis": {
+        "summary": "最值得借鉴的是用“热度是否实至名归”提出验证任务，再按用车需求给出有条件的购买结论；但残缺文本和公开计数不足以证明这些机制带来了爆款或更高留存。",
+        "hook": "Is this a car of the year? Well, based on a lot of our media friends, it's [music] shaping up to be a real contender.",
+        "hook_type": "年度车悬念提问 + 同行背书",
+        "structure": [
+          "开头提出年度车资格问题，引用媒体朋友的评价和网上热销说法，再追问这辆车是否值得追捧；这些热度说法未获独立核实。",
+          "外观片段按前脸、侧面和尾部展开，穿插ADV与LTD的差异及主播个人审美偏好。",
+          "后备厢片段把装载地板、备胎等配置关联到长途出行和大件装载，并包含主播装入自行车的自述；材料不能证明实际画面如何呈现。",
+          "内饰片段先批评两块屏幕排列不协调，再讨论车机响应、界面、材料和耐用诉求，形成优缺点并列的评价。",
+          "描述列有驾驶感受、油耗、安全技术及价格章节，但中间逐字稿缺失，无法重建这些部分的论证、转折和兑现程度。",
+          "结尾按长期用车安心、技术偏好、换车周期和预算区分人群，回扣年度车候选判断，再邀请观众在本车、LTD和其他车型之间表态。"
+        ],
+        "template": "___被认为是___，但它真的值得___吗？先核对___，再放进___使用场景。它的___有吸引力，但___也有代价。如果你重视___，需要重点验证___；如果你更在意___，就与___同口径比较。现有证据支持的结论是___，还不能判断的是___。",
+        "topic": "借年度车候选和热销争议，讨论非顶配RAV4 ADV是否值得购买，并把所谓“丰田溢价”落到安心诉求、技术偏好与预算之间的取舍。",
+        "audience": "从账号、市场和版本名称推测，主要面向关注菲律宾市场RAV4 ADV/LTD的SUV潜在买家，尤其是正在权衡配置、预算和长期使用便利的人；实际观众构成未知。",
+        "reasons": [
+          {
+            "point": "主要机制一：把作者声称的热销转成待验证问题，可能吸引正在犹豫的买家继续寻找判断依据。反事实检查：删掉“是否值得这股热度”的追问，开头更接近普通车型介绍，验证动机可能减弱；这只是文本层面的假设。",
+            "evidence": "And based on what we see online, it's sold out everywhere. Lines are long, [music] not just here, but even abroad. Is it really worth the hype?",
+            "is_hypothesis": true,
+            "evidence_translation": "根据我们在网上看到的信息，它到处都售罄了。排队很长，不只这里，国外也是。它真的值得这么受追捧吗？"
+          },
+          {
+            "point": "主要机制二：结尾允许不同需求的人得出不同购买结论，可能增加决策用途，也方便观众拿去与共同购车的人讨论。反事实检查：删掉技术、换车周期和预算这些分支，结论可能更像笼统的品牌推荐。是否产生信任或分享，现有材料不能验证。",
+            "evidence": "But if that's not your mindset, if you want to be on the cutting edge of tech, if you want to replace your car every 3 to 5 years before parts become an issue, or maybe your budget just isn't up there, then that's okay, too.",
+            "is_hypothesis": true,
+            "evidence_translation": "但如果你不是这样想的，如果你想要最前沿的技术，想在零件成为问题之前每三到五年换车，或者预算没有那么高，那也完全可以。"
+          }
+        ],
+        "tags": [
+          "悬念提问",
+          "热度质疑",
+          "条件式结论",
+          "购车取舍",
+          "长篇车评"
+        ],
+        "gaps": "逐字稿共 22407 字，已截断为开头 6000 字和结尾 1500 字；中间内容未提供，不能推断完整结构。 原逐字稿共22407字，仅提供开头6000字和结尾1500字，中间内容未提供，不能推断完整结构，也不能确认驾驶、油耗、安全及价格章节是否兑现了开头问题。只有描述中的章节时间，没有逐句时间戳；没有视频画面、音频、完播率、留存曲线或评论正文，无法判断真实前3秒、镜头、剪辑、语气及观众反应。章节已到20:03，说明这是长篇评测，不能直接推导短视频的最佳结构或时长。屏幕尺寸表述先接近13英寸、后又说10.9，存在内部不一致，无法确认正确数值；热销、奖项竞争力和长期可靠性也只是材料中的说法。按播放47481、订阅56100计算，播放/订阅约0.85，与所给一位小数0.8相容，但不足以认定爆款，更不是因果证明。缺少发布时间、取数时点、账号历史播放基线及同类对照；订阅基础、车型热点时机、投流未知、随机性和幸存者偏差都可能影响结果。给定搜索关键词不能证明真实流量来源，也无法判断平台推荐依据。分享、收藏未知，评论数量不能代替评论态度；单条内容不能证明通用规律。",
+        "analysis_version": 2,
+        "account_field": "汽车、车评讲解",
+        "opening_3s": {
+          "evidence": "Is this a car of the year?",
+          "technique": "先提出年度车资格问题，把车型介绍变成一项待回答的评价任务。",
+          "retention_reason": "对正在关注这款车的人，较高的评价门槛可能引出“凭什么”的疑问，促使其继续寻找依据；实际留人效果未知。",
+          "limitation": "没有时间戳，仅按开头文字推测，无法确认真实前 3 秒；描述中的章节标注不能定位这句话的实际起止时间。",
+          "evidence_translation": "这辆车能成为年度车吗？"
+        },
+        "takeaways": [
+          {
+            "point": "把热度转成具体的验证任务，让后文有明确的回答目标。",
+            "evidence": "Is it really worth the hype? Let's find out today.",
+            "application": "中文车评可围绕家庭选SUV开场：“如果销售用‘很抢手’劝你下订，先看它能不能过你家的三关。”随后实拍车位进出、同一组常用行李装载，并展示同城带日期的落地报价。若要宣称排队或热销，先补相应记录，并限定门店、地区和日期。",
+            "evidence_translation": "它真的值得这么受追捧吗？今天我们来看看。"
+          },
+          {
+            "point": "把抽象的不满意说成观众能理解、能检查的具体问题。",
+            "evidence": "It feels kind of like having a dual monitor setup with mismatched size monitors.",
+            "application": "做车机短评时，从驾驶位实拍两块屏幕的位置关系，再录下相同导航任务的操作过程。口播可说：“屏幕排布顺不顺眼是审美，常用信息找不找得到，要实际操作。”分别给出外观感受和操作观察；没有实测，就只评价排布，不推断易用性。",
+            "evidence_translation": "这感觉有点像一套由不同尺寸显示器拼起来的双屏设备。"
+          },
+          {
+            "point": "给观众保留不购买的合理分支，把评价落到个人需求。",
+            "evidence": "You can go get a different car, and there's nothing wrong with that.",
+            "application": "结尾按真实持车计划分人群：“准备短期换车，先比较眼前需要的功能和成交条件；准备长期持有，再核对保修、保养和维修便利。”实拍常用功能，配官方保修条款、保养价目与同城询价记录。缺少长期资料时，不把品牌口碑说成已证实的可靠性。",
+            "evidence_translation": "你可以去买另一辆车，这没有什么问题。"
+          }
+        ],
+        "avoid_copying": [
+          {
+            "point": "直接搬用“到处售罄”和年度车背书。",
+            "reason": "材料只有作者陈述，没有销量、交期或奖项资料；海外市场的情况也不能直接用于中文受众所在市场。",
+            "alternative": "有证据时限定为某地区、某日期、某门店的情况；没有证据时，用“这款SUV是否适合你的需求”作为验证问题。"
+          },
+          {
+            "point": "把丰田品牌与长期省心直接画等号。",
+            "reason": "短期体验不能证明多年可靠性，材料也未提供故障率、维修成本或长期跟踪数据。",
+            "alternative": "拆成保修范围、保养价格、维修网点和零件询价等可核对项目，并明确这些资料仍不能单独证明故障概率。"
+          },
+          {
+            "point": "把整套长篇部位介绍顺序压进一条短视频。",
+            "reason": "原视频章节已超过20分钟，中间论证又缺失，无法确认这种顺序的留存效果；直接压缩容易堆配置。",
+            "alternative": "一条短视频只回答一个选车问题，例如家庭装载、车机操作或持有成本，用少量可比较素材支撑结论。"
+          },
+          {
+            "point": "照搬海外版本配置、尺寸和价格判断。",
+            "reason": "ADV/LTD对应特定市场，材料中的屏幕尺寸还存在矛盾；本地版本能否对应未知。",
+            "alternative": "先确认实拍车辆的销售地区、年款和版本，再依据本地官方配置及实际报价组织口播；无法确认的数字暂不使用。"
+          }
+        ],
+        "adapted_topics": [
+          {
+            "title": "热门SUV值得等吗？先过你家这三关",
+            "opening": "如果销售用“这车很抢手”劝你下订，先别急。你家的车位、常用行李和预算，才是今天要核对的三件事。",
+            "outline": [
+              "选定一款实际待购SUV；需要补带日期的同城交期和报价记录，没有记录就不宣称热销或售罄。",
+              "在实际车位测试停放、开门和取物，实拍并交代车位条件。",
+              "用家庭常带的行李或儿童用品测试装载，展示物品清单和座椅状态。",
+              "按相同付款、保险及附加项目口径核对落地价，区分车价与附加费用。",
+              "按是否急用车、空间是否够用和预算是否接受，给出有条件的选择结论。"
+            ],
+            "source_mechanism": "把热度变成需要验证的问题，再用家庭购车条件决定结论；需要补本地交期、实车测试和可比报价素材。"
+          },
+          {
+            "title": "买SUV，“省心”这两个字值多少钱？",
+            "opening": "“省心”听着很值钱，但不能直接当结论。把两台候选SUV的保修、保养和维修便利度摆在一起，再按你准备开几年算账。",
+            "outline": [
+              "选两台真实候选车，明确地区、版本和价格口径；需要补同城可比报价。",
+              "对照官方保修条款和保养价目，说明覆盖范围、周期及费用项目。",
+              "针对明确的维修项目询价，并记录当地服务网点情况；不拿单项报价代替整体可靠性。",
+              "分别讨论短期换车和长期持有时需要关注的条件，只计算有依据的项目，未知成本标为未知。",
+              "给出适用人群和未解决的问题；缺少长期故障资料时，不宣布哪台车一定更省心。"
+            ],
+            "source_mechanism": "把笼统的品牌价值拆成不同人群的购买条件，让观众根据自己的持有计划判断溢价是否值得。"
+          }
+        ],
+        "hook_translation": "这辆车能成为年度车吗？嗯，按照我们不少媒体朋友的看法，它正在成为一个真正有竞争力的候选者。"
+      },
+      "transcript_excerpt": "Is this a car of the year? Well, based\non a lot of our media friends, it's\n[musi"
+    },
     {
       "aweme_id": "7702708128757073334",
       "day": "2026-11-05",
@@ -407,8 +2592,11 @@
       "author": "阿源说车",
       "keyword": "车评",
       "published_at": "2026-10-31T06:01:31+00:00",
+      "platform": "douyin",
       "followers": 1099833,
       "likes": 24862,
+      "views": null,
+      "coins": null,
       "comments": 113,
       "favorites": 678,
       "shares": 517,
@@ -553,8 +2741,11 @@
       "author": "铁拳车评",
       "keyword": "车评",
       "published_at": "2026-11-02T09:48:22+00:00",
+      "platform": "douyin",
       "followers": 3551161,
       "likes": 39109,
+      "views": null,
+      "coins": null,
       "comments": 1805,
       "favorites": 23424,
       "shares": 9668,
@@ -699,8 +2890,11 @@
       "author": "沙奔可会开车了",
       "keyword": "车评",
       "published_at": "2026-11-02T12:50:00+00:00",
+      "platform": "douyin",
       "followers": 2363746,
       "likes": 13672,
+      "views": null,
+      "coins": null,
       "comments": 2954,
       "favorites": 497,
       "shares": 441,
@@ -833,8 +3027,11 @@
       "author": "丸子体育",
       "keyword": "创作台收藏",
       "published_at": "",
+      "platform": "douyin",
       "followers": null,
       "likes": 185000,
+      "views": null,
+      "coins": null,
       "comments": 1764,
       "favorites": 27000,
       "shares": 19000,
@@ -894,8 +3091,11 @@
       "author": "",
       "keyword": "创作台收藏",
       "published_at": "",
+      "platform": "douyin",
       "followers": null,
       "likes": null,
+      "views": null,
+      "coins": null,
       "comments": null,
       "favorites": null,
       "shares": null,

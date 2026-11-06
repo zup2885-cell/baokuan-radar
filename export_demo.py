@@ -9,6 +9,8 @@ from pathlib import Path
 import re
 import sqlite3
 
+from platforms import video_url
+
 ROOT = Path(__file__).resolve().parent
 DEFAULT_DB = Path.home() / 'Library/Application Support/BaokuanRadar/radar.sqlite3'
 DEFAULT_OUTPUT = ROOT / 'docs/data.json'
@@ -20,7 +22,9 @@ LOCAL_PATH = re.compile(
 
 
 def public_text(value):
-    return LOCAL_PATH.sub('［本机路径已隐藏］', value) if isinstance(value, str) else ''
+    if not isinstance(value,str):return ''
+    value=re.sub(r'AIza[0-9A-Za-z_-]{35}', '［密钥已隐藏］', value)
+    return LOCAL_PATH.sub('［本机路径已隐藏］',value)
 
 
 def public_value(value, spec):
@@ -78,35 +82,39 @@ def export_snapshot(db_path=DEFAULT_DB, day=None):
         classification_key = hashlib.sha256(json.dumps([raw_field, tracks], ensure_ascii=False).encode()).hexdigest()
         hot_columns = {r['name'] for r in db.execute('PRAGMA table_info(hot)')}
         hot = []
-        for row in db.execute('SELECT * FROM hot WHERE day=? ORDER BY rank', (day,)):
+        if 'platform' in hot_columns:
+            hot_query='SELECT * FROM hot WHERE day=(SELECT max(h.day) FROM hot h WHERE h.platform=hot.platform AND h.day<=?) ORDER BY platform,rank'
+        else:hot_query='SELECT * FROM hot WHERE day=? ORDER BY rank'
+        for row in db.execute(hot_query, (day,)):
             classified = ({'track', 'related', 'classification_key'} <= hot_columns
                           and row['classification_key'] == classification_key
                           and row['track'] in tracks and row['related'] in (0, 1))
-            hot.append({'rank': row['rank'], 'word': public_text(row['word']), 'hot_value': row['hot_value'],
+            hot.append({'platform': row['platform'] if 'platform' in row.keys() else 'douyin', 'day':row['day'], 'rank': row['rank'], 'word': public_text(row['word']), 'hot_value': row['hot_value'],
                         'track': row['track'] if classified else '未分类',
                         'related': bool(row['related']) if classified else None})
-        keywords = [{'word': public_text(r['word']), 'status': public_text(r['status']), 'found': r['found'],
+        keywords = [{'platform':r['platform'] if 'platform' in r.keys() else 'douyin', 'word': public_text(r['word']), 'status': public_text(r['status']), 'found': r['found'],
                      'hot_word': public_text(r['hot_word'])} for r in db.execute(
-                         'SELECT word,status,found,hot_word FROM keywords WHERE day=? ORDER BY rowid', (day,))]
-        schema = json.loads((ROOT / 'schemas/analysis.json').read_text(encoding='utf-8'))
+                         'SELECT * FROM keywords WHERE day=? ORDER BY rowid', (day,))]
+        schemas={p:json.loads((ROOT / 'schemas'/('analysis_youtube.json' if p=='youtube' else 'analysis.json')).read_text(encoding='utf-8')) for p in ('douyin','bilibili','youtube')}
         videos = []
         # 保留完成的历史收藏；今日列表由 day 筛选。指定历史日时不混入之后的视频。
         for row in db.execute("SELECT * FROM videos WHERE status='done' AND coalesce(day,'')<=? "
                               'ORDER BY ratio IS NULL, ratio DESC, likes DESC, aweme_id', (day,)):
             video = {key: public_text(row[key]) for key in
                      ('aweme_id', 'day', 'desc', 'author', 'keyword', 'published_at')}
-            for key in ('followers', 'likes', 'comments', 'favorites', 'shares', 'ratio'):
-                number = row[key]
+            video['platform']=row['platform'] if 'platform' in row.keys() else 'douyin'
+            for key in ('followers', 'likes', 'views', 'coins', 'comments', 'favorites', 'shares', 'ratio'):
+                number = row[key] if key in row.keys() else None
                 video[key] = number if isinstance(number, (int, float)) and math.isfinite(number) else None
             # 只保留原作品链接；拒绝 file:、脚本、本机地址和下载地址。
             ident = row['aweme_id'] or ''
-            video['url'] = 'https://www.douyin.com/video/' + ident if re.fullmatch(r'\d+', ident) else ''
+            video['url'] = video_url(video['platform'],ident.removeprefix(video['platform']+':'))
             video['status'] = 'done'
             video['saved'] = row['saved'] == 1
             tags = decode_json(row['tags'], [])
             video['tags'] = list(dict.fromkeys(public_text(t).strip() for t in tags
                                              if isinstance(t, str) and t.strip())) if isinstance(tags, list) else []
-            video['analysis'] = public_value(decode_json(row['analysis'], None), schema)
+            video['analysis'] = public_value(decode_json(row['analysis'], None), schemas.get(video['platform'],schemas['douyin']))
             video['transcript_excerpt'] = public_text((row['transcript'] or '')[:80])[:80]
             # 防止旧分析的自由文本意外粘贴全文或媒体地址。
             transcript = row['transcript'] or ''

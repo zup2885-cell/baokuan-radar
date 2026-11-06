@@ -30,7 +30,7 @@ function element(tagName = 'div', attributes = {}) {
         if(child.id)elements.set('#'+child.id,child);
       }
       // 两个嵌套区域也被独立查询；textarea 保留初始值。
-      for(const id of ['hotFilters','libraryTags','keywords']){
+      for(const id of ['hotFilters','libraryTags','keywords','platformFilters']){
         const body=this._html.match(new RegExp('<div[^>]*id="'+id+'"[^>]*>([\\s\\S]*?)<\\/div>'));
         if(body)elements.get('#'+id).innerHTML=body[1];
       }
@@ -67,6 +67,8 @@ const settle = () => new Promise(resolve => setImmediate(resolve));
 async function main() {
   vm.runInContext(source, context);
   await settle();
+  assert.match(run('statusBadge({status:"irrelevant"})'),/不相关/);
+  assert.match(run('analysisStatus({status:"irrelevant",error:"标题与领域不相关"})'),/已排除：标题与领域不相关/);
   assert.match(elements.get('#main').innerHTML, /服务没有连上/);
   assert.ok(timers > 0, '首次失败后应安排重试');
 
@@ -354,7 +356,7 @@ async function main() {
   byId('auto').checked=true;
   await byId('saveSet').onclick();
   const posted=JSON.parse(settingsCalls.find(c=>c[0]==='/api/settings')[1].body);
-  assert.deepEqual(posted,{field:'汽车成本',fixed_keywords:['车评','保养'],keywords_per_day:'6',per_keyword:'3',min_likes:'10000',recent_days:'7',auto:true,active_start:'8',active_end:'22',search_gap_minutes:'60'});
+  assert.deepEqual(posted,{field:'汽车成本',fixed_keywords:['车评','保养'],keywords_per_day:'6',per_keyword:'3',min_likes:'10000',recent_days:'7',auto:true,active_start:'8',active_end:'22',search_gap_minutes:'60',douyin_enabled:true,bilibili_enabled:false,youtube_enabled:false,x_enabled:false,bilibili_search_gap_minutes:'30',youtube_search_gap_minutes:'30',bilibili_min_views:'10000',youtube_min_views:'10000',youtube_fixed_keywords:[''],youtube_searches_per_day:'10',youtube_hot_category:''});
   for(const [id,endpoint] of [['run','/api/run'],['login','/api/login'],['challenge','/api/challenge']]){
     await byId(id).onclick();assert.ok(settingsCalls.some(c=>c[0]===endpoint));
   }
@@ -368,6 +370,34 @@ async function main() {
   assert.match(html,/max-width:760px/);
   assert.match(html,/@media\(max-width:899px\)/);
   assert.doesNotMatch(html,/box-shadow|@keyframes|transition\s*:/);
+  // 多平台：本地筛选参数、平台标识、指标算法、英文原句与翻译。
+  run('view="today";++pageVersion;platformFilter.today="";renderToday()');
+  assert.equal(byId('platformFilters').querySelectorAll('button').length,4);
+  assert.ok(!byId('platformFilters').querySelectorAll('button').some(b=>b.dataset.platform==='x'));
+  const platformRequests=[];
+  context.fetch=async url=>{platformRequests.push(url);return response({items:[]})};
+  await byId('platformFilters').querySelectorAll('button').find(b=>b.dataset.platform==='bilibili').onclick();
+  assert.match(platformRequests.at(-1),/platform=bilibili/);
+  assert.equal(byId('platformFilters').querySelectorAll('button').find(b=>b.dataset.platform==='bilibili').getAttribute('aria-pressed'),'true');
+  const multiVideos=[{...fullVideo,aweme_id:'bilibili:BV1234567890',platform:'bilibili',views:30000,coins:200,ratio:30},
+    {...fullVideo,aweme_id:'youtube:AbCdEfG1234',platform:'youtube',views:50000,followers:2000,ratio:25,desc:'Car review',
+      url:'https://www.youtube.com/watch?v=AbCdEfG1234',analysis:{...fullVideo.analysis,hook_translation:'中文钩子',
+        opening_3s:{evidence:'English opening',evidence_translation:'中文开场',technique:'提问',retention_reason:'具体情境',limitation:'无时间戳'},
+        reasons:[{point:'推测',evidence:'English evidence',evidence_translation:'中文证据'}],
+        takeaways:[{point:'账单',evidence:'English quote',evidence_translation:'中文引用',application:'用自己的中文车评账单'}]}}];
+  context.multiVideos=multiVideos;run('items=multiVideos;current=multiVideos[0].aweme_id;renderList()');
+  assert.match(byId('list').innerHTML,/B站|投币|YouTube|订阅/);
+  assert.match(byId('list').innerHTML,/播放/);
+  for(const v of multiVideos){
+    context.fetch=async()=>response(v);context.selected=v.aweme_id;run('current=selected');await run('showDetail(current)');
+    assert.match(byId('detail').innerHTML,v.platform==='youtube'?/播放 ÷ 订阅/:/播放 ÷ 粉丝/);
+    if(v.platform==='youtube'){assert.match(byId('detail').innerHTML,/English evidence/);assert.match(byId('detail').innerHTML,/中文证据|中文开场|中文引用/);assert.match(byId('detail').innerHTML,/https:\/\/www.youtube.com\/watch/)}
+    else assert.match(byId('detail').innerHTML,/投币/);
+  }
+  context.fetch=async()=>response(hot);run('view="hot";++pageVersion;hotFilter=""');await run('renderHot()');
+  assert.equal(byId('platformFilters').querySelectorAll('button').length,5);
+  assert.match(byId('main').innerHTML,/未配置 YouTube 密钥/);
+  console.log('多平台界面检查通过：平台切换、B站播放/投币、YouTube播放/订阅、倍数算法、英文证据与中文翻译、无密钥提示。');
   console.log('界面离线逻辑检查通过：五页签、新旧分析/任务状态、复制、收藏、备注保存/编辑保留、请求顺序、日期、收藏检索/标签、热榜筛选、设置及断线恢复。');
   await staticChecks();
 }
@@ -479,6 +509,24 @@ async function staticChecks() {
   assert.match(byId('list').innerHTML,/没有已完成拆解/);
   assert.doesNotMatch(byId('main').innerHTML,/undefined|设置|立即运行/);
   assert.equal(requests.length,1);
+  requests=[];delayed=[];
+  const multiFixture={...fixture,hot:[...fixture.hot,{rank:1,word:'#CarReview',platform:'x',hot_value:null,track:'汽车',related:true,day:'2026-11-04'}],
+    keywords:[...fixture.keywords,{word:'car review',platform:'youtube',status:'done',found:1}],
+    videos:[...fixture.videos,{...video,aweme_id:'youtube:AbCdEfG1234',platform:'youtube',views:10000,followers:1000,ratio:10,desc:'Car review',url:'https://www.youtube.com/watch?v=AbCdEfG1234'}]};
+  const multi=harness(multiFixture);await settle();await settle();
+  await byId('platformFilters').querySelectorAll('button').find(b=>b.dataset.platform==='youtube').onclick();
+  assert.match(byId('list').innerHTML,/Car review/);assert.doesNotMatch(byId('list').innerHTML,/养车账单/);
+  assert.match(byId('keywords').innerHTML,/car review/);assert.doesNotMatch(byId('keywords').innerHTML,/保养/);
+  multi('view="library";++pageVersion');await multi('render();loadList()');
+  await byId('platformFilters').querySelectorAll('button').find(b=>b.dataset.platform==='youtube').onclick();
+  assert.match(byId('list').innerHTML,/Car review/);assert.doesNotMatch(byId('list').innerHTML,/养车账单|旧日保养/);
+  multi('view="hot";++pageVersion');await multi('render()');
+  await byId('platformFilters').querySelectorAll('button').find(b=>b.dataset.platform==='x').onclick();
+  assert.match(byId('main').innerHTML,/#CarReview/);assert.doesNotMatch(byId('main').innerHTML,/汽车热词|科技热词/);
+  assert.match(byId('main').innerHTML,/2026-11-04 快照/);
+  const xCounts=await multi('api("/api/hot?platform=x")');assert.equal(xCounts.counts.all,1);
+  assert.equal(requests.length,1);assert.equal(delayed.length,0);
+  console.log('多平台静态演示检查通过：今日/收藏平台筛选、英文关键词、X趋势与独立计数，全程仅一次本地快照请求。');
   console.log('静态模式检查通过：仅一次 data.json 请求、无 /api/外部资源/轮询，五页签、摘录复制、搜索、历史收藏、标签、赛道、只读防护、空状态及加载失败。');
 }
 main().catch(error => { console.error(error); process.exitCode = 1; });

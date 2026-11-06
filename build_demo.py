@@ -1,4 +1,4 @@
-"""从唯一界面源码生成 GitHub Pages 演示页：python3 build_demo.py。"""
+"""从唯一界面源码生成多平台 GitHub Pages 演示页：python3 build_demo.py。"""
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent

@@ -1,3 +1,8 @@
 __pycache__/
 *.pyc
 .DS_Store
+.radar-preview-*/
+.radar-acceptance-*/
+*.sqlite3
+*.sqlite3-wal
+*.sqlite3-shm
