@@ -461,18 +461,21 @@ function renderSettings(){
       <label for="ytCategory">YouTube 美国热榜</label><select id="ytCategory"><option value="" ${s.youtube_hot_category?'':'selected'}>总榜</option><option value="2" ${s.youtube_hot_category==='2'?'selected':''}>汽车（分类 2）</option></select>
       <p class="hint">未配置 YouTube 密钥时只用公开英文关键词搜索，不显示 YouTube 热榜。密钥由 macOS 钥匙串 youtube-api 服务读取，页面只显示状态。B站与 YouTube 倍数 = 播放 ÷ 粉丝或订阅；抖音 = 点赞 ÷ 粉丝。公开计数不代表传播原因。</p>
     </div>
-    <div class="card"><h3>语音识别与分析模型</h3>
+    <div class="card"><h3>语音识别与模型设置</h3>
       <p class="hint" id="aliyunKeyStatus">${S.aliyun_key_configured?'阿里云百炼：已配置':'未配置阿里云百炼'}</p>
-      <label for="analysisProvider">分析模型</label><select id="analysisProvider"><option value="codex" ${(s.analysis_provider||'codex')==='codex'?'selected':''}>Codex（默认）</option><option value="qwen" ${s.analysis_provider==='qwen'?'selected':''}>千问</option></select>
+      <label for="screeningProvider">筛选模型（挑词、热榜分类、相关性）</label><select id="screeningProvider" aria-describedby="screeningHint"><option value="codex" ${s.screening_provider==='codex'?'selected':''}>Codex</option><option value="qwen" ${(s.screening_provider||'qwen')==='qwen'?'selected':''}>千问（默认）</option></select>
+      <p class="hint" id="screeningHint">挑词、热榜分类和相关性判断使用筛选模型，默认千问。播放量、爆款倍数和时长等门槛仍由本地规则计算。未配置百炼密钥时自动回退 Codex，运行记录显示实际使用的模型。</p>
+      <label for="analysisProvider">分析模型（爆款拆解）</label><select id="analysisProvider" aria-describedby="analysisHint"><option value="codex" ${(s.analysis_provider||'codex')==='codex'?'selected':''}>Codex（默认）</option><option value="qwen" ${s.analysis_provider==='qwen'?'selected':''}>千问</option></select>
+      <p class="hint" id="analysisHint">只用于爆款拆解，默认 Codex。详情页可单次选择「用千问拆 / 用 Codex 拆」，不改变全局设置。未配置百炼密钥时，千问自动回退 Codex。</p>
       <label for="qwenModel">千问模型名</label><input id="qwenModel" value="${esc(s.qwen_model||'qwen-plus')}" maxlength="80">
-      <p class="hint">挑词、热榜分类和拆解跟随此设置。无百炼密钥时使用 Codex 与本地 whisper。有密钥时中文优先百炼转写，YouTube 优先英文字幕。百炼按量计费，请查看控制台用量。详情可切换查看每个模型最近一次成功分析。</p>
+      <p class="hint">筛选或分析选择千问时，共用此模型名。有密钥时中文优先百炼转写，YouTube 优先英文字幕；无密钥时使用本地语音识别。百炼按量计费，请查看控制台用量。详情可切换查看每个模型最近一次成功分析。</p>
     </div>
     <div class="card"><h3>运行记录</h3><div id="logs">${logHTML()}</div></div>
   </div></div>`;
   $('#run').onclick=async()=>{const j=await api('/api/run',{});toast(j.ok?'开始运行，搜索和拆解要几分钟':'正在忙：'+j.busy);refresh()};
   $('#login').onclick=async()=>{const j=await api('/api/login',{});toast(j.ok?'扫码窗口打开中，请用小号扫码':'正在忙：'+j.busy);refresh()};
   $('#challenge').onclick=async()=>{const j=await api('/api/challenge',{});toast(j.ok?'验证窗口打开中':'正在忙：'+j.busy);refresh()};
-  $('#saveSet').onclick=async()=>{try{await api('/api/settings',{analysis_provider:$('#analysisProvider').value,qwen_model:$('#qwenModel').value,douyin_min_ratio:$('#ratio-douyin').value,field:$('#field').value,fixed_keywords:$('#fixed').value.split(/[,，、]+/),keywords_per_day:$('#kpd').value,per_keyword:$('#pk').value,min_likes:$('#ml').value,recent_days:$('#rd').value,auto:$('#auto').checked,active_start:$('#as').value,active_end:$('#ae').value,search_gap_minutes:$('#gap').value,...Object.fromEntries(Object.keys(PLATFORM_NAMES).map(p=>[p+'_enabled',$('#enable-'+p).checked])),...Object.fromEntries(['bilibili','youtube'].flatMap(p=>[[p+'_search_gap_minutes',$('#gap-'+p).value],[p+'_min_views',$('#min-'+p).value],[p+'_min_ratio',$('#ratio-'+p).value]])),youtube_fixed_keywords:$('#english').value.split(/[,，、]+/),youtube_searches_per_day:$('#ytLimit').value,youtube_hot_category:$('#ytCategory').value});toast('设置已保存');await loadState();if(view==='settings')renderSettings()}catch(e){toast(e.message)}};
+  $('#saveSet').onclick=async()=>{try{await api('/api/settings',{screening_provider:$('#screeningProvider').value,analysis_provider:$('#analysisProvider').value,qwen_model:$('#qwenModel').value,douyin_min_ratio:$('#ratio-douyin').value,field:$('#field').value,fixed_keywords:$('#fixed').value.split(/[,，、]+/),keywords_per_day:$('#kpd').value,per_keyword:$('#pk').value,min_likes:$('#ml').value,recent_days:$('#rd').value,auto:$('#auto').checked,active_start:$('#as').value,active_end:$('#ae').value,search_gap_minutes:$('#gap').value,...Object.fromEntries(Object.keys(PLATFORM_NAMES).map(p=>[p+'_enabled',$('#enable-'+p).checked])),...Object.fromEntries(['bilibili','youtube'].flatMap(p=>[[p+'_search_gap_minutes',$('#gap-'+p).value],[p+'_min_views',$('#min-'+p).value],[p+'_min_ratio',$('#ratio-'+p).value]])),youtube_fixed_keywords:$('#english').value.split(/[,，、]+/),youtube_searches_per_day:$('#ytLimit').value,youtube_hot_category:$('#ytCategory').value});toast('设置已保存');await loadState();if(view==='settings')renderSettings()}catch(e){toast(e.message)}};
   updateSettingsStatus();
 }
 document.querySelectorAll('nav a').forEach(a=>{a.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();a.onclick()}};a.onclick=async()=>{if(STATIC&&a.dataset.view==='settings')return;const page=++pageVersion;view=a.dataset.view;current=null;await loadState();if(page!==pageVersion)return;await render();if(page===pageVersion&&(view==='today'||view==='library'))await loadList()}});

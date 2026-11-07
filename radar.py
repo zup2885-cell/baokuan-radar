@@ -1,4 +1,4 @@
-"""爆款雷达：抓热榜 → Codex 挑关键词 → 小号搜索 → 挑小号爆款 → 转文字 → Codex 拆文案 → 收藏库。
+"""爆款雷达：抓热榜 → 筛选模型挑关键词 → 小号搜索 → 挑小号爆款 → 转文字 → 分析模型拆文案 → 收藏库。
 
 用法：python3 radar.py tick | hot | status | import-saved
 每次 tick 每个平台最多搜索一个关键词、合计处理几条视频，由 launchd 每 30 分钟调用一次，节奏慢一点以免触发风控。
@@ -46,6 +46,7 @@ DEFAULTS={
     'bilibili_min_ratio':2,
     'youtube_min_ratio':2,
     'douyin_min_ratio':0,
+    'screening_provider':'qwen',
     'analysis_provider':'codex',
     'qwen_model':'qwen-plus',
     'youtube_fixed_keywords':[],
@@ -126,6 +127,8 @@ def connect():
                 db.execute(f'alter table {table}_multi rename to {table}')
         db.execute('''insert or ignore into video_analyses select aweme_id,analysis_provider,analysis_model,analysis,updated_at
             from videos where analysis is not null and analysis!='' ''')
+        # 只补缺失的筛选设置；保留分析模型和其他已保存设置。
+        db.execute('insert or ignore into settings values(?,?)',('screening_provider','"qwen"'))
         # 旧版没有逐项修改记录。只将缺省或仍等于旧默认的播放门槛迁移一次。
         if not setting(db,'threshold_defaults_v2'):
             for platform in ('bilibili','youtube'):
@@ -262,7 +265,7 @@ def hot_items(db,day,context=None,platform=None):
 
 
 def classify_hot(db,day,platform='douyin'):
-    """一批未分类热词只调用一次 Codex；全量校验后原子入库，失败留待重试。"""
+    """用筛选模型批量分类；全量校验后原子入库，失败留待重试。"""
     context=hot_context(db);field,tracks,key=context
     pending=[r for r in hot_items(db,day,context,platform) if r['track']=='未分类']
     if not pending:return 0
@@ -274,7 +277,7 @@ def classify_hot(db,day,platform='douyin'):
 逐条返回 rank、word（原样）、track、related（布尔值）。不得遗漏、重复或添加热词。
 related 判断是否与账号领域直接相关或有具体自然的内容结合点；不能为了蹭热点强行关联。
 无足够信息判断关联时填 false。赛道与相关性独立判断，不能把“被挑作关键词”当作相关的依据。'''
-    result=model_json(db,prompt,'hot_classification.json')['items']
+    result=screening_json(db,prompt,'hot_classification.json',platform,'热榜分类')['items']
     expected={(r['rank'],r['word']) for r in pending};seen=set()
     for r in result:
         ident=(r['rank'],r['word'])
@@ -341,11 +344,27 @@ def validate_result(doc,schema):
     return doc
 
 
-def analysis_choice(db,provider=None):
-    provider=provider or setting(db,'analysis_provider')
-    if provider not in ('codex','qwen'):raise ValueError('分析模型须为 Codex 或千问')
+def model_choice(db,provider,label):
+    if provider not in ('codex','qwen'):raise ValueError(label+'须为 Codex 或千问')
     if provider=='qwen' and not aliyun.api_key():provider='codex'
     return provider,setting(db,'qwen_model') if provider=='qwen' else 'codex'
+
+
+def analysis_choice(db,provider=None):
+    return model_choice(db,provider or setting(db,'analysis_provider'),'分析模型')
+
+
+def screening_choice(db):
+    return model_choice(db,setting(db,'screening_provider'),'筛选模型')
+
+
+def screening_json(db,prompt,schema,platform,task):
+    """判断要不要、选哪些的模型调用统一走筛选设置，并记录实际模型。"""
+    choice=screening_choice(db)
+    label=f'千问（{choice[1]}）' if choice[0]=='qwen' else 'Codex'
+    fallback='（未配置百炼密钥，已从千问回退）' if choice[0]=='codex' and setting(db,'screening_provider')=='qwen' else ''
+    log(db,f'{platforms.NAMES[platform]}{task}：{label}{fallback}')
+    return model_json(db,prompt,schema,choice=choice)
 
 
 def model_json(db,prompt,schema,choice=None,timeout=300,check=None):
@@ -386,7 +405,7 @@ def pick_keywords(db,day,hot,platform='douyin'):
 - hot_word 填它对应的热榜原词；不是来自热榜的填空字符串。reason 用一句话说明为什么选它。
 - 不要重复，不要给出敏感时政、灾难事故类的词。'''
     if platform=='youtube':prompt+=f'\nYouTube 只搜索英文内容。把账号领域翻译成英文搜索短语，word 必须用英文，reason 用中文。优先具体车型、年份、测评场景，例如 {now().year} SUV review、EV road test；避免只有 car review 的宽泛词，以及玩具、遥控车、游戏和家庭挑战。'
-    picked=model_json(db,prompt,'pick.json')['keywords']
+    picked=screening_json(db,prompt,'pick.json',platform,'挑词')['keywords']
     words=[]
     for word in unique_text(s['youtube_fixed_keywords'] if platform=='youtube' else s['fixed_keywords'],limit=s['keywords_per_day'],width=80 if platform=='youtube' else 20):
         words.append({'word':word,'hot_word':'','reason':'设置里的固定关键词'})

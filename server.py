@@ -102,8 +102,9 @@ def validate_settings(data,current):
                 except ValueError:raise ValueError('最低爆款倍数须为 0–1000000 的数字，0 表示不限') from None
             if type(value) not in (int,float) or not math.isfinite(value) or not 0<=value<=1000000:
                 raise ValueError('最低爆款倍数须为 0–1000000 的数字，0 表示不限')
-        elif key=='analysis_provider':
-            if value not in ('codex','qwen'):raise ValueError('分析模型须为 Codex 或千问')
+        elif key in ('screening_provider','analysis_provider'):
+            label='筛选模型' if key=='screening_provider' else '分析模型'
+            if value not in ('codex','qwen'):raise ValueError(label+'须为 Codex 或千问')
         elif key=='qwen_model':
             if not isinstance(value,str) or not re.fullmatch(r'qwen[a-zA-Z0-9._-]{1,79}',value.strip()):
                 raise ValueError('千问模型名须以 qwen 开头，最多 80 字，只能含字母、数字、点、下划线和短横线')

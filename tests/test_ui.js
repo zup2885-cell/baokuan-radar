@@ -390,18 +390,35 @@ async function main() {
 
   // 设置字段的读写与按钮均继续使用原 API；忙时禁用会启动任务的按钮。
   run('view="settings";++pageVersion;renderSettings()');
+  assert.equal(byId('screeningProvider').value,'qwen');
+  assert.equal(byId('analysisProvider').value,'codex');
+  assert.match(byId('main').innerHTML,/<label for="screeningProvider">筛选模型（挑词、热榜分类、相关性）<\/label>/);
+  assert.match(byId('main').innerHTML,/<label for="analysisProvider">分析模型（爆款拆解）<\/label>/);
+  assert.match(byId('main').innerHTML,/未配置百炼密钥时自动回退 Codex/);
+  assert.doesNotMatch(byId('main').innerHTML,/挑词、热榜分类和拆解跟随此设置/);
   const settingsCalls=[];
   context.fetch=async(url,options)=>{settingsCalls.push([url,options]);return response(url.startsWith('/api/state')?state:{ok:true})};
   for(const [id,value] of Object.entries({field:'汽车成本',fixed:'车评，保养',kpd:'6',pk:'3',ml:'10000',rd:'7',as:'8',ae:'22',gap:'60'}))byId(id).value=value;
   byId('auto').checked=true;
   await byId('saveSet').onclick();
   const posted=JSON.parse(settingsCalls.find(c=>c[0]==='/api/settings')[1].body);
-  assert.deepEqual(posted,{analysis_provider:'codex',qwen_model:'qwen-plus',douyin_min_ratio:'0',field:'汽车成本',fixed_keywords:['车评','保养'],keywords_per_day:'6',per_keyword:'3',min_likes:'10000',recent_days:'7',auto:true,active_start:'8',active_end:'22',search_gap_minutes:'60',douyin_enabled:true,bilibili_enabled:false,youtube_enabled:false,x_enabled:false,bilibili_search_gap_minutes:'30',youtube_search_gap_minutes:'30',bilibili_min_views:'50000',youtube_min_views:'50000',bilibili_min_ratio:'2',youtube_min_ratio:'2',youtube_fixed_keywords:[''],youtube_searches_per_day:'10',youtube_hot_category:''});
+  assert.deepEqual(posted,{screening_provider:'qwen',analysis_provider:'codex',qwen_model:'qwen-plus',douyin_min_ratio:'0',field:'汽车成本',fixed_keywords:['车评','保养'],keywords_per_day:'6',per_keyword:'3',min_likes:'10000',recent_days:'7',auto:true,active_start:'8',active_end:'22',search_gap_minutes:'60',douyin_enabled:true,bilibili_enabled:false,youtube_enabled:false,x_enabled:false,bilibili_search_gap_minutes:'30',youtube_search_gap_minutes:'30',bilibili_min_views:'50000',youtube_min_views:'50000',bilibili_min_ratio:'2',youtube_min_ratio:'2',youtube_fixed_keywords:[''],youtube_searches_per_day:'10',youtube_hot_category:''});
   assert.match(byId('aliyunKeyStatus').textContent,/未配置阿里云百炼/);
+  byId('screeningProvider').value='codex';
+  await byId('saveSet').onclick();
+  const codexScreening=JSON.parse(settingsCalls.filter(c=>c[0]==='/api/settings').at(-1)[1].body);
+  assert.equal(codexScreening.screening_provider,'codex');assert.equal(codexScreening.analysis_provider,'codex');
   byId('analysisProvider').value='qwen';byId('qwenModel').value='qwen3-max';byId('ratio-youtube').value='2.5';byId('ratio-douyin').value='1.5';
   await byId('saveSet').onclick();
   const qwenSettings=JSON.parse(settingsCalls.filter(c=>c[0]==='/api/settings').at(-1)[1].body);
-  assert.equal(qwenSettings.analysis_provider,'qwen');assert.equal(qwenSettings.qwen_model,'qwen3-max');assert.equal(qwenSettings.youtube_min_ratio,'2.5');assert.equal(qwenSettings.douyin_min_ratio,'1.5');
+  assert.equal(qwenSettings.screening_provider,'qwen');assert.equal(qwenSettings.analysis_provider,'qwen');assert.equal(qwenSettings.qwen_model,'qwen3-max');assert.equal(qwenSettings.youtube_min_ratio,'2.5');assert.equal(qwenSettings.douyin_min_ratio,'1.5');
+  state.settings.screening_provider='codex';state.settings.analysis_provider='qwen';
+  await run('loadState();renderSettings()');
+  assert.equal(byId('screeningProvider').value,'codex');assert.equal(byId('analysisProvider').value,'qwen');
+  // 自动刷新不能覆盖两项尚未保存的模型选择。
+  byId('screeningProvider').value='qwen';byId('analysisProvider').value='codex';
+  await run('refresh()');
+  assert.equal(byId('screeningProvider').value,'qwen');assert.equal(byId('analysisProvider').value,'codex');
   for(const [id,endpoint] of [['run','/api/run'],['login','/api/login'],['challenge','/api/challenge']]){
     await byId(id).onclick();assert.ok(settingsCalls.some(c=>c[0]===endpoint));
   }
