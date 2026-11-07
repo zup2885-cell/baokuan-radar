@@ -206,6 +206,7 @@ html[data-radar-static] .badge{max-width:100%;white-space:normal;overflow-wrap:a
 </div>
 <script>
 window.RADAR_STATIC=true;
+window.RADAR_DATA_VERSION="f5558b5967b2b54b";
 const STATIC=window.RADAR_STATIC===true;
 const $=s=>document.querySelector(s);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -221,13 +222,13 @@ function platformHTML(hot=false){return `<div class="chips" id="platformFilters"
 function bindPlatforms(){const box=$('#platformFilters');if(!box)return;box.querySelectorAll('button').forEach(b=>b.onclick=async()=>{platformFilter[view]=b.dataset.platform;current=null;if(view==='hot')await renderHot();else {box.querySelectorAll('button').forEach(button=>{const on=button.dataset.platform===platformFilter[view];button.classList.toggle('on',on);button.setAttribute('aria-pressed',String(on))});if(view==='today')updateTodayMeta();if(view==='library')await updateTags();await loadList()}})}
 let snapshotPromise=null;
 async function staticData(){
-  if(!snapshotPromise)snapshotPromise=(async()=>{const r=await fetch('./data.json');if(!r.ok)throw new Error('无法读取演示快照，请刷新页面重试');const j=await r.json();if(!j.snapshot_date||!Array.isArray(j.videos)||!Array.isArray(j.hot)||!Array.isArray(j.keywords)||!Array.isArray(j.tracks))throw new Error('演示快照格式不正确，请重新导出');return j})().catch(e=>{snapshotPromise=null;throw e});
+  if(!snapshotPromise)snapshotPromise=(async()=>{const r=await fetch('./data.json?v='+encodeURIComponent(window.RADAR_DATA_VERSION||'latest'),{cache:'no-store'});if(!r.ok)throw new Error('无法读取演示快照，请刷新页面重试');const j=await r.json();if(!j.snapshot_date||!Array.isArray(j.videos)||!Array.isArray(j.hot)||!Array.isArray(j.keywords)||!Array.isArray(j.tracks))throw new Error('演示快照格式不正确，请重新导出');return j})().catch(e=>{snapshotPromise=null;throw e});
   return snapshotPromise;
 }
 async function staticAPI(path,body){
   if(body!==undefined)throw new Error('演示版只能查看，完整工具请在自己的 Mac 上运行');
   const [route,query='']=path.split('?'),q=new URLSearchParams(query),d=await staticData();
-  const videos=d.videos.filter(v=>v.status==='done'),saved=videos.filter(v=>v.saved),platform=q.get('platform')||'',matchesPlatform=v=>!platform||platformOf(v)===platform;
+  const videos=d.videos.filter(v=>v.status==='done'||(v.status==='imported'&&v.saved)),saved=videos.filter(v=>v.saved),platform=q.get('platform')||'',matchesPlatform=v=>!platform||platformOf(v)===platform;
   if(route==='/api/state')return {today:d.snapshot_date,day:d.snapshot_date,days:[d.snapshot_date],settings:{field:d.field},keywords:d.keywords,today_keywords:d.keywords,saved:saved.length,today_count:videos.filter(v=>v.day===d.snapshot_date).length,job:{name:null,result:''}};
   if(route==='/api/videos'){
     let rows=q.get('view')==='library'?saved:videos.filter(v=>v.day===d.snapshot_date);
@@ -258,7 +259,7 @@ function ratioText(r){return r==null?'—':r>=100?String(Math.round(r)):r>=1?r.t
 function ratioBadge(v){if(v.ratio==null)return '<span class="badge plain">倍数未知</span>';return `<span title="${formula(v)}" class="badge ${v.ratio>=3?'hot':'plain'}">${ratioText(v.ratio)} 倍</span>`}
 function statusBadge(v){return {pending:'<span class="item-state">待拆解</span>',processing:'<span class="item-state">拆解中</span>',failed:'<span class="badge hot">失败</span>',irrelevant:'<span class="item-state">不相关</span>',imported:'<span class="item-state">未拆解</span>'}[v.status]||`<span class="item-state">${v.saved?'已收藏':'已拆解'}</span>`}
 function cleanTitle(text){return String(text||'').replace(/#[^\s#]+/gu,'').replace(/\s+/g,' ').trim()||'（无文字标题）'}
-function coverHTML(v,detail=false){const cls=detail?'detail-cover':'thumb';if(STATIC)return `<div class="${cls} demo-cover" aria-label="文字占位图"><strong>${esc(Array.from(v.keyword||cleanTitle(v.desc))[0])}</strong><small>${esc(v.keyword||'爆款拆解')}</small></div>`;return v.cover?`<img class="${cls}" src="${esc(v.cover)}" referrerpolicy="no-referrer" loading="lazy" alt="${detail?'视频封面':''}" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'${cls} cover-placeholder',textContent:'暂无封面'}))">`:`<div class="${cls} cover-placeholder">暂无封面</div>`}
+function coverHTML(v,detail=false){const cls=detail?'detail-cover':'thumb',publicImage=typeof v.thumbnail==='string'&&/^https:\/\/(?:i\.ytimg\.com\/vi(?:_webp)?\/[\w-]{11}\/[\w-]+\.(?:jpg|webp)|i[012]\.hdslb\.com\/bfs\/archive\/[a-f0-9]{32,64}\.(?:jpg|jpeg|png|webp))$/.test(v.thumbnail)?v.thumbnail:'',image=STATIC?publicImage:v.cover;if(STATIC&&!image)return `<div class="${cls} demo-cover" aria-label="文字占位图"><strong>${esc(Array.from(v.keyword||cleanTitle(v.desc))[0])}</strong><small>${esc(v.keyword||'爆款拆解')}</small></div>`;return image?`<img class="${cls}" src="${esc(image)}" referrerpolicy="no-referrer" loading="lazy" alt="${detail?'视频封面':'视频封面：'+cleanTitle(v.desc)}" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'${cls} cover-placeholder',textContent:'暂无封面'}))">`:`<div class="${cls} cover-placeholder">暂无封面</div>`}
 function keywordHTML(){return S.keywords.filter(k=>!platformFilter.today||platformOf(k)===platformFilter.today).map(k=>{
   const hint=k.status==='failed'?'搜索连续失败，已跳过，后续轮次继续其他关键词':k.status==='empty'?'没有搜索结果，已完成，下一轮继续下一个关键词':k.error?platformOf(k)==='douyin'?'搜索未成功，下轮重试或等待处理登录/验证':['RATE_LIMITED','PLATFORM_BLOCKED'].includes(k.error)?'平台因限流或风控暂停，暂停结束后继续':'搜索未成功，下轮重试；连续失败 2 次后跳过':'';
   const label=k.status==='failed'?'已跳过':k.error?'失败':k.status==='done'||k.status==='empty'?'已搜 '+(k.found??0)+' 条':k.status==='processing'?'搜索中':'排队中';
@@ -367,7 +368,7 @@ function renderList(){
 const DETAIL_TABS=[['analysis','爆款分析'],['copy','文案拆解'],['topics','改编选题'],['transcript',STATIC?'逐字稿摘录':'逐字稿'],['notes',STATIC?'标签':'标签和备注']];
 function missingHTML(a,content){return `<p class="missing-content">${STATIC?'这份快照暂未包含'+esc(content)+'。':a?'旧版分析暂未包含'+esc(content)+'，可点「重新拆解」补充。':'拆解完成后，这里会显示'+esc(content)+'。'}</p>`}
 function analysisStatus(v){
-  if(STATIC)return v.analysis?'':'<div class="msg" role="status">这条视频的快照没有可展示的拆解结果。</div>';
+  if(STATIC)return v.analysis?'':`<div class="msg" role="status">${v.status==='imported'?'这条是导入的收藏，尚未拆解。可查看原视频、封面和公开指标。':'这条视频的快照没有可展示的拆解结果。'}</div>`;
   const previous=v.analysis?' 下方保留上次的拆解结果。':'';
   if(v.status==='irrelevant')return `<div class="msg" role="status">已排除：${esc(v.error||'与当前领域不相关')}。</div>`;
   if(v.status==='failed')return `<div class="msg error" role="status">拆解失败：${esc(v.error||'请查看运行记录')}。可以点「重新拆解」重试。${previous}</div>`;

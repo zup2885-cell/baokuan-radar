@@ -8,12 +8,27 @@ import math
 from pathlib import Path
 import re
 import sqlite3
+from urllib.parse import urlsplit
 
 from platforms import video_url
 
 ROOT = Path(__file__).resolve().parent
 DEFAULT_DB = Path.home() / 'Library/Application Support/BaokuanRadar/radar.sqlite3'
 DEFAULT_OUTPUT = ROOT / 'docs/data.json'
+
+
+def public_thumbnail(platform, ident, value):
+    """Only stable public artwork URLs; never publish signed URLs or credentials."""
+    if not isinstance(value, str) or re.search(r'\s',value):return ''
+    try:
+        u=urlsplit(value)
+        if u.scheme!='https' or u.username or u.password or u.query or u.fragment or u.port:return ''
+    except ValueError:return ''
+    if platform=='youtube' and u.hostname=='i.ytimg.com' and re.fullmatch(
+            r'/vi(?:_webp)?/'+re.escape(ident)+r'/[A-Za-z0-9_-]+\.(?:jpg|webp)',u.path):return value
+    if platform=='bilibili' and u.hostname in ('i0.hdslb.com','i1.hdslb.com','i2.hdslb.com') and re.fullmatch(
+            r'/bfs/archive/[0-9a-f]{32,64}\.(?:jpg|jpeg|png|webp)',u.path):return value
+    return ''
 # 自由文本中也可能出现调试路径；不把本机位置带到公开快照。
 LOCAL_PATH = re.compile(
     r'file://[^\s<>"\'，。；）]*|'
@@ -99,7 +114,7 @@ def export_snapshot(db_path=DEFAULT_DB, day=None):
         schemas={p:json.loads((ROOT / 'schemas'/('analysis_youtube.json' if p=='youtube' else 'analysis.json')).read_text(encoding='utf-8')) for p in ('douyin','bilibili','youtube')}
         videos = []
         # 保留完成的历史收藏；今日列表由 day 筛选。指定历史日时不混入之后的视频。
-        for row in db.execute("SELECT * FROM videos WHERE status='done' AND coalesce(day,'')<=? "
+        for row in db.execute("SELECT * FROM videos WHERE (status='done' OR (status='imported' AND saved=1)) AND coalesce(day,'')<=? "
                               'ORDER BY ratio IS NULL, ratio DESC, likes DESC, aweme_id', (day,)):
             video = {key: public_text(row[key]) for key in
                      ('aweme_id', 'day', 'desc', 'author', 'keyword', 'published_at')}
@@ -112,7 +127,9 @@ def export_snapshot(db_path=DEFAULT_DB, day=None):
             # 只保留原作品链接；拒绝 file:、脚本、本机地址和下载地址。
             ident = row['aweme_id'] or ''
             video['url'] = video_url(video['platform'],ident.removeprefix(video['platform']+':'))
-            video['status'] = 'done'
+            video['status'] = row['status']
+            thumbnail=public_thumbnail(video['platform'],ident.removeprefix(video['platform']+':'),row['cover'])
+            if thumbnail:video['thumbnail']=thumbnail
             video['saved'] = row['saved'] == 1
             tags = decode_json(row['tags'], [])
             video['tags'] = list(dict.fromkeys(public_text(t).strip() for t in tags
@@ -121,7 +138,7 @@ def export_snapshot(db_path=DEFAULT_DB, day=None):
             video['transcript_excerpt'] = public_text((row['transcript'] or '')[:80])[:80]
             # 防止旧分析的自由文本意外粘贴全文或媒体地址。
             transcript = row['transcript'] or ''
-            secrets = [s for s in (row['play_url'], row['cover']) if s]
+            secrets = [s for s in (row['play_url'], row['cover'] if row['cover']!=thumbnail else '') if s]
             if len(transcript) > 80:
                 secrets.append(transcript)
             def scrub(value):
@@ -168,7 +185,7 @@ def main():
     except (OSError, sqlite3.Error, ValueError) as error:
         parser.exit(1, f'导出失败：{error}\n')
     print(f"已导出 {snapshot['snapshot_date']}：热榜 {len(snapshot['hot'])} 条，"
-          f"关键词 {len(snapshot['keywords'])} 个，已拆解视频 {len(snapshot['videos'])} 条，"
+          f"关键词 {len(snapshot['keywords'])} 个，视频 {len(snapshot['videos'])} 条，"
           f"其中收藏 {sum(v['saved'] for v in snapshot['videos'])} 条。")
 
 

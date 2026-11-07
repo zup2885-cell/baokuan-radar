@@ -576,7 +576,8 @@ async function staticChecks() {
       URLSearchParams,setTimeout(callback){delayed.push(callback);return delayed.length},clearTimeout(){},
       fetch:async (url,options)=>{
         requests.push([url,options]);
-        assert.equal(url,'./data.json','静态模式只能从相对路径读取快照，禁止任何 /api 或外部网络请求');
+        assert.match(url,/^\.\/data\.json\?v=[a-f0-9]{16}$/,'静态模式按快照版本读取同目录 JSON');
+        assert.equal(options?.cache,'no-store');
         assert.ok(!options?.method||options.method==='GET');
         if(fail)return {ok:false};
         return response(data);
@@ -696,8 +697,23 @@ async function staticChecks() {
   assert.match(byId('main').innerHTML,/<h1>工作流程<\/h1>/);
   assert.equal(requests.length,1,'返回流程页仍复用同一份快照');
   assert.equal(delayed.length,0,'工作流程不启用静态轮询');
+  const imported={...video,aweme_id:'youtube:abcdefghijk',platform:'youtube',day:'',status:'imported',analysis:null,
+    desc:'真实视频待拆解',url:'https://www.youtube.com/watch?v=abcdefghijk',thumbnail:'https://i.ytimg.com/vi/abcdefghijk/hqdefault.jpg'};
+  requests=[];delayed=[];
+  const media=harness({...fixture,videos:[imported,{...imported,aweme_id:'youtube:hidden00001',status:'pending'}]});
+  await settle();await settle();
+  assert.equal(byId('nSaved').textContent,1);
+  media('view="library";++pageVersion');await media('render();loadList()');
+  assert.match(byId('list').innerHTML,/<img[^>]*src="https:\/\/i.ytimg.com\/vi\/abcdefghijk\/hqdefault.jpg"/);
+  assert.match(byId('detail').innerHTML,/尚未拆解/);
+  assert.match(byId('detail').innerHTML,/https:\/\/www.youtube.com\/watch\?v=abcdefghijk/);
+  assert.match(byId('detail').innerHTML,/referrerpolicy="no-referrer"/);
+  for(const unsafe of ['https://evil.example/cover.jpg','https://i.ytimg.com/vi/abcdefghijk/hqdefault.jpg?secret=1','javascript:alert(1)']){
+    assert.doesNotMatch(media(`coverHTML({...${JSON.stringify(imported)},thumbnail:${JSON.stringify(unsafe)}},true)`),/<img/);
+  }
+  assert.equal(requests.length,1);assert.equal(delayed.length,0);
   console.log('工作流程检查通过：本机与演示页均可切换、九步流程及说明、当前设置与边界值、演示默认页、空快照、只读且不启动任务。');
   console.log('多平台静态演示检查通过：今日/收藏平台筛选、英文关键词、X趋势与独立计数，全程仅一次本地快照请求。');
-  console.log('静态模式检查通过：仅一次 data.json 请求、无 /api/外部资源/轮询，五页签、摘录复制、搜索、历史收藏、标签、赛道、只读防护、空状态及加载失败。');
+  console.log('静态模式检查通过：带版本快照、仅允许原平台封面、未拆解收藏、只读防护与筛选；无本机 API 或轮询。');
 }
 main().catch(error => { console.error(error); process.exitCode = 1; });

@@ -187,6 +187,38 @@ class DemoExportTests(unittest.TestCase):
         self.assertIn('data-radar-static', generated)
         self.assertTrue((export_demo.ROOT / 'docs/.nojekyll').is_file())
 
+    def test_saved_unanalyzed_reference_and_public_thumbnail(self):
+        thumbnail='https://i.ytimg.com/vi/abcdefghijk/hqdefault.jpg'
+        with sqlite3.connect(self.path) as db:
+            db.execute("ALTER TABLE videos ADD COLUMN platform TEXT DEFAULT 'douyin'")
+            db.execute("UPDATE videos SET aweme_id='youtube:abcdefghijk',platform='youtube',status='imported',day='',analysis=NULL,transcript='',cover=? WHERE aweme_id='101'",(thumbnail,))
+            db.execute("UPDATE videos SET status='imported',saved=0 WHERE aweme_id='104'")
+        rows=export_demo.export_snapshot(self.path)['videos']
+        imported=next(v for v in rows if v['aweme_id']=='youtube:abcdefghijk')
+        self.assertEqual(imported['status'],'imported')
+        self.assertEqual(imported['thumbnail'],thumbnail)
+        self.assertIsNone(imported['analysis'])
+        self.assertEqual(imported['url'],'https://www.youtube.com/watch?v=abcdefghijk')
+        self.assertFalse({'103','104','105'}&{v['aweme_id'] for v in rows})
+        for bad in [thumbnail+'?token=secret',thumbnail+'#fragment',thumbnail.replace('https:','http:'),
+                    thumbnail.replace('i.ytimg.com','i.ytimg.com.evil.example'),
+                    thumbnail.replace('i.ytimg.com','user:secret@i.ytimg.com'),
+                    thumbnail.replace('i.ytimg.com','i.ytimg.com:invalid'),
+                    thumbnail.replace('abcdefghijk','wrongwrong1'),'/Users/private/photo.jpg']:
+            self.assertEqual(export_demo.public_thumbnail('youtube','abcdefghijk',bad),'')
+
+    def test_snapshot_content_changes_cache_version(self):
+        root=Path(self.temp.name)/'site'
+        (root/'ui').mkdir(parents=True);(root/'docs').mkdir()
+        (root/'ui/index.html').write_text('<html lang="zh-CN"><script>test</script></html>')
+        (root/'docs/data.json').write_text('{"saved":1}')
+        with patch('build_demo.ROOT',root):
+            first=build_demo.build_html()
+            (root/'docs/data.json').write_text('{"saved":312}')
+            second=build_demo.build_html()
+        self.assertNotEqual(first,second)
+        self.assertIn(hashlib.sha256(b'{"saved":312}').hexdigest()[:16],second)
+
 
 if __name__ == '__main__':
     unittest.main()
