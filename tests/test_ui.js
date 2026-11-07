@@ -45,11 +45,20 @@ function element(tagName = 'div', attributes = {}) {
     querySelector(selector) {return this.querySelectorAll(selector)[0]||null},
     setAttribute(name,value) {this.attributes[name]=String(value)},
     getAttribute(name) {return this.attributes[name]},
-    focus() {focused=this}, remove() {}, classList: {toggle() {}},
+    focus() {focused=this}, remove() {}, classList: {toggle(name,on) {
+      const classes=new Set(el.className.split(' ').filter(Boolean));
+      const enabled=on??!classes.has(name);
+      if(enabled)classes.add(name);else classes.delete(name);
+      el.className=[...classes].join(' ');el.attributes.class=el.className;
+      return enabled;
+    }},
   };
   for(const [key,value] of Object.entries(attributes))if(key.startsWith('data-'))el.dataset[key.slice(5).replace(/-([a-z])/g,(_,c)=>c.toUpperCase())]=value;
   return el;
 }
+const navigationFrom=markup=>[...markup.matchAll(/<a\b([^>]*data-view="([^"]+)"[^>]*)>/g)]
+  .map(m=>element('a',{'data-view':m[2],class:m[1].match(/class="([^"]*)"/)?.[1]||''}));
+const navigation=navigationFrom(html);
 for (const id of ['main', 'status', 'nSaved', 'nToday']) elements.set('#'+id, element());
 const clipboard=[];
 let timers = 0;
@@ -60,7 +69,7 @@ const state = {today: '2026-11-05', day: '2026-11-05', days: [], counts: {}, tod
     per_keyword: 3, min_likes: 10000, recent_days: 7}};
 const response = body => ({ok: true, json: async () => body});
 const context = vm.createContext({
-  document: {querySelector: key => elements.get(key), querySelectorAll: selector => selector.startsWith('#')?selector.split(',').map(s=>elements.get(s)).filter(Boolean):[],
+  document: {querySelector: key => elements.get(key), querySelectorAll: selector => selector==='nav a'?navigation:selector.startsWith('#')?selector.split(',').map(s=>elements.get(s)).filter(Boolean):[],
     createElement: element, body: {appendChild() {}}},
   window: {addEventListener() {}}, navigator: {clipboard: {writeText: async text => {clipboard.push(text)}}},
   setTimeout() { return ++timers; }, clearTimeout() {},
@@ -82,6 +91,45 @@ async function main() {
   assert.equal(run('renderedView'), 'today');
   assert.ok(elements.has('#list'), '服务恢复后应重新建立列表');
   assert.match(elements.get('#list').innerHTML, /还没有爆款/);
+
+  // 本机默认页不变；导航能打开流程页，且只读当前设置，不搜索或拆解。
+  assert.equal(run('view'),'today');
+  const workflowNav=navigation.find(a=>a.dataset.view==='workflow');
+  assert.ok(workflowNav,'本机导航应有工作流程入口');
+  const workflowRequests=[];
+  context.fetch=async (url,options)=>{
+    workflowRequests.push([url,options]);
+    assert.ok(url.startsWith('/api/state'),'流程页只需读取状态');
+    assert.ok(!options?.method||options.method==='GET','流程页不能写入或启动任务');
+    assert.equal(options?.body,undefined);
+    return response(state);
+  };
+  await workflowNav.onclick();
+  assert.equal(run('view'),'workflow');
+  assert.equal(run('renderedView'),'workflow');
+  assert.match(workflowNav.className,/\bon\b/);
+  let workflow=elements.get('#main').innerHTML;
+  assert.match(workflow,/<h1>工作流程<\/h1>/);
+  assert.match(workflow,/<ol class="workflow-flow" aria-label="从热榜到收藏的工作流程">/);
+  assert.equal(elements.get('#main').querySelectorAll('.workflow-step').length,9);
+  for(const text of ['抓热榜','按赛道分热榜','挑关键词','各平台搜索','门槛筛选','排除明显不相关的视频','转成文字','AI 爆款拆解','收藏库','全自动怎么跑','AI 怎么分工','安全做法','千问（qwen-plus）','Codex','每 30 分钟','钥匙串'])assert.ok(workflow.includes(text),text);
+  assert.match(workflow,/最近 7 天/);
+  assert.match(workflow,/没有另做一轮 AI 视频筛选/);
+  assert.doesNotMatch(workflow,/选题库|undefined|NaN/);
+  // 当前值、零门槛和小数倍数都须准确，不能拿默认值或四舍五入后的值替代。
+  run('S={...S,settings:{...S.settings,recent_days:30,bilibili_min_views:50001,bilibili_min_ratio:0,youtube_min_views:80000,youtube_min_ratio:2.5,min_likes:0,douyin_min_ratio:1.5}};renderWorkflow()');
+  workflow=elements.get('#main').innerHTML;
+  assert.match(workflow,/最近 30 天/);
+  assert.match(workflow,/B站：播放量 ≥ 50,001，倍数不限/);
+  assert.match(workflow,/YouTube：播放量 ≥ 80,000，且播放 ÷ 订阅 ≥ 2.5/);
+  assert.match(workflow,/抖音：点赞 ≥ 0，且点赞 ÷ 粉丝 ≥ 1.5/);
+  const beforeListLoad=workflowRequests.length;
+  await run('loadList()');
+  assert.equal(workflowRequests.length,beforeListLoad,'流程页不能加载视频列表');
+  context.fetch=async url=>response(url.startsWith('/api/state')?state:{items:[]});
+  await navigation.find(a=>a.dataset.view==='today').onclick();
+  assert.equal(run('view'),'today');
+  assert.ok(elements.has('#list'),'离开流程页后视频列表仍可用');
 
   // 后发请求先返回时，旧请求不能覆盖新列表。
   run('globalThis.originalDetail = showDetail; showDetail = async () => {};');
@@ -521,8 +569,9 @@ async function staticChecks() {
   const harness=(data,fail=false)=>{
     elements.clear();
     for(const id of ['main','status','nToday','nSaved','demoBanner'])elements.set('#'+id,element());
+    const demoNavigation=navigationFrom(demoHTML);
     const sandbox=vm.createContext({
-      document:{querySelector:key=>elements.get(key),querySelectorAll:()=>[],createElement:element,body:{appendChild(){}}},
+      document:{querySelector:key=>elements.get(key),querySelectorAll:selector=>selector==='nav a'?demoNavigation:[],createElement:element,body:{appendChild(){}}},
       window:{addEventListener(){}},navigator:{clipboard:{writeText:async value=>copied.push(value)}},
       URLSearchParams,setTimeout(callback){delayed.push(callback);return delayed.length},clearTimeout(){},
       fetch:async (url,options)=>{
@@ -533,6 +582,7 @@ async function staticChecks() {
         return response(data);
       },
     });
+    sandbox.demoNavigation=demoNavigation;
     vm.runInContext(demoSource,sandbox);
     return code=>vm.runInContext(code,sandbox);
   };
@@ -547,6 +597,17 @@ async function staticChecks() {
   assert.match(byId('demoBanner').innerHTML,/https:\/\/github.com\/zup2885-cell\/baokuan-radar/);
   assert.equal(byId('nToday').textContent,2);
   assert.equal(byId('nSaved').textContent,2);
+  assert.equal(demoRun('view'),'workflow','演示模式默认先显示工作流程');
+  assert.equal(demoRun('renderedView'),'workflow');
+  assert.ok(demoRun('demoNavigation.find(a=>a.dataset.view==="workflow").className').includes('on'));
+  assert.match(byId('main').innerHTML,/<h1>工作流程<\/h1>/);
+  assert.equal(byId('main').querySelectorAll('.workflow-step').length,9);
+  for(const text of ['代码默认 N = 7','30 天','播放量 ≥ 5 万','默认点赞 ≥ 1 万','倍数不限','没有另做一轮 AI 视频筛选','不上传到仓库或演示页'])assert.ok(byId('main').innerHTML.includes(text),text);
+  assert.match(byId('main').innerHTML,/只展示快照，不会抓取、调用 AI 或自动运行/);
+  assert.doesNotMatch(byId('main').innerHTML,/选题库|undefined|NaN/);
+  assert.equal(byId('list'),undefined,'流程页不应加载视频列表');
+  await demoRun('demoNavigation.find(a=>a.dataset.view==="today").onclick()');
+  assert.equal(demoRun('view'),'today');
   assert.match(byId('list').innerHTML,/养车账单|今日未收藏/);
   assert.doesNotMatch(byId('list').innerHTML,/旧日保养|<img/);
   assert.match(byId('list').innerHTML,/demo-cover/);
@@ -607,6 +668,8 @@ async function staticChecks() {
   assert.equal(requests.length,1);
   requests=[];
   const empty=harness({...fixture,videos:[],hot:[],keywords:[]});await settle();await settle();
+  assert.match(byId('main').innerHTML,/<h1>工作流程<\/h1>/,'空快照也能显示完整流程');
+  await empty('demoNavigation.find(a=>a.dataset.view==="today").onclick()');
   assert.match(byId('list').innerHTML,/没有已完成拆解/);
   assert.doesNotMatch(byId('main').innerHTML,/undefined|设置|立即运行/);
   assert.equal(requests.length,1);
@@ -615,6 +678,8 @@ async function staticChecks() {
     keywords:[...fixture.keywords,{word:'car review',platform:'youtube',status:'done',found:1}],
     videos:[...fixture.videos,{...video,aweme_id:'youtube:AbCdEfG1234',platform:'youtube',views:10000,followers:1000,ratio:10,desc:'Car review',url:'https://www.youtube.com/watch?v=AbCdEfG1234'}]};
   const multi=harness(multiFixture);await settle();await settle();
+  assert.equal(multi('view'),'workflow');
+  await multi('demoNavigation.find(a=>a.dataset.view==="today").onclick()');
   await byId('platformFilters').querySelectorAll('button').find(b=>b.dataset.platform==='youtube').onclick();
   assert.match(byId('list').innerHTML,/Car review/);assert.doesNotMatch(byId('list').innerHTML,/养车账单/);
   assert.match(byId('keywords').innerHTML,/car review/);assert.doesNotMatch(byId('keywords').innerHTML,/保养/);
@@ -627,6 +692,11 @@ async function staticChecks() {
   assert.match(byId('main').innerHTML,/2026-11-04 快照/);
   const xCounts=await multi('api("/api/hot?platform=x")');assert.equal(xCounts.counts.all,1);
   assert.equal(requests.length,1);assert.equal(delayed.length,0);
+  await multi('demoNavigation.find(a=>a.dataset.view==="workflow").onclick()');
+  assert.match(byId('main').innerHTML,/<h1>工作流程<\/h1>/);
+  assert.equal(requests.length,1,'返回流程页仍复用同一份快照');
+  assert.equal(delayed.length,0,'工作流程不启用静态轮询');
+  console.log('工作流程检查通过：本机与演示页均可切换、九步流程及说明、当前设置与边界值、演示默认页、空快照、只读且不启动任务。');
   console.log('多平台静态演示检查通过：今日/收藏平台筛选、英文关键词、X趋势与独立计数，全程仅一次本地快照请求。');
   console.log('静态模式检查通过：仅一次 data.json 请求、无 /api/外部资源/轮询，五页签、摘录复制、搜索、历史收藏、标签、赛道、只读防护、空状态及加载失败。');
 }

@@ -132,6 +132,21 @@ label{display:block;font-size:13px;color:var(--muted);margin:16px 0 6px}
 .empty-state{color:var(--muted);padding:40px 16px;text-align:center;line-height:1.9}
 .missing-content{color:var(--muted);font-size:14px;margin:0;line-height:1.75}
 .settings,.hot-content{min-width:0;overflow:auto;padding:4px 28px 40px;flex:1}
+.workflow{min-width:0;overflow:auto;padding:4px 28px 40px;flex:1}
+.workflow-inner{max-width:900px;margin-inline:auto;overflow-wrap:anywhere}
+.workflow-note{padding:14px 18px;background:var(--warm-bg);border-radius:8px;margin-bottom:24px;line-height:1.8}
+/* 单列流程：32px 编号 + 16px 间距 + 自适应文字，不依赖固定图宽。 */
+.workflow-flow{list-style:none;margin:0;padding:0}
+.workflow-step{position:relative;display:grid;grid-template-columns:32px minmax(0,1fr);gap:16px;padding-bottom:30px}
+.workflow-step:not(:last-child)::before{content:"";position:absolute;left:15px;top:36px;bottom:8px;width:1px;background:var(--line)}
+.workflow-step:not(:last-child)::after{content:"";position:absolute;left:12px;bottom:9px;width:6px;height:6px;border-right:1px solid var(--muted);border-bottom:1px solid var(--muted);transform:rotate(45deg)}
+.workflow-number{display:grid;place-items:center;width:32px;height:32px;border:1px solid var(--line);border-radius:50%;color:var(--accent);font-variant-numeric:tabular-nums;background:var(--card)}
+.workflow-step h2{margin:2px 0 8px;font-size:17px;line-height:1.6;font-weight:600}
+.workflow-step p{margin:0;font-size:14px;line-height:1.85;color:var(--muted)}
+.workflow-info{padding:22px 0;border-top:1px solid var(--line)}
+.workflow-info h2{margin:0 0 10px;font-size:17px;font-weight:600}
+.workflow-info p,.workflow-info li{font-size:14px;line-height:1.85}
+.workflow-info ul{margin:0;padding-left:20px}
 .settings-grid{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;align-items:start}
 .settings .card h3{padding-bottom:12px;border-bottom:1px solid var(--line)}
 .settings .msg{margin:12px 0}
@@ -166,6 +181,7 @@ html[data-radar-static] [data-local-only]{display:none!important}
 html[data-radar-static] .detail-context,html[data-radar-static] .detail-byline{overflow-wrap:anywhere}
 html[data-radar-static] .badge{max-width:100%;white-space:normal;overflow-wrap:anywhere}
 @media(max-width:899px){html[data-radar-static] body{height:auto;min-height:100vh}.demo-banner{padding:12px 20px}html[data-radar-static] .app{flex:none}html[data-radar-static] .detail-cover.demo-cover strong{font-size:40px}}
+@media(max-width:899px){.workflow{overflow:visible;padding-inline:20px}}
 @container(max-width:640px){.detail-cover{grid-row:1}.metrics,.detail-actions{grid-column:1/-1}.metric dd{font-size:20px}.application-grid{grid-template-columns:1fr}.detail-head{column-gap:20px}.detail-tabs{gap:4px 14px}}
 @container(max-width:520px){.metrics{grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}}
 @container(max-width:420px){.detail-head{grid-template-columns:96px minmax(0,1fr);column-gap:16px}.detail-cover{width:96px;height:128px}.detail h2{font-size:20px}.grid2{grid-template-columns:1fr}.reading-card{padding:16px}.detail-tabs{gap:4px 12px}.detail-tabs button{font-size:13px}}
@@ -178,6 +194,7 @@ html[data-radar-static] .badge{max-width:100%;white-space:normal;overflow-wrap:a
 <div class="app">
   <nav aria-label="主导航">
     <div class="brand"><i>爆</i>爆款雷达</div>
+    <a role="button" tabindex="0" data-view="workflow">工作流程</a>
     <a role="button" tabindex="0" data-view="today" class="on">今日爆款 <b id="nToday"></b></a>
     <a role="button" tabindex="0" data-view="hot">热榜</a>
     <a role="button" tabindex="0" data-view="library">收藏库 <b id="nSaved"></b></a>
@@ -191,7 +208,7 @@ const STATIC=window.RADAR_STATIC===true;
 const $=s=>document.querySelector(s);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const fmt=n=>n==null?'—':n>=10000?(n/10000).toFixed(n>=100000?0:1)+' 万':n.toLocaleString();
-let S=null,view='today',renderedView=null,day=null,items=[],current=null,libQ='',libTag='',timer=null,followToday=true,pageVersion=0,listVersion=0,detailVersion=0,stateVersion=0,hotVersion=0,hotFilter='',refreshing=false,shownJobResult='';
+let S=null,view=STATIC?'workflow':'today',renderedView=null,day=null,items=[],current=null,libQ='',libTag='',timer=null,followToday=true,pageVersion=0,listVersion=0,detailVersion=0,stateVersion=0,hotVersion=0,hotFilter='',refreshing=false,shownJobResult='';
 const PLATFORM_NAMES={douyin:'抖音',bilibili:'B站',youtube:'YouTube',x:'X'};
 const platformFilter={today:'',library:'',hot:''};
 const analysisSelections={};
@@ -261,6 +278,7 @@ async function loadState(){
 async function refresh(){if(refreshing)return;refreshing=true;const version=pageVersion;try{await loadState();if(version!==pageVersion)return;if(S.job.name)shownJobResult='';else if(S.job.result&&shownJobResult!==S.job.result){toast(S.job.result);shownJobResult=S.job.result}if(renderedView!==view||(['today','library'].includes(view)&&!$('#list'))||(view==='settings'&&!$('#field')))await render();if(view==='today')updateTodayMeta();if(view==='today'||view==='library'){if(view==='library')await updateTags();await loadList(true)}else if(view==='settings')updateSettingsStatus();else if(view==='hot')await renderHot()}catch(e){$('#status').textContent=e.message+'，稍后自动重试'}finally{refreshing=false;scheduleRefresh()}}
 
 async function loadList(keep){
+  if(view!=='today'&&view!=='library')return;
   const version=++listVersion,page=pageVersion;
   const j=await api(view==='library'?`/api/videos?view=library&q=${encodeURIComponent(libQ)}&tag=${encodeURIComponent(libTag)}&platform=${platformFilter.library}`:`/api/videos?day=${day}${platformFilter.today?'&platform='+platformFilter.today:''}`);
   if(version!==listVersion||page!==pageVersion||!$('#list'))return;
@@ -271,8 +289,43 @@ async function render(){
   if(STATIC&&view==='settings')view='today';
   const page=pageVersion;
   document.querySelectorAll('nav a').forEach(a=>a.classList.toggle('on',a.dataset.view===view));
-  if(view==='today')renderToday();else if(view==='library')await renderLibrary();else if(view==='hot')await renderHot();else renderSettings();
+  if(view==='workflow')renderWorkflow();else if(view==='today')renderToday();else if(view==='library')await renderLibrary();else if(view==='hot')await renderHot();else renderSettings();
   if(page===pageVersion)renderedView=view;
+}
+function renderWorkflow(){
+  const s=S?.settings||{};
+  const count=n=>Number(n).toLocaleString('zh-CN');
+  const days=STATIC?'只保留最近 N 天发布的视频，代码默认 N = 7，本机可设为 30 天。':`本机当前只保留最近 ${esc(s.recent_days??7)} 天发布的视频，代码默认 7 天，可在「设置」改为 30 天。`;
+  const thresholds=STATIC?'B站、YouTube 默认：播放量 ≥ 5 万，且播放 ÷ 粉丝或订阅 ≥ 2。抖音看点赞 ÷ 粉丝，默认点赞 ≥ 1 万，倍数不限；门槛可在本机修改。':`B站：播放量 ≥ ${count(s.bilibili_min_views??50000)}，${s.bilibili_min_ratio===0?'倍数不限':`且播放 ÷ 粉丝 ≥ ${esc(s.bilibili_min_ratio??2)}`}；YouTube：播放量 ≥ ${count(s.youtube_min_views??50000)}，${s.youtube_min_ratio===0?'倍数不限':`且播放 ÷ 订阅 ≥ ${esc(s.youtube_min_ratio??2)}`}。抖音：点赞 ≥ ${count(s.min_likes??10000)}，${s.douyin_min_ratio?'且点赞 ÷ 粉丝 ≥ '+esc(s.douyin_min_ratio):'点赞 ÷ 粉丝的倍数不限'}；以上以本机「设置」为准。`;
+  const steps=[
+    ['抓热榜','按开启的平台抓取抖音、B站、YouTube 热榜和 X 趋势。YouTube 热榜需密钥；X 来自第三方美国趋势，每天最多取一次，只看趋势。'],
+    ['按赛道分热榜','AI 给热词分赛道，再判断和账号领域有没有自然的结合点。热榜可按赛道或「和我相关」查看，分类失败会在后续轮次重试。'],
+    ['挑关键词',`每个视频平台每天挑一批词，固定词优先，再补 AI 挑的词；默认每天共 6 个，以本机设置为准。对标博主只供挑词时参考选题风格，不会自动采集其账号；YouTube 使用英文搜索词。`],
+    ['各平台搜索',`${days} 抖音搜索可选，用专用小号；B站、YouTube 不登录，X 不搜索视频。`],
+    ['排除明显不相关的视频','YouTube 搜索会按标题规则排除玩具车、遥控模型、游戏等明显偏题内容，也会排除不足 60 秒的视频和标记为 Shorts 的视频。这一步由规则完成；AI 相关性判断用于前面的热榜分类和挑词，没有另做一轮 AI 视频筛选。'],
+    ['门槛筛选',thresholds],
+    ['转成文字','YouTube 先取人工或自动英文字幕，没有字幕才做语音识别；抖音、B站直接做语音识别。语音识别优先用百炼，未配置密钥或识别失败时改用本地识别；没有可用文字时只能据标题和描述分析，并注明缺口。'],
+    ['AI 爆款拆解','分析开头钩子、内容结构、可能的爆点和可改编的选题角度；引用要能在提供的逐字稿或标题里对上。爆款原因是推测，只有文字时不能确认画面、语气和真实前 3 秒。'],
+    ['收藏库','在本机把值得反复研究的视频收藏起来，加标签和备注，之后可以搜索和筛选。演示页只能查看已有收藏和标签。'],
+  ];
+  $('#main').innerHTML=`<header class="bar"><div class="page-heading"><h1>工作流程</h1><p class="sub">从热榜到爆款拆解，再把值得研究的视频留下来。</p></div></header>
+  <div class="workflow"><div class="workflow-inner">
+    <p class="workflow-note">${STATIC?'这是本机完整工具的工作流程。当前演示页只展示快照，不会抓取、调用 AI 或自动运行。':'下面按实际处理顺序说明。平台、门槛和模型都以本机「设置」为准。'}</p>
+    <ol class="workflow-flow" aria-label="从热榜到收藏的工作流程">${steps.map(([title,text],i)=>`<li class="workflow-step"><span class="workflow-number" aria-hidden="true">${i+1}</span><div><h2>${title}</h2><p>${text}</p></div></li>`).join('')}</ol>
+    <section class="workflow-info" aria-labelledby="workflowAuto"><h2 id="workflowAuto">全自动怎么跑</h2>
+      <p>安装后台任务并开启自动运行后，每 30 分钟检查一次，只在设定时段内运行；默认是北京时间 8:00–22:00。每轮每个视频平台最多搜一个词，合计最多拆 3 条，没拆完的已选视频留到后续轮次。</p>
+      <p>两次搜索有间隔，默认抖音 60 分钟，B站、YouTube 30 分钟，可在本机修改。这样可降低被限流的风险，仍可能遇到验证；限流时暂停 24 小时，当天队列处理结束后尝试发电脑通知，休眠或关机会影响进度。</p>
+    </section>
+    <section class="workflow-info" aria-labelledby="workflowModels"><h2 id="workflowModels">AI 怎么分工</h2>
+      <p>默认筛选用千问（qwen-plus），负责热榜分类、相关性判断和挑词；拆解用 Codex，分析文案和改编角度。播放、点赞、倍数、日期等门槛由本机规则计算。</p>
+      <p>筛选和拆解的模型可分别修改。未配置百炼密钥时，千问会回退到 Codex；百炼按量计费，Codex 使用本机账号额度，判断结果仍需人来核对。</p>
+    </section>
+    <section class="workflow-info" aria-labelledby="workflowSafety"><h2 id="workflowSafety">安全做法</h2><ul>
+      <li>抖音不用主号，使用专门的小号。</li>
+      <li>验证码由本人来点，出现验证时先暂停搜索。</li>
+      <li>密钥只保存在本机 macOS 钥匙串，不上传到仓库或演示页；调用服务时，只通过加密连接发送给对应服务。</li>
+    </ul></section>
+  </div></div>`;
 }
 function renderToday(){
   const opts=[...new Set([day,S.today,...S.days])].map(d=>`<option ${d===day?'selected':''}>${esc(d)}</option>`).join('');
@@ -492,7 +545,7 @@ function renderSettings(){
   updateSettingsStatus();
 }
 document.querySelectorAll('nav a').forEach(a=>{a.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();a.onclick()}};a.onclick=async()=>{if(STATIC&&a.dataset.view==='settings')return;const page=++pageVersion;view=a.dataset.view;current=null;await loadState();if(page!==pageVersion)return;await render();if(page===pageVersion&&(view==='today'||view==='library'))await loadList()}});
-loadState().then(async()=>{if(pageVersion)return;await render();if(!pageVersion)await loadList()}).catch(e=>{$('#main').innerHTML='<div class="empty-state">'+(STATIC?'演示快照加载失败：':'服务没有连上：')+esc(e.message)+'</div>';scheduleRefresh()});
+loadState().then(async()=>{if(pageVersion)return;await render();if(!pageVersion&&(view==='today'||view==='library'))await loadList()}).catch(e=>{$('#main').innerHTML='<div class="empty-state">'+(STATIC?'演示快照加载失败：':'服务没有连上：')+esc(e.message)+'</div>';scheduleRefresh()});
 </script>
 </body>
 </html>
