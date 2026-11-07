@@ -349,7 +349,9 @@ async function main() {
   run('loadState=originalLoadState;loadList=originalLoadList');
 
   // 关键词状态、卡片标题、状态摘要、历史日期与收藏库检索保持原协议。
-  state.keywords=[{word:'车评',status:'queued'},{word:'账单',status:'done',found:3},{word:'空词',status:'empty',found:0},{word:'验证词',status:'queued',error:'PLATFORM_BLOCKED'}];
+  state.keywords=[{word:'车评',status:'queued'},{word:'账单',status:'done',found:3},{word:'空词',status:'empty',found:0},{word:'验证词',status:'queued',error:'PLATFORM_BLOCKED'},
+    {word:'失败词',platform:'bilibili',status:'failed',found:0,error:'UPSTREAM_BROKEN',consecutive_failures:2},
+    {word:'重试词',platform:'youtube',status:'queued',error:'TIMEOUT',consecutive_failures:1}];
   state.account={status:'ready',logged_in:true};state.settings.auto=false;
   state.logs=[{at:'2026-11-05T10:20:30',message:'模拟运行完成'}];
   context.fetch=async()=>response(state);await run('loadState();');
@@ -359,6 +361,20 @@ async function main() {
   assert.match(byId('keywords').innerHTML,/账单<small>已搜 3 条/);
   assert.match(byId('keywords').innerHTML,/空词<small>已搜 0 条/);
   assert.match(byId('keywords').innerHTML,/验证词<small>失败/);
+  assert.match(byId('keywords').innerHTML,/失败词<small>已跳过/);
+  assert.match(byId('keywords').innerHTML,/没有搜索结果，已完成/);
+  assert.match(byId('keywords').innerHTML,/连续失败 2 次后跳过/);
+  assert.doesNotMatch(byId('keywords').innerHTML,/失败词<small>排队中/);
+  const platformStatus=run(`(()=>{
+    const previous=[S.platform_states,S.settings.bilibili_enabled,S.settings.youtube_enabled];
+    S.platform_states={bilibili:{error:'UPSTREAM_BROKEN',paused_until:Date.now()/1000+1800},youtube:{error:'RATE_LIMITED',paused_until:Date.now()/1000+86400}};
+    S.settings.bilibili_enabled=true;S.settings.youtube_enabled=true;
+    const html=platformStatusHTML();
+    [S.platform_states,S.settings.bilibili_enabled,S.settings.youtube_enabled]=previous;
+    return html;
+  })()`);
+  assert.match(platformStatus,/B站：上次失败 · 公开数据读取失败/);
+  assert.match(platformStatus,/YouTube：暂停至/);
   assert.match(byId('status').innerHTML,/status-main/);
   assert.match(byId('status').innerHTML,/小号已登录/);
   assert.match(byId('status').innerHTML,/模拟运行完成/);
@@ -392,6 +408,8 @@ async function main() {
   run('view="settings";++pageVersion;renderSettings()');
   assert.equal(byId('screeningProvider').value,'qwen');
   assert.equal(byId('analysisProvider').value,'codex');
+  assert.equal(byId('benchmarks').disabled,true,'旧服务没有新增键时禁用对标编辑');
+  assert.match(byId('benchmarksHint').innerHTML||byId('main').innerHTML,/重启界面服务后才能编辑/);
   assert.match(byId('main').innerHTML,/<label for="screeningProvider">筛选模型（挑词、热榜分类、相关性）<\/label>/);
   assert.match(byId('main').innerHTML,/<label for="analysisProvider">分析模型（爆款拆解）<\/label>/);
   assert.match(byId('main').innerHTML,/未配置百炼密钥时自动回退 Codex/);
@@ -412,13 +430,34 @@ async function main() {
   await byId('saveSet').onclick();
   const qwenSettings=JSON.parse(settingsCalls.filter(c=>c[0]==='/api/settings').at(-1)[1].body);
   assert.equal(qwenSettings.screening_provider,'qwen');assert.equal(qwenSettings.analysis_provider,'qwen');assert.equal(qwenSettings.qwen_model,'qwen3-max');assert.equal(qwenSettings.youtube_min_ratio,'2.5');assert.equal(qwenSettings.douyin_min_ratio,'1.5');
+  // 新服务的对标列表：读取、转义、平台解析、清空、错误阻止提交。
+  state.settings.benchmark_creators=[{name:'示例车评人',platform:'douyin'},{name:'<车主>',platform:'bilibili'}];
+  await run('loadState();renderSettings()');
+  assert.equal(byId('benchmarks').disabled,false);
+  assert.equal(byId('benchmarks').value,'示例车评人｜抖音\n<车主>｜B站');
+  assert.match(byId('main').innerHTML,/&lt;车主&gt;｜B站/);
+  assert.match(byId('main').innerHTML,/不会自动采集这些账号/);
+  byId('benchmarks').value='示例车评人｜抖音\n\n 家庭车评 | B站\nEV Reviewer｜YouTube\n车主｜X';
+  await byId('saveSet').onclick();
+  const benchmarkSettings=JSON.parse(settingsCalls.filter(c=>c[0]==='/api/settings').at(-1)[1].body);
+  assert.deepEqual(benchmarkSettings.benchmark_creators,[{name:'示例车评人',platform:'douyin'},
+    {name:'家庭车评',platform:'bilibili'},{name:'EV Reviewer',platform:'youtube'},{name:'车主',platform:'x'}]);
+  for(const invalid of ['只有名称','车评｜未知平台','车评｜抖音｜多一列','｜抖音']){
+    const before=settingsCalls.filter(c=>c[0]==='/api/settings').length;
+    byId('benchmarks').value=invalid;await byId('saveSet').onclick();
+    assert.equal(settingsCalls.filter(c=>c[0]==='/api/settings').length,before,'格式错误不能提交');
+  }
+  byId('benchmarks').value='';await byId('saveSet').onclick();
+  assert.deepEqual(JSON.parse(settingsCalls.filter(c=>c[0]==='/api/settings').at(-1)[1].body).benchmark_creators,[]);
   state.settings.screening_provider='codex';state.settings.analysis_provider='qwen';
   await run('loadState();renderSettings()');
   assert.equal(byId('screeningProvider').value,'codex');assert.equal(byId('analysisProvider').value,'qwen');
   // 自动刷新不能覆盖两项尚未保存的模型选择。
   byId('screeningProvider').value='qwen';byId('analysisProvider').value='codex';
+  byId('benchmarks').value='尚未保存的对标｜B站';
   await run('refresh()');
   assert.equal(byId('screeningProvider').value,'qwen');assert.equal(byId('analysisProvider').value,'codex');
+  assert.equal(byId('benchmarks').value,'尚未保存的对标｜B站');
   for(const [id,endpoint] of [['run','/api/run'],['login','/api/login'],['challenge','/api/challenge']]){
     await byId(id).onclick();assert.ok(settingsCalls.some(c=>c[0]===endpoint));
   }

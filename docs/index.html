@@ -242,7 +242,11 @@ function ratioBadge(v){if(v.ratio==null)return '<span class="badge plain">倍数
 function statusBadge(v){return {pending:'<span class="item-state">待拆解</span>',processing:'<span class="item-state">拆解中</span>',failed:'<span class="badge hot">失败</span>',irrelevant:'<span class="item-state">不相关</span>',imported:'<span class="item-state">未拆解</span>'}[v.status]||`<span class="item-state">${v.saved?'已收藏':'已拆解'}</span>`}
 function cleanTitle(text){return String(text||'').replace(/#[^\s#]+/gu,'').replace(/\s+/g,' ').trim()||'（无文字标题）'}
 function coverHTML(v,detail=false){const cls=detail?'detail-cover':'thumb';if(STATIC)return `<div class="${cls} demo-cover" aria-label="文字占位图"><strong>${esc(Array.from(v.keyword||cleanTitle(v.desc))[0])}</strong><small>${esc(v.keyword||'爆款拆解')}</small></div>`;return v.cover?`<img class="${cls}" src="${esc(v.cover)}" referrerpolicy="no-referrer" loading="lazy" alt="${detail?'视频封面':''}" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'${cls} cover-placeholder',textContent:'暂无封面'}))">`:`<div class="${cls} cover-placeholder">暂无封面</div>`}
-function keywordHTML(){return S.keywords.filter(k=>!platformFilter.today||platformOf(k)===platformFilter.today).map(k=>`<span class="chip ${k.error?'err':k.status}" title="${esc([k.reason,k.error?'搜索未成功，下轮重试或等待处理登录/验证':''].filter(Boolean).join('；'))}">${esc(PLATFORM_NAMES[platformOf(k)])} · ${esc(k.word)}<small>${k.error?'失败':k.status==='done'||k.status==='empty'?'已搜 '+(k.found??0)+' 条':STATIC?({queued:'排队中',processing:'搜索中',failed:'失败'}[k.status]||'未完成'):'排队中'}</small></span>`).join('')||(STATIC?'<span class="sub">这一天的快照没有关键词。</span>':'<span class="sub">这一天还没有关键词，可到「设置」查看运行记录或立即运行。</span>')}
+function keywordHTML(){return S.keywords.filter(k=>!platformFilter.today||platformOf(k)===platformFilter.today).map(k=>{
+  const hint=k.status==='failed'?'搜索连续失败，已跳过，后续轮次继续其他关键词':k.status==='empty'?'没有搜索结果，已完成，下一轮继续下一个关键词':k.error?platformOf(k)==='douyin'?'搜索未成功，下轮重试或等待处理登录/验证':['RATE_LIMITED','PLATFORM_BLOCKED'].includes(k.error)?'平台因限流或风控暂停，暂停结束后继续':'搜索未成功，下轮重试；连续失败 2 次后跳过':'';
+  const label=k.status==='failed'?'已跳过':k.error?'失败':k.status==='done'||k.status==='empty'?'已搜 '+(k.found??0)+' 条':k.status==='processing'?'搜索中':'排队中';
+  return `<span class="chip ${k.error?'err':k.status}" title="${esc([k.reason,hint].filter(Boolean).join('；'))}">${esc(PLATFORM_NAMES[platformOf(k)])} · ${esc(k.word)}<small>${label}</small></span>`;
+}).join('')||(STATIC?'<span class="sub">这一天的快照没有关键词。</span>':'<span class="sub">这一天还没有关键词，可到「设置」查看运行记录或立即运行。</span>')}
 
 async function loadState(){
   const version=++stateVersion,j=await api('/api/state'+(!followToday&&day?'?day='+encodeURIComponent(day):''));if(version!==stateVersion)return;S=j;day=S.day;
@@ -425,7 +429,15 @@ async function renderHot(){
   updateSettingsStatus();
 }
 const PLATFORM_ERRORS={UPSTREAM_BROKEN:'公开数据读取失败',RATE_LIMITED:'请求被拒绝或限流',PLATFORM_BLOCKED:'平台要求验证或拒绝读取',TIMEOUT:'请求超时',NEED_SETUP:'找不到既有环境',DAILY_LIMIT:'已到每天搜索上限'};
-function platformStatusHTML(){return Object.entries(S.platform_states||{}).map(([p,s])=>`<div class="hint">${PLATFORM_NAMES[p]}：${!S.settings[p+'_enabled']?'未启用':s.paused_until>Date.now()/1000?'暂停至 '+new Date(s.paused_until*1000).toLocaleString('zh-CN'):s.error?'上次失败':'就绪'}${s.error?' · '+esc(PLATFORM_ERRORS[s.error]||'读取失败'):''}</div>`).join('')}
+function platformStatusHTML(){return Object.entries(S.platform_states||{}).map(([p,s])=>`<div class="hint">${PLATFORM_NAMES[p]}：${!S.settings[p+'_enabled']?'未启用':['RATE_LIMITED','PLATFORM_BLOCKED'].includes(s.error)&&s.paused_until>Date.now()/1000?'暂停至 '+new Date(s.paused_until*1000).toLocaleString('zh-CN'):s.error?'上次失败':'就绪'}${s.error?' · '+esc(PLATFORM_ERRORS[s.error]||'读取失败'):''}</div>`).join('')}
+function parseBenchmarkCreators(text){
+  return text.split(/\r?\n/).map(line=>line.trim()).filter(Boolean).map((line,i)=>{
+    const parts=line.split(/[|｜]/).map(s=>s.trim());
+    const platform=Object.keys(PLATFORM_NAMES).find(p=>PLATFORM_NAMES[p]===parts[1]);
+    if(parts.length!==2||!parts[0]||!platform)throw new Error(`对标博主第 ${i+1} 行请按「名称｜平台」填写，平台可选抖音、B站、YouTube 或 X`);
+    return {name:parts[0],platform};
+  });
+}
 function renderSettings(){
   if(STATIC)return;
   const s=S.settings,a=S.account,[cls,label]=accountLabel(a);
@@ -439,6 +451,8 @@ function renderSettings(){
       <label for="field">账号领域</label><input id="field" value="${esc(s.field)}">
       <div class="hint">用于热榜相关性判断、关键词和 AI 爆款分析。修改后热榜会在下一轮或点「补分类」时重新判断；已有分析需点「重新拆解」。</div>
       <label for="fixed">固定关键词（计入每天总数，逗号分隔）</label><input id="fixed" value="${esc(s.fixed_keywords.join('，'))}">
+      <label for="benchmarks">对标博主（每行：名称｜平台）</label><textarea id="benchmarks" rows="5" aria-describedby="benchmarksHint" ${'benchmark_creators' in s?'':'disabled'}>${esc((s.benchmark_creators||[]).map(r=>r.name+'｜'+PLATFORM_NAMES[r.platform]).join('\n'))}</textarea>
+      <div class="hint" id="benchmarksHint">${'benchmark_creators' in s?'最多 20 位。平台填写抖音、B站、YouTube 或 X。仅供挑词时参考选题风格，不会自动采集这些账号；清空可取消参考。':'此项需重启界面服务后才能编辑，其他设置仍可保存。'}</div>
       <div class="grid2"><div><label for="kpd">每天搜几个关键词</label><input id="kpd" type="number" min="1" max="12" value="${s.keywords_per_day}"></div>
       <div><label for="pk">每个关键词拆几条</label><input id="pk" type="number" min="1" max="10" value="${s.per_keyword}"></div>
       <div><label for="ml">抖音最低点赞数</label><input id="ml" type="number" min="0" max="1000000000" step="1000" value="${s.min_likes}"></div>
@@ -450,6 +464,7 @@ function renderSettings(){
       <div><label for="ae">结束时间（点）</label><input id="ae" type="number" min="1" max="24" value="${s.active_end}"></div></div>
       <label for="gap">抖音两次搜索间隔（分钟）</label><input id="gap" type="number" min="20" max="1440" value="${s.search_gap_minutes}">
       <div class="hint">每 30 分钟检查一次，到间隔才搜索一个词；立即运行也遵守间隔与暂停。间隔越长，搜索越少，但仍可能触发风控。电脑休眠、运行时段和拆解耗时会影响完成时间。</div>
+      <div class="hint">B站和 YouTube 没有结果时完成该词；同一词连续失败 2 次后跳过，后续轮次继续其他词。只有限流或风控才暂停平台 24 小时。YouTube 达到日上限后，当天不再发起官方搜索请求。</div>
       <div class="inline" style="margin-top:14px"><button class="primary" id="saveSet">保存设置</button></div></div>
     <div class="card"><h3>平台与英文搜索</h3>
       ${Object.entries(PLATFORM_NAMES).map(([p,n])=>`<div class="inline"><input type="checkbox" id="enable-${p}" ${s[p+'_enabled']??(p==='douyin')?'checked':''}><label for="enable-${p}">${n}${p==='x'?' 趋势（每天一次，不搜索推文）':''}</label></div>`).join('')}
@@ -475,7 +490,7 @@ function renderSettings(){
   $('#run').onclick=async()=>{const j=await api('/api/run',{});toast(j.ok?'开始运行，搜索和拆解要几分钟':'正在忙：'+j.busy);refresh()};
   $('#login').onclick=async()=>{const j=await api('/api/login',{});toast(j.ok?'扫码窗口打开中，请用小号扫码':'正在忙：'+j.busy);refresh()};
   $('#challenge').onclick=async()=>{const j=await api('/api/challenge',{});toast(j.ok?'验证窗口打开中':'正在忙：'+j.busy);refresh()};
-  $('#saveSet').onclick=async()=>{try{await api('/api/settings',{screening_provider:$('#screeningProvider').value,analysis_provider:$('#analysisProvider').value,qwen_model:$('#qwenModel').value,douyin_min_ratio:$('#ratio-douyin').value,field:$('#field').value,fixed_keywords:$('#fixed').value.split(/[,，、]+/),keywords_per_day:$('#kpd').value,per_keyword:$('#pk').value,min_likes:$('#ml').value,recent_days:$('#rd').value,auto:$('#auto').checked,active_start:$('#as').value,active_end:$('#ae').value,search_gap_minutes:$('#gap').value,...Object.fromEntries(Object.keys(PLATFORM_NAMES).map(p=>[p+'_enabled',$('#enable-'+p).checked])),...Object.fromEntries(['bilibili','youtube'].flatMap(p=>[[p+'_search_gap_minutes',$('#gap-'+p).value],[p+'_min_views',$('#min-'+p).value],[p+'_min_ratio',$('#ratio-'+p).value]])),youtube_fixed_keywords:$('#english').value.split(/[,，、]+/),youtube_searches_per_day:$('#ytLimit').value,youtube_hot_category:$('#ytCategory').value});toast('设置已保存');await loadState();if(view==='settings')renderSettings()}catch(e){toast(e.message)}};
+  $('#saveSet').onclick=async()=>{try{await api('/api/settings',{screening_provider:$('#screeningProvider').value,analysis_provider:$('#analysisProvider').value,qwen_model:$('#qwenModel').value,douyin_min_ratio:$('#ratio-douyin').value,field:$('#field').value,fixed_keywords:$('#fixed').value.split(/[,，、]+/),...('benchmark_creators' in s?{benchmark_creators:parseBenchmarkCreators($('#benchmarks').value)}:{}),keywords_per_day:$('#kpd').value,per_keyword:$('#pk').value,min_likes:$('#ml').value,recent_days:$('#rd').value,auto:$('#auto').checked,active_start:$('#as').value,active_end:$('#ae').value,search_gap_minutes:$('#gap').value,...Object.fromEntries(Object.keys(PLATFORM_NAMES).map(p=>[p+'_enabled',$('#enable-'+p).checked])),...Object.fromEntries(['bilibili','youtube'].flatMap(p=>[[p+'_search_gap_minutes',$('#gap-'+p).value],[p+'_min_views',$('#min-'+p).value],[p+'_min_ratio',$('#ratio-'+p).value]])),youtube_fixed_keywords:$('#english').value.split(/[,，、]+/),youtube_searches_per_day:$('#ytLimit').value,youtube_hot_category:$('#ytCategory').value});toast('设置已保存');await loadState();if(view==='settings')renderSettings()}catch(e){toast(e.message)}};
   updateSettingsStatus();
 }
 document.querySelectorAll('nav a').forEach(a=>{a.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();a.onclick()}};a.onclick=async()=>{if(STATIC&&a.dataset.view==='settings')return;const page=++pageVersion;view=a.dataset.view;current=null;await loadState();if(page!==pageVersion)return;await render();if(page===pageVersion&&(view==='today'||view==='library'))await loadList()}});

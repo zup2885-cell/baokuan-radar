@@ -17,6 +17,23 @@ def primary_key(db,table):
 class MigrationTest(unittest.TestCase):
     setUp=original.RadarTest.setUp
 
+    def test_legacy_keyword_failure_count_migrates_once_and_preserves_queue(self):
+        folder=self.root/'旧关键词库';folder.mkdir()
+        with closing(sqlite3.connect(folder/'radar.sqlite3')) as db,db:
+            db.execute('''create table keywords(day text,word text,status text default 'queued',
+                searched_at text,found int,error text,primary key(day,word))''')
+            db.execute('insert into keywords values(?,?,?,?,?,?)',
+                       (self.day,'发光车标','queued',None,0,'UPSTREAM_BROKEN'))
+        with patch.object(radar,'DATA',folder),closing(radar.connect()) as db:
+            row=db.execute('select * from keywords').fetchone()
+            self.assertEqual((row['word'],row['status'],row['found'],row['error'],row['consecutive_failures']),
+                             ('发光车标','queued',0,'UPSTREAM_BROKEN',0))
+            db.execute('update keywords set consecutive_failures=1');db.commit()
+            version=db.execute('pragma schema_version').fetchone()[0]
+        with patch.object(radar,'DATA',folder),closing(radar.connect()) as db:
+            self.assertEqual(db.execute('select consecutive_failures from keywords').fetchone()[0],1)
+            self.assertEqual(db.execute('pragma schema_version').fetchone()[0],version)
+
     def legacy_analyses(self,name='旧分析库'):
         folder=self.root/name;folder.mkdir()
         rows=[('12345678901','codex','codex',json.dumps(original.legacy_analysis(),ensure_ascii=False),'2026-11-05'),

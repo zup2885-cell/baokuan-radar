@@ -54,6 +54,7 @@ DEFAULTS={
     'youtube_hot_category':'',
     'field':'汽车、车评讲解',
     'fixed_keywords':['车评'],
+    'benchmark_creators':[],
     'keywords_per_day':6,
     'per_keyword':3,
     'min_likes':10000,
@@ -71,6 +72,7 @@ MESSAGES={
     'UPSTREAM_BROKEN':'抖音页面读取失败，可能是网页改版，下一轮会再试。',
     'NEED_SETUP':'找不到抖音创作台的 dy-cli Python 环境，请检查原环境是否仍在。',
 }
+PUBLIC_PAUSE_CODES=('RATE_LIMITED','PLATFORM_BLOCKED')
 
 
 def now():return datetime.now(CST)
@@ -99,7 +101,7 @@ def connect():
         for table,additions in {
             'hot':{'track':"text default '未分类'",'related':'integer','classification_key':"text default ''",
                    'platform':"text not null default 'douyin'"},
-            'keywords':{'platform':"text not null default 'douyin'"},
+            'keywords':{'platform':"text not null default 'douyin'",'consecutive_failures':'integer not null default 0'},
             'videos':{'platform':"text not null default 'douyin'",'views':'integer','coins':'integer',
                       'analysis_provider':"text not null default 'codex'",'analysis_model':"text not null default 'codex'"},
         }.items():
@@ -276,6 +278,7 @@ def classify_hot(db,day,platform='douyin'):
 热词材料：{json.dumps([{'rank':r['rank'],'word':r['word']} for r in pending],ensure_ascii=False)}
 逐条返回 rank、word（原样）、track、related（布尔值）。不得遗漏、重复或添加热词。
 related 判断是否与账号领域直接相关或有具体自然的内容结合点；不能为了蹭热点强行关联。
+按账号领域的具体受众、选购需求和使用场景判断，不要仅因同属一个大行业就判为相关。
 无足够信息判断关联时填 false。赛道与相关性独立判断，不能把“被挑作关键词”当作相关的依据。'''
     result=screening_json(db,prompt,'hot_classification.json',platform,'热榜分类')['items']
     expected={(r['rank'],r['word']) for r in pending};seen=set()
@@ -395,6 +398,7 @@ def pick_keywords(db,day,hot,platform='douyin'):
     prompt=f'''你是{platforms.NAMES[platform]}选题助手。只根据下面的材料回答，不要运行任何命令，不要读写文件。
 
 账号领域：{s['field']}
+参考对标博主（名称与平台，仅作为选题风格参考）：{json.dumps([{'name':r['name'],'platform':platforms.NAMES[r['platform']]} for r in s['benchmark_creators']],ensure_ascii=False)}
 今日热榜：
 {lines}
 
@@ -402,6 +406,7 @@ def pick_keywords(db,day,hot,platform='douyin'):
 - 优先选热榜里和账号领域相关的话题，把它改写成适合搜索的短词（2–8 个字）。
 - 如果某个热点本身和领域无关，但可以和领域结合（例如热点人物 + 汽车），可以给出结合后的搜索词。
 - 实在没有相关的，就给出该领域本周常见的爆款选题词。
+- 参考对标博主的选题风格，围绕账号领域中的具体人群、需求问题与使用场景选词；对标账号名不是固定搜索词，不要照搬其人设，也不要推断其未提供的作品或数据。
 - hot_word 填它对应的热榜原词；不是来自热榜的填空字符串。reason 用一句话说明为什么选它。
 - 不要重复，不要给出敏感时政、灾难事故类的词。'''
     if platform=='youtube':prompt+=f'\nYouTube 只搜索英文内容。把账号领域翻译成英文搜索短语，word 必须用英文，reason 用中文。优先具体车型、年份、测评场景，例如 {now().year} SUV review、EV road test；避免只有 car review 的宽泛词，以及玩具、遥控车、游戏和家庭挑战。'
@@ -745,7 +750,10 @@ def run_douyin_tick(db,day,s,notes):
 
 
 def platform_state(db,platform):
-    return setting(db,platform+'_state') or {}
+    state=setting(db,platform+'_state') or {}
+    # 兼容旧版留下的普通读取失败暂停；限流和风控暂停仍必须遵守。
+    if state.get('error') not in PUBLIC_PAUSE_CODES:state['paused_until']=0
+    return state
 
 
 def platform_paused(db,platform):
@@ -754,12 +762,13 @@ def platform_paused(db,platform):
 
 
 def pause_platform(db,platform,code):
+    """记录平台错误；只有限流、风控才设置暂停时间。"""
     code=platforms.PlatformError(code).code
     state=platform_state(db,platform)
-    until=(now()+timedelta(days=1)).replace(hour=0,minute=0,second=0,microsecond=0).timestamp() if code=='DAILY_LIMIT' else time.time()+(86400 if code in ('RATE_LIMITED','PLATFORM_BLOCKED') else 1800)
+    until=time.time()+86400 if code in PUBLIC_PAUSE_CODES else 0
     state.update(error=code,paused_until=until)
     put(db,platform+'_state',state)
-    log(db,platforms.NAMES[platform]+'暂停：'+platforms.ERROR_LABELS[code],'warn')
+    log(db,platforms.NAMES[platform]+('暂停：' if until else '：')+platforms.ERROR_LABELS[code],'warn')
 
 
 def run_platform_tick(db,day,s,platform,notes):
@@ -769,7 +778,7 @@ def run_platform_tick(db,day,s,platform,notes):
     state=platform_state(db,platform)
     hot=[dict(r) for r in db.execute('select * from hot where day=? and platform=? order by rank',(day,platform))]
     if not hot and state.get('hot_attempt_day')!=day:
-        # X 一天只尝试一次；其他平台失败后遵守本平台暂停期再试。
+        # X 一天只尝试一次；普通热榜故障不阻塞已有关键词。
         if platform=='x':state['hot_attempt_day']=day;put(db,platform+'_state',state)
         if platform=='youtube' and not key:
             notes.append('未配置 YouTube 密钥，仅关键词搜索')
@@ -780,7 +789,8 @@ def run_platform_tick(db,day,s,platform,notes):
                 save_hot(db,day,hot,platform);notes.append(name+'热榜 '+str(len(hot))+' 条')
             except Exception as error:
                 pause_platform(db,platform,error.code if isinstance(error,platforms.PlatformError) else 'UPSTREAM_BROKEN')
-                notes.append(name+'热榜暂不可用');return
+                notes.append(name+'热榜暂不可用')
+                if platform_paused(db,platform):return
     if hot:notes.append(name+'：'+try_classify_hot(db,day,platform))
     if platform=='x':return
     marker=platform+'_keywords_picked_day'
@@ -798,8 +808,17 @@ def run_platform_tick(db,day,s,platform,notes):
         notes.append(name+'搜索「'+row['word']+'」')
     except Exception as error:
         code=error.code if isinstance(error,platforms.PlatformError) else 'UPSTREAM_BROKEN'
-        db.execute('update keywords set error=? where day=? and word=? and platform=?',(code,day,row['word'],platform));db.commit()
-        pause_platform(db,platform,code);notes.append(name+'搜索暂停')
+        with db:
+            db.execute('''update keywords set error=?,consecutive_failures=consecutive_failures+1,
+                status=case when consecutive_failures+1>=2 then 'failed' else 'queued' end,
+                searched_at=?,found=0 where day=? and word=? and platform=?''',
+                (code,now().isoformat(timespec='seconds'),day,row['word'],platform))
+        failed=db.execute('select status from keywords where day=? and word=? and platform=?',
+                          (day,row['word'],platform)).fetchone()['status']=='failed'
+        message=name+'搜索「'+row['word']+'」'+('连续失败 2 次，已跳过' if failed else '失败，下一轮重试')
+        log(db,message,'warn');notes.append(message)
+        pause_platform(db,platform,code)
+        if platform_paused(db,platform):notes.append(name+'搜索暂停')
 
 
 def viral_ratio(platform,likes,views,followers):
@@ -849,7 +868,8 @@ def restore_completed_analysis(db,ident):
 def record_public_search(db,day,word,platform,found,has_results=True):
     with db:
         db.execute('''insert into keywords(day,word,platform,status,searched_at,found,error,reason) values(?,?,?,?,?,?,null,?)
-            on conflict(platform,day,word) do update set status=excluded.status,searched_at=excluded.searched_at,found=excluded.found,error=null''',
+            on conflict(platform,day,word) do update set status=excluded.status,searched_at=excluded.searched_at,
+            found=excluded.found,error=null,consecutive_failures=0''',
             (day,word,platform,'done' if has_results else 'empty',now().isoformat(timespec='seconds'),found,'手动搜索'))
 
 

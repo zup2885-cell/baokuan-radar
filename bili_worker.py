@@ -13,9 +13,14 @@ async def collect(word,limit,days):
     data=await search.search_by_type(keyword=word,search_type=search.SearchObjectType.VIDEO,
         order_type=search.OrderVideo.CLICK,page=1,page_size=limit,
         time_start=(date.today()-timedelta(days=days)).isoformat(),time_end=date.today().isoformat())
-    if not isinstance(data.get('result'),list):raise ValueError('invalid result')
+    if not isinstance(data,dict):raise ValueError('B站搜索返回格式不正确')
+    results=data.get('result')
+    # B站无匹配视频时会省略 result；必须有明确的零计数，不能吞掉损坏的响应。
+    if results is None and all(type(data.get(k)) is int and data[k]==0 for k in ('numResults','numPages')):
+        results=[]
+    if not isinstance(results,list):raise ValueError('B站搜索结果格式不正确')
     rows=[];followers={}
-    for row in data['result'][:limit]:
+    for row in results[:limit]:
         ident=row.get('bvid','')
         if not re.fullmatch(r'BV[0-9A-Za-z]{10}',ident):continue
         info=await video.Video(bvid=ident).get_info()

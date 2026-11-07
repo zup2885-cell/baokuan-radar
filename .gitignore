@@ -6,3 +6,5 @@ __pycache__/
 *.sqlite3
 *.sqlite3-wal
 *.sqlite3-shm
+# 具体博主的赛道研究只留在本机
+docs-research/

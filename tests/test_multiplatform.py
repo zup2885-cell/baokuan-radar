@@ -160,7 +160,7 @@ class MultiPlatformTest(unittest.TestCase):
             self.assertEqual(yt.call_count,2);self.assertEqual(bili.call_count,1);self.assertEqual(dy.call_count,1)
         self.assertEqual(self.db.execute("select count(*) from keywords where status='queued'").fetchone()[0],2)
 
-    def test_rate_limit_or_generic_failure_pauses_only_failed_platform(self):
+    def test_rate_limit_pauses_only_failed_platform(self):
         self.ready_tick()
         for p in ('bilibili','youtube'):self.ready_new(p)
         with patch.object(radar,'dy',return_value={'ok':True,'items':[]}) as dy,patch('platforms.bili_search',side_effect=platforms.PlatformError('RATE_LIMITED')) as bili,patch('platforms.youtube_public_search',return_value=[]) as yt:
@@ -169,6 +169,119 @@ class MultiPlatformTest(unittest.TestCase):
         self.assertTrue(radar.platform_paused(self.db,'bilibili'));self.assertFalse(radar.platform_paused(self.db,'youtube'))
         self.assertEqual(radar.account(self.db)['status'],'ready')
         self.assertEqual(self.db.execute("select error from keywords where platform='bilibili' order by rowid").fetchone()[0],'RATE_LIMITED')
+
+    def next_search(self,p):
+        state=radar.platform_state(self.db,p)
+        state['last_search_at']=0
+        radar.put(self.db,p+'_state',state)
+
+    def test_empty_search_finishes_keyword_and_advances_without_pause(self):
+        radar.put(self.db,'douyin_enabled',False)
+        for p in ('bilibili','youtube'):self.ready_new(p)
+        with patch('platforms.bili_search',return_value=[]) as bili,patch('platforms.youtube_public_search',return_value=[]) as yt:
+            radar.run_tick(self.db,True)
+            for p in ('bilibili','youtube'):
+                row=self.db.execute('select * from keywords where platform=? order by rowid',(p,)).fetchone()
+                self.assertEqual((row['status'],row['found'],row['error']),('empty',0,None))
+                self.assertIsNotNone(row['searched_at'])
+                self.assertFalse(radar.platform_paused(self.db,p))
+                self.next_search(p)
+            radar.run_tick(self.db,True)
+            for search in (bili,yt):
+                self.assertEqual([c.args[0] for c in search.call_args_list],['car review','second review'])
+
+    def test_two_failures_with_different_codes_skip_keyword_on_both_platforms(self):
+        radar.put(self.db,'douyin_enabled',False)
+        for p in ('bilibili','youtube'):self.ready_new(p)
+        failures=[platforms.PlatformError('TIMEOUT'),RuntimeError('模拟格式错误'),[]]
+        with patch('platforms.bili_search',side_effect=failures) as bili,patch('platforms.youtube_public_search',side_effect=failures) as yt:
+            for attempt in (1,2):
+                radar.run_tick(self.db,True)
+                for p in ('bilibili','youtube'):
+                    row=self.db.execute('select * from keywords where platform=? order by rowid',(p,)).fetchone()
+                    self.assertEqual(row['status'],'queued' if attempt==1 else 'failed')
+                    self.assertEqual(row['consecutive_failures'],attempt)
+                    self.assertFalse(radar.platform_paused(self.db,p))
+                    self.next_search(p)
+                if attempt==1:
+                    # 重连后计数仍在；原来的搜索间隔依然生效。
+                    reopened=radar.connect();reopened.close()
+            radar.run_tick(self.db,True)
+            for search in (bili,yt):
+                self.assertEqual([c.args[0] for c in search.call_args_list],['car review','car review','second review'])
+        for p in ('bilibili','youtube'):
+            row=self.db.execute('select * from keywords where platform=? order by rowid',(p,)).fetchone()
+            self.assertEqual((row['status'],row['found'],row['error']),('failed',0,'UPSTREAM_BROKEN'))
+
+    def test_rate_limit_and_block_still_pause_and_count_toward_two_failures(self):
+        radar.put(self.db,'douyin_enabled',False)
+        for p in ('bilibili','youtube'):self.ready_new(p)
+        failures=[platforms.PlatformError('RATE_LIMITED'),platforms.PlatformError('PLATFORM_BLOCKED'),[]]
+        with patch('platforms.bili_search',side_effect=failures) as bili,patch('platforms.youtube_public_search',side_effect=failures) as yt:
+            for attempt in (1,2):
+                radar.run_tick(self.db,True)
+                for p in ('bilibili','youtube'):
+                    self.assertTrue(radar.platform_paused(self.db,p))
+                    row=self.db.execute('select * from keywords where platform=? order by rowid',(p,)).fetchone()
+                    self.assertEqual(row['status'],'queued' if attempt==1 else 'failed')
+                    self.assertEqual(row['consecutive_failures'],attempt)
+                radar.run_tick(self.db,True)
+                self.assertEqual(bili.call_count,attempt);self.assertEqual(yt.call_count,attempt)
+                for p in ('bilibili','youtube'):
+                    state=radar.platform_state(self.db,p);state.update(paused_until=0,last_search_at=0)
+                    radar.put(self.db,p+'_state',state)
+            radar.run_tick(self.db,True)
+            for search in (bili,yt):self.assertEqual(search.call_args.args[0],'second review')
+
+    def test_only_rate_limit_and_block_pause_public_platforms_including_old_state(self):
+        for p in ('bilibili','youtube','x'):
+            for code in platforms.ERROR_LABELS:
+                with self.subTest(platform=p,code=code):
+                    radar.pause_platform(self.db,p,code)
+                    self.assertEqual(radar.platform_paused(self.db,p),code in ('RATE_LIMITED','PLATFORM_BLOCKED'))
+            radar.put(self.db,p+'_state',{'error':'UPSTREAM_BROKEN','paused_until':radar.time.time()+1800})
+            self.assertFalse(radar.platform_paused(self.db,p))
+
+    def test_success_resets_failure_count_and_error(self):
+        self.ready_new('bilibili');notes=[]
+        with patch('platforms.bili_search',side_effect=platforms.PlatformError('TIMEOUT')):
+            radar.run_platform_tick(self.db,self.day,radar.settings(self.db),'bilibili',notes)
+        self.next_search('bilibili')
+        with patch('platforms.bili_search',return_value=[]):
+            radar.run_platform_tick(self.db,self.day,radar.settings(self.db),'bilibili',notes)
+        row=self.db.execute("select * from keywords where platform='bilibili' order by rowid").fetchone()
+        self.assertEqual((row['status'],row['found'],row['error'],row['consecutive_failures']),('empty',0,None,0))
+
+    def test_official_daily_limit_skips_after_two_failures_without_more_requests(self):
+        radar.put(self.db,'douyin_enabled',False);self.ready_new('youtube')
+        radar.put(self.db,'youtube_searches_per_day',1)
+        radar.put(self.db,'youtube_api_usage',{'day':self.day,'count':1})
+        with patch('platforms.youtube_key',return_value='fake-key'),patch('platforms.youtube_search') as api,patch('platforms.youtube_public_search') as public:
+            for _ in range(2):
+                radar.run_tick(self.db,True)
+                self.assertFalse(radar.platform_paused(self.db,'youtube'))
+                self.next_search('youtube')
+            row=self.db.execute("select * from keywords where platform='youtube' order by rowid").fetchone()
+            self.assertEqual((row['status'],row['error'],row['consecutive_failures']),('failed','DAILY_LIMIT',2))
+            radar.run_tick(self.db,True)
+            self.assertEqual(self.db.execute("select consecutive_failures from keywords where platform='youtube' and word='second review'").fetchone()[0],1)
+            api.assert_not_called();public.assert_not_called()
+        self.assertEqual(radar.setting(self.db,'youtube_api_usage'),{'day':self.day,'count':1})
+
+    def test_broken_hot_list_does_not_starve_existing_keyword_queue(self):
+        radar.put(self.db,'douyin_enabled',False)
+        radar.put(self.db,'bilibili_enabled',True);self.queue('bilibili')
+        with patch('platforms.bili_hot',side_effect=platforms.PlatformError()),patch('platforms.bili_search',return_value=[]) as search:
+            radar.run_tick(self.db,True)
+        search.assert_called_once()
+        self.assertFalse(radar.platform_paused(self.db,'bilibili'))
+
+    def test_youtube_empty_adapters_preserve_success_and_do_not_fetch_details(self):
+        with patch('platforms.run_json',return_value={'entries':[]}):
+            self.assertEqual(platforms.youtube_public_search('car review'),[])
+        with patch('platforms.youtube_api',return_value=[]) as api:
+            self.assertEqual(platforms.youtube_search('car review',10,'2026-11-01T00:00:00Z','fake-key'),[])
+            api.assert_called_once()
 
     def test_douyin_failure_does_not_stop_other_platforms(self):
         self.ready_tick();self.ready_new('youtube')

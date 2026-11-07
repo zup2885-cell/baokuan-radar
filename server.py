@@ -126,6 +126,18 @@ def validate_settings(data,current):
         elif key=='field':
             if not isinstance(value,str) or not 1<=len(value.strip())<=200:raise ValueError('账号领域须为 1–200 字')
             value=value.strip()
+        elif key=='benchmark_creators':
+            if not isinstance(value,list) or len(value)>20:raise ValueError('对标博主须为列表，最多 20 位')
+            creators=[];seen=set()
+            for item in value:
+                if not isinstance(item,dict) or set(item)!={'name','platform'}:raise ValueError('每位对标博主须包含名称和平台')
+                name=item['name'];platform=item['platform']
+                if (not isinstance(name,str) or not 1<=len(name.strip())<=60 or
+                    re.search(r'[\r\n|｜]',name)):raise ValueError('对标博主名称须为 1–60 字，不能包含换行或竖线')
+                if not isinstance(platform,str) or platform not in radar.platforms.NAMES:raise ValueError('对标博主平台须为抖音、B站、YouTube 或 X')
+                name=name.strip();ident=(name.casefold(),platform)
+                if ident not in seen:creators.append({'name':name,'platform':platform});seen.add(ident)
+            value=creators
         current[key]=value
     if current['active_start']>=current['active_end']:raise ValueError('结束时间必须晚于开始时间，运行时段不能跨天')
     if len(current['youtube_fixed_keywords'])>current['keywords_per_day']:raise ValueError('英文固定关键词数量不能超过每天关键词数')
