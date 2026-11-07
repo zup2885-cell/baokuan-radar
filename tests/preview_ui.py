@@ -26,6 +26,7 @@ def main():
         for target in ('radar.dy','radar.download','radar.transcribe','radar.notify','radar.fetch_hot','radar.platforms.bili_hot','radar.platforms.bili_search','radar.platforms.youtube_hot','radar.platforms.youtube_search','radar.platforms.youtube_public_search','radar.platforms.x_hot'):
             stack.enter_context(patch(target,side_effect=RuntimeError('预览模式已禁用外部操作')))
         stack.enter_context(patch.object(radar.platforms,'youtube_key',return_value=''))
+        stack.enter_context(patch.object(radar.aliyun,'api_key',return_value=''))
         def codex(prompt,schema,*args,**kwargs):
             if schema=='hot_classification.json':
                 rows=json.loads(prompt.split('热词材料：',1)[1].split('\n',1)[0])

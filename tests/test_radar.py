@@ -66,13 +66,16 @@ class RadarTest(unittest.TestCase):
         paths = patch.multiple(radar, DATA=self.root, DY_STATE=self.root/'dy-account', MEDIA=self.root/'media')
         paths.start()
         self.addCleanup(paths.stop)
-        for target in ('urllib.request.urlopen', 'subprocess.run', 'socket.socket'):
+        for target in ('urllib.request.urlopen', 'urllib.request.build_opener', 'subprocess.run', 'socket.socket'):
             guard = patch(target, side_effect=AssertionError('测试禁止真实网络或外部进程'))
             guard.start()
             self.addCleanup(guard.stop)
         key = patch.object(radar.platforms, 'youtube_key', return_value='')
         key.start()
         self.addCleanup(key.stop)
+        aliyun_key = patch.object(radar.aliyun, 'api_key', return_value='')
+        aliyun_key.start()
+        self.addCleanup(aliyun_key.stop)
         notice = patch.object(radar, 'notify')
         self.notify = notice.start()
         self.addCleanup(notice.stop)

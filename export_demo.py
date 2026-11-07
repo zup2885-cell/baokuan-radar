@@ -24,6 +24,7 @@ LOCAL_PATH = re.compile(
 def public_text(value):
     if not isinstance(value,str):return ''
     value=re.sub(r'AIza[0-9A-Za-z_-]{35}', '［密钥已隐藏］', value)
+    value=re.sub(r'\bsk-[0-9A-Za-z_-]+', '［密钥已隐藏］', value)
     return LOCAL_PATH.sub('［本机路径已隐藏］',value)
 
 
@@ -103,6 +104,8 @@ def export_snapshot(db_path=DEFAULT_DB, day=None):
             video = {key: public_text(row[key]) for key in
                      ('aweme_id', 'day', 'desc', 'author', 'keyword', 'published_at')}
             video['platform']=row['platform'] if 'platform' in row.keys() else 'douyin'
+            video['analysis_provider']=public_text(row['analysis_provider']) if 'analysis_provider' in row.keys() else 'codex'
+            video['analysis_model']=public_text(row['analysis_model']) if 'analysis_model' in row.keys() else 'codex'
             for key in ('followers', 'likes', 'views', 'coins', 'comments', 'favorites', 'shares', 'ratio'):
                 number = row[key] if key in row.keys() else None
                 video[key] = number if isinstance(number, (int, float)) and math.isfinite(number) else None

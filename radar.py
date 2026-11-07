@@ -19,6 +19,8 @@ import time
 import urllib.request
 import tempfile
 import platforms
+import aliyun
+from chinese import simplified
 
 HERE=Path(__file__).resolve().parent
 DATA=Path(os.environ.get('BAOKUAN_DATA') or Path.home()/'Library/Application Support/BaokuanRadar').expanduser().resolve()
@@ -39,8 +41,13 @@ DEFAULTS={
     'x_enabled':False,
     'bilibili_search_gap_minutes':30,
     'youtube_search_gap_minutes':30,
-    'bilibili_min_views':10000,
-    'youtube_min_views':10000,
+    'bilibili_min_views':50000,
+    'youtube_min_views':50000,
+    'bilibili_min_ratio':2,
+    'youtube_min_ratio':2,
+    'douyin_min_ratio':0,
+    'analysis_provider':'codex',
+    'qwen_model':'qwen-plus',
     'youtube_fixed_keywords':[],
     'youtube_searches_per_day':10,
     'youtube_hot_category':'',
@@ -92,14 +99,19 @@ def connect():
             'hot':{'track':"text default '未分类'",'related':'integer','classification_key':"text default ''",
                    'platform':"text not null default 'douyin'"},
             'keywords':{'platform':"text not null default 'douyin'"},
-            'videos':{'platform':"text not null default 'douyin'",'views':'integer','coins':'integer'},
+            'videos':{'platform':"text not null default 'douyin'",'views':'integer','coins':'integer',
+                      'analysis_provider':"text not null default 'codex'",'analysis_model':"text not null default 'codex'"},
         }.items():
             columns={r['name'] for r in db.execute(f'pragma table_info({table})')}
             for name,definition in additions.items():
                 if name not in columns:db.execute(f'alter table {table} add column {name} {definition}')
-        for table,primary in {'hot':'platform,day,rank','keywords':'platform,day,word'}.items():
+        db.execute('''create table if not exists video_analyses(aweme_id text, provider text, model text,
+            analysis text not null, updated_at text, primary key(aweme_id,provider,model))''')
+        for table,primary in {'hot':('platform','day','rank'),'keywords':('platform','day','word'),
+                              'video_analyses':('aweme_id','provider','model')}.items():
             info=db.execute(f'pragma table_info({table})').fetchall()
-            if 'platform' not in [r['name'] for r in info if r['pk']]:
+            existing=tuple(r['name'] for r in sorted(info,key=lambda r:r['pk']) if r['pk'])
+            if existing!=primary:
                 # 从现有定义重建，避免丢失旧版已存在的列与默认值。
                 definitions=[]
                 for r in info:
@@ -107,11 +119,22 @@ def connect():
                     if r['notnull']:definition+=' not null'
                     if r['dflt_value'] is not None:definition+=' default '+r['dflt_value']
                     definitions.append(definition)
-                db.execute(f'create table {table}_multi('+','.join(definitions)+f',primary key({primary}))')
+                db.execute(f'create table {table}_multi('+','.join(definitions)+',primary key('+','.join(primary)+'))')
                 columns=','.join('"'+r['name']+'"' for r in info)
                 db.execute(f'insert into {table}_multi({columns}) select {columns} from {table} order by rowid')
                 db.execute(f'drop table {table}')
                 db.execute(f'alter table {table}_multi rename to {table}')
+        db.execute('''insert or ignore into video_analyses select aweme_id,analysis_provider,analysis_model,analysis,updated_at
+            from videos where analysis is not null and analysis!='' ''')
+        # 旧版没有逐项修改记录。只将缺省或仍等于旧默认的播放门槛迁移一次。
+        if not setting(db,'threshold_defaults_v2'):
+            for platform in ('bilibili','youtube'):
+                key=platform+'_min_views'
+                old=db.execute('select value from settings where key=?',(key,)).fetchone()
+                if old is None or json.loads(old[0])==10000:
+                    db.execute('insert or replace into settings values(?,?)',(key,'50000'))
+                db.execute('insert or ignore into settings values(?,?)',(platform+'_min_ratio','2'))
+            db.execute('insert into settings values(?,?)',('threshold_defaults_v2','true'))
         db.commit()
     except Exception:
         db.rollback();db.close();raise
@@ -251,7 +274,7 @@ def classify_hot(db,day,platform='douyin'):
 逐条返回 rank、word（原样）、track、related（布尔值）。不得遗漏、重复或添加热词。
 related 判断是否与账号领域直接相关或有具体自然的内容结合点；不能为了蹭热点强行关联。
 无足够信息判断关联时填 false。赛道与相关性独立判断，不能把“被挑作关键词”当作相关的依据。'''
-    result=validate_result(codex(prompt,'hot_classification.json'),'hot_classification.json')['items']
+    result=model_json(db,prompt,'hot_classification.json')['items']
     expected={(r['rank'],r['word']) for r in pending};seen=set()
     for r in result:
         ident=(r['rank'],r['word'])
@@ -298,24 +321,53 @@ def validate_result(doc,schema):
     def check(value,spec):
         kind=spec['type']
         if type(value) is not {'object':dict,'array':list,'string':str,'integer':int,'boolean':bool}[kind]:
-            raise ValueError('Codex 返回的数据类型不符合要求')
-        if 'enum' in spec and value not in spec['enum']:raise ValueError('Codex 返回了无效选项')
-        if 'const' in spec and value!=spec['const']:raise ValueError('Codex 返回了无效固定值')
-        if kind=='integer' and value<spec.get('minimum',value):raise ValueError('Codex 返回的数字太小')
+            raise ValueError('模型返回的数据类型不符合要求')
+        if 'enum' in spec and value not in spec['enum']:raise ValueError('模型返回了无效选项')
+        if 'const' in spec and value!=spec['const']:raise ValueError('模型返回了无效固定值')
+        if kind=='integer' and value<spec.get('minimum',value):raise ValueError('模型返回的数字太小')
         if kind=='string' and (len(value)<spec.get('minLength',0) or (spec.get('minLength',0)>0 and not value.strip())):
-            raise ValueError('Codex 返回了空白内容')
+            raise ValueError('模型返回了空白内容')
         if kind=='object':
-            if any(k not in value for k in spec.get('required',[])):raise ValueError('Codex 返回的结果缺少必填字段')
+            if any(k not in value for k in spec.get('required',[])):raise ValueError('模型返回的结果缺少必填字段')
             props=spec.get('properties',{})
-            if spec.get('additionalProperties') is False and any(k not in props for k in value):raise ValueError('Codex 返回了未知字段')
+            if spec.get('additionalProperties') is False and any(k not in props for k in value):raise ValueError('模型返回了未知字段')
             for k,v in value.items():
                 if k in props:check(v,props[k])
         elif kind=='array':
             if not spec.get('minItems',0)<=len(value)<=spec.get('maxItems',len(value)):
-                raise ValueError('Codex 返回的条目数量不符合要求')
+                raise ValueError('模型返回的条目数量不符合要求')
             for v in value:check(v,spec['items'])
     check(doc,json.loads((HERE/'schemas'/schema).read_text()))
     return doc
+
+
+def analysis_choice(db,provider=None):
+    provider=provider or setting(db,'analysis_provider')
+    if provider not in ('codex','qwen'):raise ValueError('分析模型须为 Codex 或千问')
+    if provider=='qwen' and not aliyun.api_key():provider='codex'
+    return provider,setting(db,'qwen_model') if provider=='qwen' else 'codex'
+
+
+def model_json(db,prompt,schema,choice=None,timeout=300,check=None):
+    provider,model=choice or analysis_choice(db)
+    if provider=='codex':
+        result=validate_result(codex(prompt,schema,timeout=timeout) if timeout!=300 else codex(prompt,schema),schema)
+        return check(result) if check else result
+    key=aliyun.api_key()
+    specification=json.loads((HERE/'schemas'/schema).read_text())
+    messages=[{'role':'system','content':'请只返回符合以下 JSON Schema 的 JSON 对象。用简体中文，原文证据保留原语言。\n'+json.dumps(specification,ensure_ascii=False)},
+              {'role':'user','content':prompt}]
+    for attempt in range(2):
+        content=aliyun.completion({'model':model,'messages':messages,'response_format':{'type':'json_object'},
+                                  'enable_thinking':False,'stream':False},key,timeout=timeout)
+        try:
+            result=validate_result(json.loads(content),schema)
+            if key and key in json.dumps(result,ensure_ascii=False):raise ValueError()
+            return check(result) if check else result
+        except (ValueError,TypeError,KeyError):
+            # 重试不回传无效结果或上游异常内容，避免污染日志和提示词。
+            if attempt==0:messages.append({'role':'user','content':'上一次 JSON 未通过结构或原文证据校验。请重新核对所有必填字段、类型、数量、账号领域和连续原文引用，仅输出完整 JSON。'})
+    raise aliyun.AliyunError('千问结果两次未通过 JSON 结构或原文证据校验，请重试')
 
 
 def pick_keywords(db,day,hot,platform='douyin'):
@@ -334,7 +386,7 @@ def pick_keywords(db,day,hot,platform='douyin'):
 - hot_word 填它对应的热榜原词；不是来自热榜的填空字符串。reason 用一句话说明为什么选它。
 - 不要重复，不要给出敏感时政、灾难事故类的词。'''
     if platform=='youtube':prompt+=f'\nYouTube 只搜索英文内容。把账号领域翻译成英文搜索短语，word 必须用英文，reason 用中文。优先具体车型、年份、测评场景，例如 {now().year} SUV review、EV road test；避免只有 car review 的宽泛词，以及玩具、遥控车、游戏和家庭挑战。'
-    picked=validate_result(codex(prompt,'pick.json'),'pick.json')['keywords']
+    picked=model_json(db,prompt,'pick.json')['keywords']
     words=[]
     for word in unique_text(s['youtube_fixed_keywords'] if platform=='youtube' else s['fixed_keywords'],limit=s['keywords_per_day'],width=80 if platform=='youtube' else 20):
         words.append({'word':word,'hot_word':'','reason':'设置里的固定关键词'})
@@ -404,7 +456,7 @@ def analysis_material(transcript):
     return text,''
 
 
-def analyze(db,row):
+def analyze(db,row,choice=None):
     def num(v):return '未知' if v is None else f'{v:,}'
     platform=row['platform'] if 'platform' in row.keys() else 'douyin'
     transcript,limitation=analysis_material(row['transcript']) if platform=='youtube' else ((row['transcript'] or '').strip()[:12000],'')
@@ -413,11 +465,15 @@ def analyze(db,row):
     prompt=ANALYSIS_PROMPT.format(platform=platforms.NAMES[platform],views=num(row['views']) if 'views' in row.keys() else '未知',coins=num(row['coins']) if 'coins' in row.keys() else '未知',formula='点赞÷粉丝' if platform=='douyin' else '播放÷粉丝（YouTube 为订阅）',field=setting(db,'field'),desc=desc or '（无）',author=row['author'] or '未知',followers=num(row['followers']),
         likes=num(row['likes']),comments=num(row['comments']),favorites=num(row['favorites']),shares=num(row['shares']),
         ratio=f"{row['ratio']:.1f}" if row['ratio'] is not None else '未知',keyword=row['keyword'] or '',
-        source={'whisper':'本地语音识别，可能有错字','none':'没有取到','subtitles':'英文字幕（人工或自动），可能有错字'}.get(row['transcript_source'],'未知'),
+        source={'aliyun-asr':'阿里云百炼语音识别，可能有错字','whisper':'本地语音识别，可能有错字','none':'没有取到','subtitles':'英文字幕（人工或自动），可能有错字'}.get(row['transcript_source'],'未知'),
         transcript=transcript or '（没有可用逐字稿，仅依据标题和描述）')
     if limitation:prompt+='\n材料限制：'+limitation+' 必须在 gaps 明确说明；证据只引用实际提供的片段，标题和描述也可作为证据。'
     if platform=='youtube':prompt+='\n保持 hook 和所有 evidence 为连续英文原句；hook_translation、evidence_translation 写对应中文意思。其余分析用简体中文。takeaways.application 必须具体说明如何改成适合中文车评账号的场景、口播和实拍素材，不能只翻译原文。'
-    result=validate_result(codex(prompt,schema,timeout=480) if platform=='youtube' else codex(prompt,schema),schema)
+    return model_json(db,prompt,schema,choice=choice,timeout=480 if platform=='youtube' else 300,
+                      check=lambda result:check_analysis(db,result,transcript,desc,limitation))
+
+
+def check_analysis(db,result,transcript,desc,limitation=''):
     if limitation:result['gaps']=limitation+' '+result['gaps']
     if result['account_field']!=setting(db,'field'):
         raise ValueError('分析领域与当前设置不一致，请重新拆解')
@@ -493,7 +549,7 @@ def search_keyword(db,day,word):
             on conflict(aweme_id) do update set followers=excluded.followers,likes=excluded.likes,comments=excluded.comments,favorites=excluded.favorites,
             shares=excluded.shares,cover=excluded.cover,play_url=excluded.play_url,ratio=excluded.ratio,updated_at=excluded.updated_at''',
             dict(item,day=day,keyword=word,stamp=stamp))
-        if item['likes'] is not None and item['likes']>=s['min_likes'] and recent:fresh.append(item)
+        if item['likes'] is not None and item['likes']>=s['min_likes'] and meets_ratio(ratio,s['douyin_min_ratio']) and recent:fresh.append(item)
     fresh.sort(key=lambda v:(v['ratio'] is not None,v['ratio'] or 0,v['likes']),reverse=True)
     chosen=[]
     for item in fresh:
@@ -533,24 +589,33 @@ def download(url,target,limit=120*1024*1024):
 
 def transcribe(row):
     if 'platform' in row.keys() and row['platform'] in ('bilibili','youtube'):return transcribe_public(row)
-    if not row['play_url'] or not WHISPER_PYTHON.is_file():return '','none'
+    if not row['play_url']:return '','none'
     MEDIA.mkdir(exist_ok=True,mode=0o700)
     target=MEDIA/(re.sub(r'[^a-zA-Z0-9_-]','_',row['aweme_id'])+'.mp4')
     try:
         download(row['play_url'],target)
+        text=try_aliyun_asr(target,'zh')
+        if text:return text,'aliyun-asr'
         result=subprocess.run([str(WHISPER_PYTHON),str(HERE/'transcribe.py'),str(WHISPER_MODEL),str(target)],
                               capture_output=True,text=True,timeout=900)
         doc=json.loads(result.stdout.strip().splitlines()[-1])
         if result.returncode or not isinstance(doc,dict):return '','none'
         text=doc.get('text')
-        return (text.strip(),'whisper') if doc.get('ok') and isinstance(text,str) and text.strip() else ('','none')
+        return (simplified(text.strip()),'whisper') if doc.get('ok') and isinstance(text,str) and text.strip() else ('','none')
     except (OSError,ValueError,IndexError,subprocess.TimeoutExpired):return '','none'
     finally:
         try:target.unlink()  # 只留文字，不留视频
         except OSError:pass
 
 
-def process(db,aweme_id,force=False):
+def try_aliyun_asr(path,language):
+    try:
+        key=aliyun.api_key()
+        return aliyun.recognize(path,language,key=key) if key else ''
+    except Exception:return ''  # 失败整条回退，不持久化任何上游错误或部分识别结果。
+
+
+def process(db,aweme_id,force=False,provider=None):
     row=db.execute('select * from videos where aweme_id=?',(aweme_id,)).fetchone()
     if not row:return False
     if row['status']=='irrelevant':return False
@@ -558,15 +623,23 @@ def process(db,aweme_id,force=False):
     if row['status']=='done' and not force:return True
     db.execute("update videos set status='processing',error=null,updated_at=? where aweme_id=?",(now().isoformat(timespec='seconds'),aweme_id));db.commit()
     try:
+        choice=analysis_choice(db,provider)
         if not (row['transcript'] or '').strip():
             text,source=transcribe(row)
             db.execute('update videos set transcript=?,transcript_source=? where aweme_id=?',(text,source,aweme_id));db.commit()
             row=db.execute('select * from videos where aweme_id=?',(aweme_id,)).fetchone()
-        result=validate_result(analyze(db,row),analysis_schema(row))
+        result=validate_result(analyze(db,row,choice=choice),analysis_schema(row))
         tags=unique_text(result['tags'],limit=6)
-        db.execute("update videos set analysis=?,tags=case when tags is null or tags='[]' then ? else tags end,status='done',updated_at=? where aweme_id=?",
-                   (json.dumps(result,ensure_ascii=False),json.dumps(tags,ensure_ascii=False),now().isoformat(timespec='seconds'),aweme_id))
-        db.commit();return True
+        stamp=now().isoformat(timespec='seconds');text=json.dumps(result,ensure_ascii=False)
+        with db:
+            if row['analysis']:
+                db.execute('insert or ignore into video_analyses values(?,?,?,?,?)',
+                           (aweme_id,row['analysis_provider'],row['analysis_model'],row['analysis'],row['updated_at']))
+            db.execute('insert into video_analyses values(?,?,?,?,?) on conflict(aweme_id,provider,model) do update set analysis=excluded.analysis,updated_at=excluded.updated_at',
+                       (aweme_id,choice[0],choice[1],text,stamp))
+            db.execute("update videos set analysis=?,analysis_provider=?,analysis_model=?,tags=case when tags is null or tags='[]' then ? else tags end,status='done',updated_at=? where aweme_id=?",
+                       (text,*choice,json.dumps(tags,ensure_ascii=False),stamp,aweme_id))
+        return True
     except Exception as error:
         if isinstance(error,platforms.PlatformError):pause_platform(db,row['platform'],error.code)
         message='Codex 分析超时，请稍后重试' if isinstance(error,subprocess.TimeoutExpired) else str(error)[:300]
@@ -715,6 +788,10 @@ def viral_ratio(platform,likes,views,followers):
     return numerator/followers if numerator is not None and followers else None
 
 
+def meets_ratio(ratio,minimum):
+    return minimum==0 or (ratio is not None and ratio>=minimum)
+
+
 def youtube_exclusion(row,field):
     title=(row['desc'] or '').split('\n',1)[0]
     if re.search(r'#shorts\b',title,re.I):return 'Shorts 短视频'
@@ -793,7 +870,7 @@ def search_public_keyword(db,day,word,platform,key=''):
             if date.tzinfo is None:date=date.replace(tzinfo=timezone.utc)
             recent=cutoff<=date<=now()
         except (ValueError,TypeError):recent=False
-        if item['views'] is not None and item['views']>=s[platform+'_min_views'] and recent:fresh.append(item)
+        if item['views'] is not None and item['views']>=s[platform+'_min_views'] and meets_ratio(item['ratio'],s[platform+'_min_ratio']) and recent:fresh.append(item)
     fresh.sort(key=lambda v:(v['ratio'] is not None,v['ratio'] or 0,v['views']),reverse=True)
     chosen=[]
     for item in fresh:
@@ -837,10 +914,13 @@ def transcribe_public(row):
             platforms.run_process(platforms.yt_args()+['--no-playlist','-f','bestaudio','--max-filesize','120M','-o',target,row['url']],timeout=240)
             audio=next((p for p in folder.glob('audio.*') if p.suffix not in ('.json3','.part','.ytdl')),None)
             if not audio:return '','none'
+            language='en' if row['platform']=='youtube' else 'zh'
+            text=try_aliyun_asr(audio,language)
+            if text:return text,'aliyun-asr'
             result=subprocess.run([str(WHISPER_PYTHON),str(HERE/'transcribe.py'),str(WHISPER_MODEL),str(audio),
                                    'en' if row['platform']=='youtube' else 'zh'],capture_output=True,text=True,timeout=900)
             doc=json.loads(result.stdout.strip().splitlines()[-1]);text=doc.get('text')
-            return (text.strip(),'whisper') if result.returncode==0 and doc.get('ok') and isinstance(text,str) and text.strip() else ('','none')
+            return ((simplified(text.strip()) if language=='zh' else text.strip()),'whisper') if result.returncode==0 and doc.get('ok') and isinstance(text,str) and text.strip() else ('','none')
         except platforms.PlatformError as error:
             if error.code in ('RATE_LIMITED','PLATFORM_BLOCKED'):raise
             return '','none'

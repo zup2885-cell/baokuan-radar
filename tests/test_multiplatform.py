@@ -142,7 +142,7 @@ class MultiPlatformTest(unittest.TestCase):
         self.queue('bilibili');radar.put(self.db,'bilibili_min_views',10000)
         rows=[self.public(),self.public(ident='BV1234567891',views=9999,likes=9999999),self.public(ident='BV1234567892',followers=0),self.public(ident='BV1234567893')]
         rows[-1]['published_at']=(radar.now()+timedelta(days=1)).isoformat()
-        with patch('platforms.bili_search',return_value=rows):self.assertEqual(radar.search_public_keyword(self.db,self.day,'car review','bilibili'),2)
+        with patch('platforms.bili_search',return_value=rows):self.assertEqual(radar.search_public_keyword(self.db,self.day,'car review','bilibili'),1)
         best=self.db.execute("select * from videos where aweme_id='bilibili:BV1234567890'").fetchone();self.assertEqual(best['ratio'],20)
         self.db.execute("update videos set status='done',saved=1,note='保留',tags='[\"原标签\"]' where aweme_id=?",(best['aweme_id'],));self.db.commit()
         with patch('platforms.bili_search',return_value=rows):radar.search_public_keyword(self.db,self.day,'car review','bilibili')
@@ -281,7 +281,7 @@ class MultiPlatformTest(unittest.TestCase):
         for duration,title,accepted in [(59,'Car review',False),(60,'Car review',True),(300,'Car #SHORTS',False),(None,'Car review',False)]:
             self.assertEqual(platforms.youtube_searchable({'desc':title,'duration':duration}),accepted)
         self.queue('youtube')
-        good=self.public('youtube');good['duration']=600
+        good=self.public('youtube',views=50000);good['duration']=600
         bad=self.public('youtube',ident='BBBBBBBBBBB',views=9999999);bad.update(desc='Lightning McQueen Truck toy car review',duration=600)
         with patch('platforms.youtube_public_search',return_value=[bad,good]):
             self.assertEqual(radar.search_public_keyword(self.db,self.day,'car review','youtube'),1)

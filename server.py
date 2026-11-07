@@ -2,6 +2,7 @@
 from http.server import ThreadingHTTPServer, BaseHTTPRequestHandler
 from contextlib import closing
 import json
+import math
 from pathlib import Path
 import re
 import threading
@@ -35,6 +36,8 @@ def start_job(name,work,lock=True):
 def video_dict(row,full=False):
     doc={k:row[k] for k in row.keys() if full or k not in ('transcript','play_url')}
     doc['analysis']=json.loads(row['analysis']) if row['analysis'] else None
+    doc['analysis_model']=doc.get('analysis_model') or 'codex'
+    doc['analysis_provider']=doc.get('analysis_provider') or 'codex'
     tags=json.loads(row['tags'] or '[]')
     doc['tags']=radar.unique_text(tags) if isinstance(tags,list) else []
     return doc
@@ -70,9 +73,9 @@ def challenge_work():
         return message
 
 
-def reanalyze_work(ident):
+def reanalyze_work(ident,provider=None):
     with closing(radar.connect()) as db:
-        return '拆完了' if radar.process(db,ident,force=True) else '拆解失败，请查看视频详情和运行记录'
+        return '拆完了' if radar.process(db,ident,force=True,provider=provider) else '拆解失败，请查看视频详情和运行记录'
 
 
 def classify_hot_work():
@@ -93,7 +96,19 @@ def validate_settings(data,current):
     if any(k not in radar.DEFAULTS for k in data):raise ValueError('设置中包含未知项目')
     current=dict(current)
     for key,value in data.items():
-        if key in limits:
+        if key in ('douyin_min_ratio','bilibili_min_ratio','youtube_min_ratio'):
+            if isinstance(value,str):
+                try:value=float(value.strip())
+                except ValueError:raise ValueError('最低爆款倍数须为 0–1000000 的数字，0 表示不限') from None
+            if type(value) not in (int,float) or not math.isfinite(value) or not 0<=value<=1000000:
+                raise ValueError('最低爆款倍数须为 0–1000000 的数字，0 表示不限')
+        elif key=='analysis_provider':
+            if value not in ('codex','qwen'):raise ValueError('分析模型须为 Codex 或千问')
+        elif key=='qwen_model':
+            if not isinstance(value,str) or not re.fullmatch(r'qwen[a-zA-Z0-9._-]{1,79}',value.strip()):
+                raise ValueError('千问模型名须以 qwen 开头，最多 80 字，只能含字母、数字、点、下划线和短横线')
+            value=value.strip()
+        elif key in limits:
             low,high,label=limits[key]
             if isinstance(value,str) and re.fullmatch(r'[0-9]+',value.strip()):value=int(value.strip())
             if type(value) is not int or not low<=value<=high:raise ValueError(f'{label}须为 {low}–{high} 之间的整数')
@@ -155,6 +170,7 @@ class Handler(BaseHTTPRequestHandler):
             today_count=db.execute("select count(*) from videos where day=? and status not in ('candidate','irrelevant')",(radar.today(),)).fetchone()[0]
             return self.send({'today':radar.today(),'day':day,'days':days,'account':radar.account(db),'settings':radar.settings(db),
                               'youtube_key_configured':bool(radar.platforms.youtube_key()),
+                              'aliyun_key_configured':bool(radar.aliyun.api_key()),
                               'platform_states':{p:radar.platform_state(db,p) for p in ('bilibili','youtube','x')},
                               'keywords':keywords,'today_keywords':today_keywords,'logs':logs,'counts':counts,'today_count':today_count,'job':job,
                               'saved':db.execute('select count(*) from videos where saved=1').fetchone()[0]})
@@ -172,7 +188,22 @@ class Handler(BaseHTTPRequestHandler):
             return self.send({'items':items})
         if url.path=='/api/video':
             row=db.execute('select * from videos where aweme_id=?',(q.get('id'),)).fetchone()
-            return self.send(video_dict(row,True) if row else {'error':'找不到这条视频'},200 if row else 404)
+            if not row:return self.send({'error':'找不到这条视频'},404)
+            doc=video_dict(row,True)
+            records=list(db.execute('select * from video_analyses where aweme_id=? order by updated_at,rowid',(row['aweme_id'],)))
+            versions={r['model']:{'provider':r['provider'],'model':r['model'],'analysis':json.loads(r['analysis']),'updated_at':r['updated_at']} for r in records}
+            variants={r['provider']:versions[r['model']] for r in records}
+            if doc['analysis']:
+                versions[doc['analysis_model']]={'provider':doc['analysis_provider'],'model':doc['analysis_model'],'analysis':doc['analysis'],'updated_at':doc['updated_at']}
+                variants[doc['analysis_provider']]=versions[doc['analysis_model']]
+            provider=q.get('analysis_provider')
+            if provider and provider not in ('codex','qwen'):return self.send({'error':'未知分析模型'},400)
+            selected=versions.get(q.get('analysis_model')) or variants.get(provider)
+            if selected:
+                doc.update(analysis=selected['analysis'],analysis_provider=selected['provider'],analysis_model=selected['model'])
+            doc['analyses']=variants
+            doc['analysis_versions']=versions
+            return self.send(doc)
         if url.path=='/api/hot':
             day=q.get('day') or radar.today()
             context=radar.hot_context(db);field,tracks,_=context
@@ -228,7 +259,9 @@ class Handler(BaseHTTPRequestHandler):
               '/api/run':('立即运行',lambda:radar.tick(force=True))}
         if path=='/api/reanalyze':
             ident=data['id']
-            jobs[path]=('拆解文案',lambda:reanalyze_work(ident))
+            provider=data.get('analysis_provider')
+            if provider is not None and provider not in ('codex','qwen'):raise ValueError('分析模型须为 Codex 或千问')
+            jobs[path]=('拆解文案',lambda:reanalyze_work(ident,provider))
         if path in jobs:
             name,work=jobs[path]
             accepted=start_job(name,work,lock=path!='/api/run')

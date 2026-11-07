@@ -35,6 +35,11 @@ function element(tagName = 'div', attributes = {}) {
         if(body)elements.get('#'+id).innerHTML=body[1];
       }
       for(const match of this._html.matchAll(/<textarea[^>]*id="([^"]+)"[^>]*>([\s\S]*?)<\/textarea>/g))elements.get('#'+match[1]).value=decode(match[2]);
+      for(const match of this._html.matchAll(/<select[^>]*id="([^"]+)"[^>]*>([\s\S]*?)<\/select>/g)){
+        const options=[...match[2].matchAll(/<option\b([^>]*)>([^<]*)<\/option>/g)];
+        const selected=options.find(o=>/\bselected\b/.test(o[1]))||options[0];
+        if(selected)elements.get('#'+match[1]).value=decode(selected[1].match(/value="([^"]*)"/)?.[1]??selected[2]);
+      }
     },
     querySelectorAll(selector) {return this._all.filter(child=>selector.split(',').some(s=>matches(child,s.trim())))},
     querySelector(selector) {return this.querySelectorAll(selector)[0]||null},
@@ -210,7 +215,7 @@ async function main() {
   context.fetch=async(url,options)=>{actions.push([url,options]);return response({ok:true})};
   await elements.get('#redo').onclick();
   assert.equal(actions[0][0],'/api/reanalyze');
-  assert.deepEqual(JSON.parse(actions[0][1].body),{id:'12345678901'});
+  assert.deepEqual(JSON.parse(actions[0][1].body),{id:'12345678901',analysis_provider:'codex'});
   // 新版结构的交互契约：只有一个可见页签，切换不重建表单，复制仍取原始文字。
   const byId=id=>elements.get('#'+id);
   run('view="today"; ++pageVersion; renderToday(); current="12345678901"');
@@ -295,6 +300,41 @@ async function main() {
     assert.match(panel.innerHTML,/成本视角/,'重新拆解中或失败时仍保留已有结果');
   }
 
+  // Codex / 千问的历史结果可切换，保留未保存备注；重新拆解明确传本次模型。
+  const codexDoc={...fullVideo.analysis,summary:'Codex 历史总结'};
+  const qwenDoc={...fullVideo.analysis,summary:'千问历史总结'};
+  const variants={codex:{model:'codex',analysis:codexDoc},qwen:{model:'qwen-plus',analysis:qwenDoc}};
+  const historyRequests=[];
+  run('current="12345678901"');
+  context.fetch=async(url,options)=>{
+    historyRequests.push([url,options]);
+    if(options?.method==='POST')return response({ok:true});
+    const provider=url.includes('analysis_model=codex')?'codex':'qwen';
+    return response({...fullVideo,analysis_provider:provider,analysis_model:variants[provider].model,analysis:variants[provider].analysis,analyses:variants});
+  };
+  await run('showDetail(current)');
+  assert.match(panel.innerHTML,/千问历史总结/);assert.match(panel.innerHTML,/千问 · qwen-plus/);
+  byId('note').value='比较时正在写的备注';byId('note').oninput();
+  byId('viewModel').value='codex';await byId('viewModel').onchange();
+  assert.match(historyRequests.at(-1)[0],/analysis_model=codex/);
+  assert.match(panel.innerHTML,/Codex 历史总结/);
+  assert.equal(byId('note').value,'比较时正在写的备注');assert.equal(panel.dataset.dirty,'1');
+  await run('showDetail(current,true)');assert.match(historyRequests.at(-1)[0],/analysis_model=codex/);
+  byId('redoModel').value='qwen';await byId('redo').onclick();
+  assert.deepEqual(JSON.parse(historyRequests.find(([url,options])=>url==='/api/reanalyze'&&options)[1].body),{id:'12345678901',analysis_provider:'qwen'});
+  assert.equal(run('analysisSelections[current]'),undefined);
+  const modelVersions={codex:{...variants.codex,provider:'codex'},'qwen-plus':{...variants.qwen,provider:'qwen'},'qwen3-max':{model:'qwen3-max',provider:'qwen',analysis:qwenDoc}};
+  context.fetch=async url=>{
+    const model=url.includes('analysis_model=qwen-plus')?'qwen-plus':'qwen3-max';
+    return response({...fullVideo,analysis_provider:'qwen',analysis_model:model,analysis:modelVersions[model].analysis,analyses:variants,analysis_versions:modelVersions});
+  };
+  await run('showDetail(current)');
+  assert.equal(byId('viewModel').value,'qwen3-max');
+  assert.match(panel.innerHTML,/查看 千问 · qwen-plus 分析/);assert.match(panel.innerHTML,/查看 千问 · qwen3-max 分析/);
+  byId('viewModel').value='qwen-plus';await byId('viewModel').onchange();
+  assert.equal(byId('viewModel').value,'qwen-plus');assert.match(panel.innerHTML,/分析模型：千问 · qwen-plus/);
+  run('delete analysisSelections[current]');
+
   // 收藏与取消收藏：按当前状态发送布尔值，并能在编辑保留时更新按钮。
   run('current="12345678901"; globalThis.originalLoadState=loadState; globalThis.originalLoadList=loadList; loadState=async()=>{};loadList=async()=>{}');
   context.fetch=async()=>response(fullVideo);await run('showDetail(current)');
@@ -356,7 +396,12 @@ async function main() {
   byId('auto').checked=true;
   await byId('saveSet').onclick();
   const posted=JSON.parse(settingsCalls.find(c=>c[0]==='/api/settings')[1].body);
-  assert.deepEqual(posted,{field:'汽车成本',fixed_keywords:['车评','保养'],keywords_per_day:'6',per_keyword:'3',min_likes:'10000',recent_days:'7',auto:true,active_start:'8',active_end:'22',search_gap_minutes:'60',douyin_enabled:true,bilibili_enabled:false,youtube_enabled:false,x_enabled:false,bilibili_search_gap_minutes:'30',youtube_search_gap_minutes:'30',bilibili_min_views:'10000',youtube_min_views:'10000',youtube_fixed_keywords:[''],youtube_searches_per_day:'10',youtube_hot_category:''});
+  assert.deepEqual(posted,{analysis_provider:'codex',qwen_model:'qwen-plus',douyin_min_ratio:'0',field:'汽车成本',fixed_keywords:['车评','保养'],keywords_per_day:'6',per_keyword:'3',min_likes:'10000',recent_days:'7',auto:true,active_start:'8',active_end:'22',search_gap_minutes:'60',douyin_enabled:true,bilibili_enabled:false,youtube_enabled:false,x_enabled:false,bilibili_search_gap_minutes:'30',youtube_search_gap_minutes:'30',bilibili_min_views:'50000',youtube_min_views:'50000',bilibili_min_ratio:'2',youtube_min_ratio:'2',youtube_fixed_keywords:[''],youtube_searches_per_day:'10',youtube_hot_category:''});
+  assert.match(byId('aliyunKeyStatus').textContent,/未配置阿里云百炼/);
+  byId('analysisProvider').value='qwen';byId('qwenModel').value='qwen3-max';byId('ratio-youtube').value='2.5';byId('ratio-douyin').value='1.5';
+  await byId('saveSet').onclick();
+  const qwenSettings=JSON.parse(settingsCalls.filter(c=>c[0]==='/api/settings').at(-1)[1].body);
+  assert.equal(qwenSettings.analysis_provider,'qwen');assert.equal(qwenSettings.qwen_model,'qwen3-max');assert.equal(qwenSettings.youtube_min_ratio,'2.5');assert.equal(qwenSettings.douyin_min_ratio,'1.5');
   for(const [id,endpoint] of [['run','/api/run'],['login','/api/login'],['challenge','/api/challenge']]){
     await byId(id).onclick();assert.ok(settingsCalls.some(c=>c[0]===endpoint));
   }

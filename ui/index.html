@@ -82,6 +82,7 @@ header.bar h1{margin:0 0 5px;font:600 24px/1.4 "Songti SC","STSong",serif;letter
 .metric.ratio dd{color:var(--accent)}
 .detail-actions{display:flex;align-items:center;flex-wrap:wrap;gap:8px;font-size:13px}
 .detail-actions .button-link{font-size:13px}
+.detail-actions select{width:auto;max-width:100%;font-size:13px}
 .detail-context{margin-top:20px;color:var(--muted);font-size:13px}
 .analysis-status:empty{display:none}
 .analysis-status .msg{margin:20px 0 0}
@@ -193,6 +194,7 @@ const fmt=n=>n==null?'—':n>=10000?(n/10000).toFixed(n>=100000?0:1)+' 万':n.to
 let S=null,view='today',renderedView=null,day=null,items=[],current=null,libQ='',libTag='',timer=null,followToday=true,pageVersion=0,listVersion=0,detailVersion=0,stateVersion=0,hotVersion=0,hotFilter='',refreshing=false,shownJobResult='';
 const PLATFORM_NAMES={douyin:'抖音',bilibili:'B站',youtube:'YouTube',x:'X'};
 const platformFilter={today:'',library:'',hot:''};
+const analysisSelections={};
 const platformOf=v=>v.platform||'douyin';
 const formula=v=>platformOf(v)==='douyin'?'点赞 ÷ 粉丝':platformOf(v)==='youtube'?'播放 ÷ 订阅':'播放 ÷ 粉丝';
 const platformBadge=v=>`<span class="badge plain">${esc(PLATFORM_NAMES[platformOf(v)]||'未知平台')}</span>`;
@@ -231,7 +233,7 @@ window.addEventListener('unhandledrejection',e=>{e.preventDefault();toast(e.reas
 const ACC={ready:['ok','小号搜索正常'],NEED_LOGIN:['bad','需要扫码登录小号'],PLATFORM_BLOCKED:['bad','抖音要求验证'],RATE_LIMITED:['warn','暂时限流']};
 const accountLabel=a=>(a.status!=='ready'&&ACC[a.status])||(a.logged_in?(ACC[a.status]||['ok','小号已登录']):['bad','小号未登录']);
 function scheduleRefresh(){if(STATIC)return;clearTimeout(timer);timer=setTimeout(refresh,S?.job.name||S?.counts.processing||S?.counts.pending?6000:30000)}
-function updateSettingsStatus(){if(STATIC)return;const a=S.account,[cls,label]=accountLabel(a);if($('#accountStatus'))$('#accountStatus').innerHTML=`<span class="dot ${cls}"></span>${label}`;if($('#accountMessage'))$('#accountMessage').textContent=a.message||'请用专门的小号扫码登录，不要用主号。';if($('#youtubeKeyStatus'))$('#youtubeKeyStatus').textContent='YouTube 密钥：'+(S.youtube_key_configured?'已配置':'未配置');if($('#platformStatus'))$('#platformStatus').innerHTML=platformStatusHTML();if($('#logs'))$('#logs').innerHTML=logHTML();document.querySelectorAll('#run,#login,#challenge,#redo,#classifyHot').forEach(b=>b.disabled=!!S.job.name)}
+function updateSettingsStatus(){if(STATIC)return;const a=S.account,[cls,label]=accountLabel(a);if($('#accountStatus'))$('#accountStatus').innerHTML=`<span class="dot ${cls}"></span>${label}`;if($('#accountMessage'))$('#accountMessage').textContent=a.message||'请用专门的小号扫码登录，不要用主号。';if($('#youtubeKeyStatus'))$('#youtubeKeyStatus').textContent='YouTube 密钥：'+(S.youtube_key_configured?'已配置':'未配置');if($('#aliyunKeyStatus'))$('#aliyunKeyStatus').textContent=S.aliyun_key_configured?'阿里云百炼：已配置':'未配置阿里云百炼';if($('#platformStatus'))$('#platformStatus').innerHTML=platformStatusHTML();if($('#logs'))$('#logs').innerHTML=logHTML();document.querySelectorAll('#run,#login,#challenge,#redo,#classifyHot').forEach(b=>b.disabled=!!S.job.name)}
 const logHTML=()=>S.logs.map(l=>`<div class="log">${esc(l.at.slice(5,16).replace('T',' '))} · ${esc(l.message)}</div>`).join('')||'<div class="hint">还没有记录</div>';
 function ratioText(r){return r==null?'—':r>=100?String(Math.round(r)):r>=1?r.toFixed(1):r.toFixed(2)}
 function ratioBadge(v){if(v.ratio==null)return '<span class="badge plain">倍数未知</span>';return `<span title="${formula(v)}" class="badge ${v.ratio>=3?'hot':'plain'}">${ratioText(v.ratio)} 倍</span>`}
@@ -345,7 +347,8 @@ function transcriptHTML(v){
     sentences.forEach(sentence=>{if(part.length>=120){parts.push(part);part=''}part+=sentence});
     if(part)parts.push(part);return parts;
   });
-  return `<section class="reading-card"><div class="section-top"><h3>逐字稿</h3>${v.transcript?'<button id="copyTranscript">复制逐字稿</button>':''}</div><p class="small-note">${v.transcript_source==='whisper'?'来自本地语音识别，可能有错字，请对照原视频核对。':v.transcript_source==='desc'?'当前仅有视频标题或描述，未取得语音逐字稿。':'本地语音识别的逐字稿可能有错字，请对照原视频核对。'}</p><div class="transcript">${paragraphs.length?paragraphs.map(t=>`<p>${esc(t)}</p>`).join(''):'<p class="missing-content">还没有取得逐字稿，拆解完成后会自动显示。</p>'}</div></section>`;
+  const sourceLabel={'aliyun-asr':'来自阿里云百炼语音识别','whisper':'来自本地语音识别','subtitles':'来自英文字幕（人工或自动）','desc':'当前仅有视频标题或描述，未取得语音逐字稿'}[v.transcript_source]||'逐字稿';
+  return `<section class="reading-card"><div class="section-top"><h3>逐字稿</h3>${v.transcript?'<button id="copyTranscript">复制逐字稿</button>':''}</div><p class="small-note">${sourceLabel}，可能有错字，请对照原视频核对。</p><div class="transcript">${paragraphs.length?paragraphs.map(t=>`<p>${esc(t)}</p>`).join(''):'<p class="missing-content">还没有取得逐字稿，拆解完成后会自动显示。</p>'}</div></section>`;
 }
 function applyDetailTab(box,key){
   box.dataset.tab=key;
@@ -367,7 +370,7 @@ function updateDetailStatus(box,v){
 async function showDetail(id,keep){
   const box=$('#detail');if(!box)return;
   const version=++detailVersion,page=pageVersion;
-  const v=await api('/api/video?id='+encodeURIComponent(id)),a=v.analysis;
+  const v=await api('/api/video?id='+encodeURIComponent(id)+(!STATIC&&analysisSelections[id]?'&analysis_model='+encodeURIComponent(analysisSelections[id]):'')),a=v.analysis;
   if(version!==detailVersion||page!==pageVersion||id!==current||box!==$('#detail'))return;
   const sig=JSON.stringify([v,S.settings.field]);
   if(keep&&box.dataset.id===id&&(box.dataset.sig===sig||box.dataset.dirty==='1')){updateDetailStatus(box,v);return}
@@ -378,16 +381,21 @@ async function showDetail(id,keep){
   if(p==='bilibili')metrics.push(['点赞',fmt(v.likes)],['收藏',fmt(v.favorites)]);
   box.innerHTML=`<div class="detail-inner"><header class="detail-head">${coverHTML(v,true)}<div class="detail-titlebox"><h2>${esc(cleanTitle(v.desc))}</h2><div class="detail-byline">${platformBadge(v)}<span>${esc(v.author||'未知作者')}</span><span>${v.published_at?'发布于 '+esc(String(v.published_at).slice(0,10)):'发布日期未知'}</span></div></div>
     <dl class="metrics">${metrics.map(([label,value],i)=>`<div class="metric ${i===2?'ratio':''}" ${i===2?`title="${formula(v)}；用于发现值得研究的内容，不代表传播因果"`:''}><dt>${label}</dt><dd>${esc(value)}</dd></div>`).join('')}</dl>
-    <div class="detail-actions">${STATIC?'':`<button class="primary" id="saveBtn" aria-pressed="${!!v.saved}">${v.saved?'已收藏 · 取消':'收藏'}</button>`}${v.url?`<a class="button-link" href="${esc(v.url)}" target="_blank" rel="noopener noreferrer">打开原视频</a>`:'<button disabled title="这条视频没有原始链接">打开原视频</button>'}${STATIC?'':`<button id="redo">${a?'重新拆解':'拆解这一条'}</button>`}</div></header>
+    <div class="detail-actions">${STATIC?'':`<button class="primary" id="saveBtn" aria-pressed="${!!v.saved}">${v.saved?'已收藏 · 取消':'收藏'}</button>`}${v.url?`<a class="button-link" href="${esc(v.url)}" target="_blank" rel="noopener noreferrer">打开原视频</a>`:'<button disabled title="这条视频没有原始链接">打开原视频</button>'}${STATIC?'':`<select id="redoModel" aria-label="本次拆解模型"><option value="codex" ${(S.settings.analysis_provider||'codex')==='codex'?'selected':''}>用 Codex 拆</option><option value="qwen" ${S.settings.analysis_provider==='qwen'?'selected':''}>用千问拆</option></select><button id="redo">${a?'重新拆解':'拆解这一条'}</button>${Object.keys(v.analysis_versions||v.analyses||{}).length?`<select id="viewModel" aria-label="查看已保存的分析">${Object.entries(v.analysis_versions||v.analyses).map(([model,result])=>`<option value="${esc(model)}" ${(model===(v.analysis_model||'codex')||(!v.analysis_versions&&model===(v.analysis_provider||'codex')))?'selected':''}>查看 ${model==='codex'?'Codex':'千问 · '+esc(result.model)} 分析</option>`).join('')}</select>`:''}`}</div></header>
     <p class="small-note">倍数算法：${formula(v)}${p==='douyin'?'（没有公开播放量）':''} · 指标缺失时显示 —</p><div id="analysisStatus" class="analysis-status">${analysisStatus(v)}</div>
-    ${a?`<div class="detail-context">${a.account_field?`应用领域：${esc(a.account_field)}${!STATIC&&a.account_field!==S.settings.field?' · 领域设置已变化，建议重新拆解':''}`:STATIC?'旧版分析 · 快照保留原始结果':'旧版分析 · 点「重新拆解」补充领域建议和新选题'}</div>`:''}
+    ${a?`<div class="detail-context">分析模型：${v.analysis_provider==='qwen'?'千问 · '+esc(v.analysis_model||'qwen-plus'):'Codex'} · ${a.account_field?`应用领域：${esc(a.account_field)}${!STATIC&&a.account_field!==S.settings.field?' · 领域设置已变化，建议重新拆解':''}`:STATIC?'旧版分析 · 快照保留原始结果':'旧版分析 · 点「重新拆解」补充领域建议和新选题'}</div>`:''}
     <div class="detail-tabs" role="tablist" aria-label="视频拆解内容">${DETAIL_TABS.map(([key,label])=>`<button id="tab-${key}" role="tab" data-tab="${key}" aria-controls="panel-${key}" aria-selected="${key===active}" tabindex="${key===active?0:-1}">${label}</button>`).join('')}</div>
     ${DETAIL_TABS.map(([key,label])=>`<section class="tab-panel" id="panel-${key}" role="tabpanel" data-panel="${key}" aria-labelledby="tab-${key}" tabindex="0" ${key===active?'':'hidden'}>${panels[key]}</section>`).join('')}</div>`;
   applyDetailTab(box,active);bindDetailTabs(box);updateDetailStatus(box,v);box.scrollTop=scroll;
   if(!STATIC){
     const tagsInput=box.querySelector('#tags'),noteInput=box.querySelector('#note');
     box.querySelector('#saveBtn').onclick=async()=>{const saved=box.dataset.saved!=='1';await api('/api/save',{id,saved});if(box===$('#detail')&&box.dataset.id===id)updateDetailStatus(box,{...v,saved});toast(saved?'已收藏':'已取消收藏');await loadState();await loadList(true)};
-    box.querySelector('#redo').onclick=async()=>{const j=await api('/api/reanalyze',{id});toast(j.ok?'开始拆解，大约 1 分钟':'正在忙：'+j.busy);refresh()};
+    box.querySelector('#redo').onclick=async()=>{const analysis_provider=box.querySelector('#redoModel').value;const j=await api('/api/reanalyze',{id,analysis_provider});if(j.ok)delete analysisSelections[id];toast(j.ok?'开始拆解，完成后自动刷新':'正在忙：'+j.busy);refresh()};
+    const viewModel=box.querySelector('#viewModel');if(viewModel)viewModel.onchange=async()=>{
+      const dirty=box.dataset.dirty,tags=tagsInput.value,note=noteInput.value;
+      analysisSelections[id]=viewModel.value;await showDetail(id);
+      if(box===$('#detail')&&box.dataset.id===id&&dirty==='1'){box.querySelector('#tags').value=tags;box.querySelector('#note').value=note;box.dataset.dirty='1';box.querySelector('#noteState').textContent='有未保存的修改'}
+    };
     tagsInput.oninput=noteInput.oninput=()=>{box.dataset.dirty='1';box.querySelector('#noteState').textContent='有未保存的修改'};
     box.querySelector('#saveNote').onclick=async()=>{const tags=tagsInput.value,note=noteInput.value;await api('/api/note',{id,tags:tags.split(/[,，、\s]+/),note});if(box===$('#detail')&&box.dataset.id===id&&tagsInput===box.querySelector('#tags')&&tagsInput.value===tags&&noteInput.value===note){box.dataset.dirty='';box.querySelector('#noteState').textContent='已保存'}toast('已保存');await refresh()};
   }
@@ -432,6 +440,7 @@ function renderSettings(){
       <div class="grid2"><div><label for="kpd">每天搜几个关键词</label><input id="kpd" type="number" min="1" max="12" value="${s.keywords_per_day}"></div>
       <div><label for="pk">每个关键词拆几条</label><input id="pk" type="number" min="1" max="10" value="${s.per_keyword}"></div>
       <div><label for="ml">抖音最低点赞数</label><input id="ml" type="number" min="0" max="1000000000" step="1000" value="${s.min_likes}"></div>
+      <div><label for="ratio-douyin">抖音最低爆款倍数（0 不限）</label><input id="ratio-douyin" type="number" min="0" max="1000000" step="0.1" value="${s.douyin_min_ratio??0}"></div>
       <div><label for="rd">只看最近几天发布的</label><input id="rd" type="number" min="1" max="180" value="${s.recent_days}"></div></div></div>
     <div class="card"><h3>节奏</h3>
       <div class="inline"><input type="checkbox" id="auto" ${s.auto?'checked':''}><label for="auto">每天自动运行（所有已启用平台）</label></div>
@@ -445,17 +454,23 @@ function renderSettings(){
       <p class="hint" id="youtubeKeyStatus">YouTube 密钥：${S.youtube_key_configured?'已配置':'未配置'}</p>
       <div id="platformStatus">${platformStatusHTML()}</div>
       <label for="english">YouTube 固定英文关键词（逗号分隔）</label><input id="english" value="${esc((s.youtube_fixed_keywords||[]).join(', '))}" placeholder="car review, electric vehicle">
-      <div class="grid2">${['bilibili','youtube'].map(p=>`<div><label for="gap-${p}">${PLATFORM_NAMES[p]} 搜索间隔（分钟）</label><input id="gap-${p}" type="number" min="20" max="1440" value="${s[p+'_search_gap_minutes']??30}"></div><div><label for="min-${p}">${PLATFORM_NAMES[p]} 最低播放</label><input id="min-${p}" type="number" min="0" max="1000000000" value="${s[p+'_min_views']??10000}"></div>`).join('')}</div>
+      <div class="grid2">${['bilibili','youtube'].map(p=>`<div><label for="gap-${p}">${PLATFORM_NAMES[p]} 搜索间隔（分钟）</label><input id="gap-${p}" type="number" min="20" max="1440" value="${s[p+'_search_gap_minutes']??30}"></div><div><label for="min-${p}">${PLATFORM_NAMES[p]} 最低播放</label><input id="min-${p}" type="number" min="0" max="1000000000" value="${s[p+'_min_views']??50000}"></div><div><label for="ratio-${p}">${PLATFORM_NAMES[p]} 最低爆款倍数（0 不限）</label><input id="ratio-${p}" type="number" min="0" max="1000000" step="0.1" value="${s[p+'_min_ratio']??2}"></div>`).join('')}</div>
       <label for="ytLimit">YouTube 每天 API 搜索上限（失败也计次）</label><input id="ytLimit" type="number" min="1" max="50" value="${s.youtube_searches_per_day??10}">
       <label for="ytCategory">YouTube 美国热榜</label><select id="ytCategory"><option value="" ${s.youtube_hot_category?'':'selected'}>总榜</option><option value="2" ${s.youtube_hot_category==='2'?'selected':''}>汽车（分类 2）</option></select>
       <p class="hint">未配置 YouTube 密钥时只用公开英文关键词搜索，不显示 YouTube 热榜。密钥由 macOS 钥匙串 youtube-api 服务读取，页面只显示状态。B站与 YouTube 倍数 = 播放 ÷ 粉丝或订阅；抖音 = 点赞 ÷ 粉丝。公开计数不代表传播原因。</p>
+    </div>
+    <div class="card"><h3>语音识别与分析模型</h3>
+      <p class="hint" id="aliyunKeyStatus">${S.aliyun_key_configured?'阿里云百炼：已配置':'未配置阿里云百炼'}</p>
+      <label for="analysisProvider">分析模型</label><select id="analysisProvider"><option value="codex" ${(s.analysis_provider||'codex')==='codex'?'selected':''}>Codex（默认）</option><option value="qwen" ${s.analysis_provider==='qwen'?'selected':''}>千问</option></select>
+      <label for="qwenModel">千问模型名</label><input id="qwenModel" value="${esc(s.qwen_model||'qwen-plus')}" maxlength="80">
+      <p class="hint">挑词、热榜分类和拆解跟随此设置。无百炼密钥时使用 Codex 与本地 whisper。有密钥时中文优先百炼转写，YouTube 优先英文字幕。百炼按量计费，请查看控制台用量。详情可切换查看每个模型最近一次成功分析。</p>
     </div>
     <div class="card"><h3>运行记录</h3><div id="logs">${logHTML()}</div></div>
   </div></div>`;
   $('#run').onclick=async()=>{const j=await api('/api/run',{});toast(j.ok?'开始运行，搜索和拆解要几分钟':'正在忙：'+j.busy);refresh()};
   $('#login').onclick=async()=>{const j=await api('/api/login',{});toast(j.ok?'扫码窗口打开中，请用小号扫码':'正在忙：'+j.busy);refresh()};
   $('#challenge').onclick=async()=>{const j=await api('/api/challenge',{});toast(j.ok?'验证窗口打开中':'正在忙：'+j.busy);refresh()};
-  $('#saveSet').onclick=async()=>{try{await api('/api/settings',{field:$('#field').value,fixed_keywords:$('#fixed').value.split(/[,，、]+/),keywords_per_day:$('#kpd').value,per_keyword:$('#pk').value,min_likes:$('#ml').value,recent_days:$('#rd').value,auto:$('#auto').checked,active_start:$('#as').value,active_end:$('#ae').value,search_gap_minutes:$('#gap').value,...Object.fromEntries(Object.keys(PLATFORM_NAMES).map(p=>[p+'_enabled',$('#enable-'+p).checked])),...Object.fromEntries(['bilibili','youtube'].flatMap(p=>[[p+'_search_gap_minutes',$('#gap-'+p).value],[p+'_min_views',$('#min-'+p).value]])),youtube_fixed_keywords:$('#english').value.split(/[,，、]+/),youtube_searches_per_day:$('#ytLimit').value,youtube_hot_category:$('#ytCategory').value});toast('设置已保存');await loadState();if(view==='settings')renderSettings()}catch(e){toast(e.message)}};
+  $('#saveSet').onclick=async()=>{try{await api('/api/settings',{analysis_provider:$('#analysisProvider').value,qwen_model:$('#qwenModel').value,douyin_min_ratio:$('#ratio-douyin').value,field:$('#field').value,fixed_keywords:$('#fixed').value.split(/[,，、]+/),keywords_per_day:$('#kpd').value,per_keyword:$('#pk').value,min_likes:$('#ml').value,recent_days:$('#rd').value,auto:$('#auto').checked,active_start:$('#as').value,active_end:$('#ae').value,search_gap_minutes:$('#gap').value,...Object.fromEntries(Object.keys(PLATFORM_NAMES).map(p=>[p+'_enabled',$('#enable-'+p).checked])),...Object.fromEntries(['bilibili','youtube'].flatMap(p=>[[p+'_search_gap_minutes',$('#gap-'+p).value],[p+'_min_views',$('#min-'+p).value],[p+'_min_ratio',$('#ratio-'+p).value]])),youtube_fixed_keywords:$('#english').value.split(/[,，、]+/),youtube_searches_per_day:$('#ytLimit').value,youtube_hot_category:$('#ytCategory').value});toast('设置已保存');await loadState();if(view==='settings')renderSettings()}catch(e){toast(e.message)}};
   updateSettingsStatus();
 }
 document.querySelectorAll('nav a').forEach(a=>{a.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();a.onclick()}};a.onclick=async()=>{if(STATIC&&a.dataset.view==='settings')return;const page=++pageVersion;view=a.dataset.view;current=null;await loadState();if(page!==pageVersion)return;await render();if(page===pageVersion&&(view==='today'||view==='library'))await loadList()}});
