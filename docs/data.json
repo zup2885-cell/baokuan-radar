@@ -1,6 +1,6 @@
 {
   "snapshot_date": "2026-11-07",
-  "field": "汽车、车评讲解",
+  "field": "女性车主视角的新能源与家用车选购、场景试驾及用车知识",
   "tracks": [
     "汽车",
     "科技数码",
@@ -23,7 +23,7 @@
       "rank": 1,
       "word": "T1 KC",
       "hot_value": null,
-      "track": "游戏",
+      "track": "其他",
       "related": false
     },
     {
@@ -59,7 +59,7 @@
       "rank": 5,
       "word": "TES 369单曲莫问归期",
       "hot_value": null,
-      "track": "游戏",
+      "track": "娱乐明星",
       "related": false
     },
     {
@@ -86,7 +86,7 @@
       "rank": 8,
       "word": "Peyz芸阿娜11-1",
       "hot_value": null,
-      "track": "游戏",
+      "track": "其他",
       "related": false
     },
     {
@@ -104,7 +104,7 @@
       "rank": 10,
       "word": "服务员华强",
       "hot_value": null,
-      "track": "其他",
+      "track": "娱乐明星",
       "related": false
     },
     {
@@ -122,7 +122,7 @@
       "rank": 12,
       "word": "369为何圈粉外国观众",
       "hot_value": null,
-      "track": "游戏",
+      "track": "娱乐明星",
       "related": false
     },
     {
@@ -131,7 +131,7 @@
       "rank": 13,
       "word": "八仙",
       "hot_value": null,
-      "track": "其他",
+      "track": "娱乐明星",
       "related": false
     },
     {
@@ -212,7 +212,7 @@
       "rank": 22,
       "word": "画地为牢背后的十五年意难平",
       "hot_value": null,
-      "track": "其他",
+      "track": "娱乐明星",
       "related": false
     },
     {
@@ -320,7 +320,7 @@
       "rank": 34,
       "word": "团子发康康歌曲暗示加入",
       "hot_value": null,
-      "track": "游戏",
+      "track": "娱乐明星",
       "related": false
     },
     {
@@ -437,7 +437,7 @@
       "rank": 47,
       "word": "甲亢哥回应C罗退役",
       "hot_value": null,
-      "track": "体育",
+      "track": "娱乐明星",
       "related": false
     },
     {
@@ -473,8 +473,8 @@
       "rank": 1,
       "word": "2027年放假安排来了",
       "hot_value": 12096341,
-      "track": "社会民生",
-      "related": false
+      "track": "未分类",
+      "related": null
     },
     {
       "platform": "douyin",
@@ -482,8 +482,8 @@
       "rank": 2,
       "word": "一道热乎菜开启各地冬天",
       "hot_value": 12049279,
-      "track": "美食",
-      "related": false
+      "track": "未分类",
+      "related": null
     },
     {
       "platform": "douyin",
@@ -491,8 +491,8 @@
       "rank": 3,
       "word": "同赴进博之约共享东方机遇",
       "hot_value": 11893116,
-      "track": "财经",
-      "related": false
+      "track": "未分类",
+      "related": null
     },
     {
       "platform": "douyin",
@@ -500,8 +500,8 @@
       "rank": 4,
       "word": "C罗宣布从葡萄牙国家队退役",
       "hot_value": 11865699,
-      "track": "体育",
-      "related": false
+      "track": "未分类",
+      "related": null
     },
     {
       "platform": "douyin",
@@ -509,8 +509,8 @@
       "rank": 5,
       "word": "路漫漫终有归处",
       "hot_value": 10948636,
-      "track": "其他",
-      "related": false
+      "track": "未分类",
+      "related": null
     },
     {
       "platform": "douyin",
@@ -518,8 +518,8 @@
       "rank": 6,
       "word": "你怎么舍得让有趣的知识流走",
       "hot_value": 10773609,
-      "track": "教育",
-      "related": false
+      "track": "未分类",
+      "related": null
     },
     {
       "platform": "douyin",
@@ -527,8 +527,8 @@
       "rank": 7,
       "word": "黄之锋再获刑10年",
       "hot_value": 9425318,
-      "track": "时政国际",
-      "related": false
+      "track": "未分类",
+      "related": null
     },
     {
       "platform": "douyin",
@@ -536,8 +536,8 @@
       "rank": 8,
       "word": "当秋冬穿搭不再all black",
       "hot_value": 9357735,
-      "track": "生活",
-      "related": false
+      "track": "未分类",
+      "related": null
     },
     {
       "platform": "douyin",
@@ -545,8 +545,8 @@
       "rank": 9,
       "word": "更适合年轻人的文玩配饰",
       "hot_value": 9238406,
-      "track": "生活",
-      "related": false
+      "track": "未分类",
+      "related": null
     },
     {
       "platform": "douyin",
@@ -554,8 +554,8 @@
       "rank": 10,
       "word": "马刺险胜独行侠",
       "hot_value": 9216810,
-      "track": "体育",
-      "related": false
+      "track": "未分类",
+      "related": null
     },
     {
       "platform": "douyin",
@@ -563,8 +563,8 @@
       "rank": 11,
       "word": "一件单品穿两季穿搭技巧",
       "hot_value": 9190784,
-      "track": "生活",
-      "related": false
+      "track": "未分类",
+      "related": null
     },
     {
       "platform": "douyin",
@@ -572,8 +572,8 @@
       "rank": 12,
       "word": "A股收盘三大指数均上涨",
       "hot_value": 9130914,
-      "track": "财经",
-      "related": false
+      "track": "未分类",
+      "related": null
     },
     {
       "platform": "douyin",
@@ -581,8 +581,8 @@
       "rank": 13,
       "word": "互联护苗展播",
       "hot_value": 9128801,
-      "track": "社会民生",
-      "related": false
+      "track": "未分类",
+      "related": null
     },
     {
       "platform": "douyin",
@@ -590,8 +590,8 @@
       "rank": 14,
       "word": "GEN战胜LYON挺进半决赛",
       "hot_value": 9112461,
-      "track": "游戏",
-      "related": false
+      "track": "未分类",
+      "related": null
     },
     {
       "platform": "douyin",
@@ -599,8 +599,8 @@
       "rank": 15,
       "word": "WTT法兰克福王楚钦vs温瑞博",
       "hot_value": 9090420,
-      "track": "体育",
-      "related": false
+      "track": "未分类",
+      "related": null
     },
     {
       "platform": "douyin",
@@ -608,8 +608,8 @@
       "rank": 16,
       "word": "民主党要求“必须结束”伊朗战争",
       "hot_value": 9078025,
-      "track": "时政国际",
-      "related": false
+      "track": "未分类",
+      "related": null
     },
     {
       "platform": "douyin",
@@ -617,8 +617,8 @@
       "rank": 17,
       "word": "常冰玉胜赵心童晋级国锦赛四强",
       "hot_value": 8910358,
-      "track": "体育",
-      "related": false
+      "track": "未分类",
+      "related": null
     },
     {
       "platform": "douyin",
@@ -626,8 +626,8 @@
       "rank": 18,
       "word": "三角洲新刀皮黑伤测评",
       "hot_value": 8833364,
-      "track": "游戏",
-      "related": false
+      "track": "未分类",
+      "related": null
     },
     {
       "platform": "douyin",
@@ -635,8 +635,8 @@
       "rank": 19,
       "word": "76人战胜活塞迎五连胜",
       "hot_value": 8289575,
-      "track": "体育",
-      "related": false
+      "track": "未分类",
+      "related": null
     },
     {
       "platform": "douyin",
@@ -644,8 +644,8 @@
       "rank": 20,
       "word": "TheShy喊话把力量借给iG",
       "hot_value": 8271068,
-      "track": "游戏",
-      "related": false
+      "track": "未分类",
+      "related": null
     },
     {
       "platform": "douyin",
@@ -653,8 +653,8 @@
       "rank": 21,
       "word": "吴磊一天骑行100公里",
       "hot_value": 8017917,
-      "track": "娱乐明星",
-      "related": false
+      "track": "未分类",
+      "related": null
     },
     {
       "platform": "douyin",
@@ -662,8 +662,8 @@
       "rank": 22,
       "word": "假装没关系转身后眼泪就决堤",
       "hot_value": 7922421,
-      "track": "其他",
-      "related": false
+      "track": "未分类",
+      "related": null
     },
     {
       "platform": "douyin",
@@ -671,8 +671,8 @@
       "rank": 23,
       "word": "袁成杰被列为失信被执行人",
       "hot_value": 7815806,
-      "track": "娱乐明星",
-      "related": false
+      "track": "未分类",
+      "related": null
     },
     {
       "platform": "douyin",
@@ -680,8 +680,8 @@
       "rank": 24,
       "word": "沈阳保洁大叔老钱风穿搭好飒",
       "hot_value": 7801634,
-      "track": "生活",
-      "related": false
+      "track": "未分类",
+      "related": null
     },
     {
       "platform": "douyin",
@@ -689,8 +689,8 @@
       "rank": 25,
       "word": "全网为许飞厉娜画地为牢",
       "hot_value": 7778513,
-      "track": "娱乐明星",
-      "related": false
+      "track": "未分类",
+      "related": null
     },
     {
       "platform": "douyin",
@@ -698,8 +698,8 @@
       "rank": 26,
       "word": "Chovy：今年的我确实有些不一样",
       "hot_value": 7768093,
-      "track": "游戏",
-      "related": false
+      "track": "未分类",
+      "related": null
     },
     {
       "platform": "douyin",
@@ -707,8 +707,8 @@
       "rank": 27,
       "word": "谁懂影之刃零中华武术的含金量",
       "hot_value": 7733227,
-      "track": "游戏",
-      "related": false
+      "track": "未分类",
+      "related": null
     },
     {
       "platform": "douyin",
@@ -716,8 +716,8 @@
       "rank": 28,
       "word": "好故事自有高光时刻",
       "hot_value": 7724528,
-      "track": "其他",
-      "related": false
+      "track": "未分类",
+      "related": null
     },
     {
       "platform": "douyin",
@@ -725,8 +725,8 @@
       "rank": 29,
       "word": "深度复盘GEN vs LYON",
       "hot_value": 7719994,
-      "track": "游戏",
-      "related": false
+      "track": "未分类",
+      "related": null
     },
     {
       "platform": "douyin",
@@ -734,8 +734,8 @@
       "rank": 30,
       "word": "电视剧谷雨今日开播",
       "hot_value": 7719909,
-      "track": "娱乐明星",
-      "related": false
+      "track": "未分类",
+      "related": null
     },
     {
       "platform": "douyin",
@@ -743,8 +743,8 @@
       "rank": 31,
       "word": "特朗普中期选举失利后首露面",
       "hot_value": 7719152,
-      "track": "时政国际",
-      "related": false
+      "track": "未分类",
+      "related": null
     },
     {
       "platform": "douyin",
@@ -752,8 +752,8 @@
       "rank": 32,
       "word": "首款华为鸿蒙台式机抢先体验",
       "hot_value": 7713727,
-      "track": "科技数码",
-      "related": false
+      "track": "未分类",
+      "related": null
     },
     {
       "platform": "douyin",
@@ -761,8 +761,8 @@
       "rank": 33,
       "word": "异环曳尔沐",
       "hot_value": 7713189,
-      "track": "游戏",
-      "related": false
+      "track": "未分类",
+      "related": null
     },
     {
       "platform": "douyin",
@@ -770,8 +770,8 @@
       "rank": 34,
       "word": "我的第五人格磷光症手记",
       "hot_value": 7692153,
-      "track": "游戏",
-      "related": false
+      "track": "未分类",
+      "related": null
     },
     {
       "platform": "douyin",
@@ -779,8 +779,8 @@
       "rank": 35,
       "word": "三角洲新赛季的n种打法",
       "hot_value": 7691668,
-      "track": "游戏",
-      "related": false
+      "track": "未分类",
+      "related": null
     },
     {
       "platform": "douyin",
@@ -788,8 +788,8 @@
       "rank": 36,
       "word": "厉娜剪了个新短发",
       "hot_value": 7688379,
-      "track": "娱乐明星",
-      "related": false
+      "track": "未分类",
+      "related": null
     },
     {
       "platform": "douyin",
@@ -797,8 +797,8 @@
       "rank": 37,
       "word": "毛茸茸的青稚有脾气",
       "hot_value": 7683131,
-      "track": "其他",
-      "related": false
+      "track": "未分类",
+      "related": null
     },
     {
       "platform": "douyin",
@@ -806,8 +806,8 @@
       "rank": 38,
       "word": "我家门口新开了一朵茉莉",
       "hot_value": 7682831,
-      "track": "其他",
-      "related": false
+      "track": "未分类",
+      "related": null
     },
     {
       "platform": "douyin",
@@ -815,8 +815,8 @@
       "rank": 39,
       "word": "一半青涩一半纯真",
       "hot_value": 7681342,
-      "track": "其他",
-      "related": false
+      "track": "未分类",
+      "related": null
     },
     {
       "platform": "douyin",
@@ -824,8 +824,8 @@
       "rank": 40,
       "word": "嫁金钗红线拿下大结果",
       "hot_value": 7676933,
-      "track": "娱乐明星",
-      "related": false
+      "track": "未分类",
+      "related": null
     },
     {
       "platform": "douyin",
@@ -833,8 +833,8 @@
       "rank": 41,
       "word": "后会友期reaction",
       "hot_value": 7676743,
-      "track": "娱乐明星",
-      "related": false
+      "track": "未分类",
+      "related": null
     },
     {
       "platform": "douyin",
@@ -842,8 +842,8 @@
       "rank": 42,
       "word": "iG对阵GEN前瞻分析",
       "hot_value": 7671975,
-      "track": "游戏",
-      "related": false
+      "track": "未分类",
+      "related": null
     },
     {
       "platform": "douyin",
@@ -851,8 +851,8 @@
       "rank": 43,
       "word": "第一视角沉浸式体验天门山跑酷",
       "hot_value": 7671749,
-      "track": "体育",
-      "related": false
+      "track": "未分类",
+      "related": null
     },
     {
       "platform": "douyin",
@@ -860,8 +860,8 @@
       "rank": 44,
       "word": "买首饰是为了取悦自己",
       "hot_value": 7666819,
-      "track": "生活",
-      "related": false
+      "track": "未分类",
+      "related": null
     },
     {
       "platform": "douyin",
@@ -869,8 +869,8 @@
       "rank": 45,
       "word": "原来深秋是咕嘟的",
       "hot_value": 7665135,
-      "track": "美食",
-      "related": false
+      "track": "未分类",
+      "related": null
     },
     {
       "platform": "douyin",
@@ -878,8 +878,8 @@
       "rank": 46,
       "word": "今年立冬吃超长长长饺子",
       "hot_value": 7664770,
-      "track": "美食",
-      "related": false
+      "track": "未分类",
+      "related": null
     },
     {
       "platform": "douyin",
@@ -887,8 +887,8 @@
       "rank": 47,
       "word": "大摆羽绒服不用当肥粽子",
       "hot_value": 7664755,
-      "track": "生活",
-      "related": false
+      "track": "未分类",
+      "related": null
     },
     {
       "platform": "douyin",
@@ -896,8 +896,8 @@
       "rank": 48,
       "word": "就这么毛茸茸地上头了",
       "hot_value": 7660535,
-      "track": "生活",
-      "related": false
+      "track": "未分类",
+      "related": null
     },
     {
       "platform": "douyin",
@@ -905,8 +905,8 @@
       "rank": 49,
       "word": "博主吉他弹唱旧亭台满是怀旧感",
       "hot_value": 7656318,
-      "track": "娱乐明星",
-      "related": false
+      "track": "未分类",
+      "related": null
     },
     {
       "platform": "x",
@@ -914,7 +914,7 @@
       "rank": 1,
       "word": "Stephen Miller",
       "hot_value": null,
-      "track": "时政国际",
+      "track": "其他",
       "related": false
     },
     {
@@ -923,7 +923,7 @@
       "rank": 2,
       "word": "Susie Wiles",
       "hot_value": null,
-      "track": "时政国际",
+      "track": "其他",
       "related": false
     },
     {
@@ -941,7 +941,7 @@
       "rank": 4,
       "word": "Money Williams",
       "hot_value": null,
-      "track": "体育",
+      "track": "其他",
       "related": false
     },
     {
@@ -959,7 +959,7 @@
       "rank": 6,
       "word": "Calley Means",
       "hot_value": null,
-      "track": "时政国际",
+      "track": "其他",
       "related": false
     },
     {
@@ -995,7 +995,7 @@
       "rank": 10,
       "word": "Goebbels",
       "hot_value": null,
-      "track": "时政国际",
+      "track": "其他",
       "related": false
     },
     {
@@ -1004,7 +1004,7 @@
       "rank": 11,
       "word": "Azzi",
       "hot_value": null,
-      "track": "体育",
+      "track": "其他",
       "related": false
     },
     {
@@ -1040,7 +1040,7 @@
       "rank": 15,
       "word": "MAHA",
       "hot_value": null,
-      "track": "时政国际",
+      "track": "其他",
       "related": false
     },
     {
@@ -1076,7 +1076,7 @@
       "rank": 19,
       "word": "Kennedy Space Center",
       "hot_value": null,
-      "track": "科技数码",
+      "track": "社会民生",
       "related": false
     },
     {
@@ -1085,7 +1085,7 @@
       "rank": 20,
       "word": "Patriots in Control",
       "hot_value": null,
-      "track": "时政国际",
+      "track": "体育",
       "related": false
     },
     {
@@ -1094,7 +1094,7 @@
       "rank": 21,
       "word": "Romney",
       "hot_value": null,
-      "track": "时政国际",
+      "track": "其他",
       "related": false
     },
     {
@@ -1103,7 +1103,7 @@
       "rank": 22,
       "word": "Wilpons",
       "hot_value": null,
-      "track": "体育",
+      "track": "其他",
       "related": false
     },
     {
@@ -1112,7 +1112,7 @@
       "rank": 23,
       "word": "Fritz",
       "hot_value": null,
-      "track": "体育",
+      "track": "其他",
       "related": false
     },
     {
@@ -1148,7 +1148,7 @@
       "rank": 27,
       "word": "Temu Obama",
       "hot_value": null,
-      "track": "时政国际",
+      "track": "其他",
       "related": false
     },
     {
@@ -1157,7 +1157,7 @@
       "rank": 28,
       "word": "Scott Presler",
       "hot_value": null,
-      "track": "时政国际",
+      "track": "其他",
       "related": false
     },
     {
@@ -1184,7 +1184,7 @@
       "rank": 31,
       "word": "Tingus Pingus",
       "hot_value": null,
-      "track": "体育",
+      "track": "其他",
       "related": false
     },
     {
@@ -1220,7 +1220,7 @@
       "rank": 35,
       "word": "La Ley 462",
       "hot_value": null,
-      "track": "时政国际",
+      "track": "其他",
       "related": false
     },
     {
@@ -1229,7 +1229,7 @@
       "rank": 36,
       "word": "Trump Political Operation",
       "hot_value": null,
-      "track": "时政国际",
+      "track": "其他",
       "related": false
     },
     {
@@ -1265,7 +1265,7 @@
       "rank": 40,
       "word": "Tapper",
       "hot_value": null,
-      "track": "时政国际",
+      "track": "其他",
       "related": false
     },
     {
@@ -1283,7 +1283,7 @@
       "rank": 42,
       "word": "#FursuitFriday",
       "hot_value": null,
-      "track": "生活",
+      "track": "其他",
       "related": false
     },
     {
@@ -1301,7 +1301,7 @@
       "rank": 44,
       "word": "Happy Sabbath",
       "hot_value": null,
-      "track": "生活",
+      "track": "其他",
       "related": false
     },
     {
@@ -1328,7 +1328,7 @@
       "rank": 47,
       "word": "Jared Isaacman",
       "hot_value": null,
-      "track": "科技数码",
+      "track": "其他",
       "related": false
     },
     {
@@ -1337,7 +1337,7 @@
       "rank": 48,
       "word": "Chewy",
       "hot_value": null,
-      "track": "财经",
+      "track": "其他",
       "related": false
     },
     {
@@ -1356,7 +1356,7 @@
       "word": "How A CR-V Engine Makes 1,000 HP 😱",
       "hot_value": 14755281,
       "track": "汽车",
-      "related": true
+      "related": false
     },
     {
       "platform": "youtube",
@@ -1365,7 +1365,7 @@
       "word": "How a 4-Way Stop Becomes a 5-Level Interchange",
       "hot_value": 6408274,
       "track": "社会民生",
-      "related": true
+      "related": false
     },
     {
       "platform": "youtube",
@@ -1373,8 +1373,8 @@
       "rank": 3,
       "word": "Driver Gets Caught By Biker #shorts #usa",
       "hot_value": 1323925,
-      "track": "汽车",
-      "related": true
+      "track": "社会民生",
+      "related": false
     },
     {
       "platform": "youtube",
@@ -1382,8 +1382,8 @@
       "rank": 4,
       "word": "Why Deer Freeze In Headlights 😳",
       "hot_value": 8437677,
-      "track": "教育",
-      "related": true
+      "track": "生活",
+      "related": false
     },
     {
       "platform": "youtube",
@@ -1392,7 +1392,7 @@
       "word": "Stuck On The Train Tracks #motovlog #motorcycle #milwaukee #biker #automobile",
       "hot_value": 22880696,
       "track": "汽车",
-      "related": true
+      "related": false
     },
     {
       "platform": "youtube",
@@ -1418,8 +1418,8 @@
       "rank": 8,
       "word": "Biker Attempts A Risky Move And Gets Hit By Oncoming Car 😳",
       "hot_value": 3367879,
-      "track": "汽车",
-      "related": true
+      "track": "社会民生",
+      "related": false
     },
     {
       "platform": "youtube",
@@ -1427,8 +1427,8 @@
       "rank": 9,
       "word": "How much you think wasted🚛😩⛽️#TruckerProblems #Trucking #Truckers #CDLLife #DieselFuel",
       "hot_value": 1578987,
-      "track": "汽车",
-      "related": true
+      "track": "社会民生",
+      "related": false
     },
     {
       "platform": "youtube",
@@ -1455,7 +1455,7 @@
       "word": "This mechanic shop told the new guy to paint the engine block",
       "hot_value": 1133333,
       "track": "汽车",
-      "related": true
+      "related": false
     },
     {
       "platform": "youtube",
@@ -1463,8 +1463,8 @@
       "rank": 13,
       "word": "Piano-Black Luxury Suitcase Transforms Into Cyber Super-Sport Bike at JFK 😱🏍️",
       "hot_value": 104502241,
-      "track": "汽车",
-      "related": true
+      "track": "科技数码",
+      "related": false
     },
     {
       "platform": "youtube",
@@ -1482,7 +1482,7 @@
       "word": "Fleet Bus Swipes Rare Shelby GT350 🥲@EarsPOV",
       "hot_value": 1472761,
       "track": "汽车",
-      "related": true
+      "related": false
     },
     {
       "platform": "youtube",
@@ -1490,8 +1490,8 @@
       "rank": 16,
       "word": "Old Riders Know The Best @Sulk.6r",
       "hot_value": 7116065,
-      "track": "汽车",
-      "related": true
+      "track": "生活",
+      "related": false
     },
     {
       "platform": "youtube",
@@ -1509,7 +1509,7 @@
       "word": "Twister vs Straight Pipe!",
       "hot_value": 787328,
       "track": "汽车",
-      "related": true
+      "related": false
     },
     {
       "platform": "youtube",
@@ -1526,7 +1526,7 @@
       "rank": 20,
       "word": "Tire gets stuck in the corn header!! #farming #farmer #farm #agriculture #farmlife #farmers",
       "hot_value": 995634,
-      "track": "生活",
+      "track": "社会民生",
       "related": false
     },
     {
@@ -1544,8 +1544,8 @@
       "rank": 22,
       "word": "Truck Speeds Past the Wrong Cop",
       "hot_value": 1916223,
-      "track": "汽车",
-      "related": true
+      "track": "社会民生",
+      "related": false
     },
     {
       "platform": "youtube",
@@ -1553,7 +1553,7 @@
       "rank": 23,
       "word": "Someone Got a Little Too Ambitious #service",
       "hot_value": 2935106,
-      "track": "其他",
+      "track": "生活",
       "related": false
     },
     {
@@ -1563,7 +1563,7 @@
       "word": "#chevy #c10 #chevytrucks #bigblockchevy #harleydavidson #chopper #elonmusk #airride #lowrider",
       "hot_value": 2852022,
       "track": "汽车",
-      "related": true
+      "related": false
     },
     {
       "platform": "youtube",
@@ -1599,7 +1599,7 @@
       "word": "This Robot Was Built To Replace The GOAT Of MotoGP",
       "hot_value": 5301052,
       "track": "科技数码",
-      "related": true
+      "related": false
     },
     {
       "platform": "youtube",
@@ -1607,8 +1607,8 @@
       "rank": 29,
       "word": "Bike Thinks He’s Tough! 🤣",
       "hot_value": 1630856,
-      "track": "汽车",
-      "related": true
+      "track": "娱乐明星",
+      "related": false
     },
     {
       "platform": "youtube",
@@ -1616,8 +1616,8 @@
       "rank": 30,
       "word": "Do you like riding motorcycles? #funny #laugher #laugh",
       "hot_value": 3362948,
-      "track": "汽车",
-      "related": true
+      "track": "生活",
+      "related": false
     },
     {
       "platform": "youtube",
@@ -1626,7 +1626,7 @@
       "word": "He CRASHED Into A SUPER CAR! 😭💔",
       "hot_value": 1905964,
       "track": "汽车",
-      "related": true
+      "related": false
     },
     {
       "platform": "youtube",
@@ -1634,8 +1634,8 @@
       "rank": 32,
       "word": "Testing Our New Rally Track!",
       "hot_value": 1422338,
-      "track": "体育",
-      "related": true
+      "track": "汽车",
+      "related": false
     },
     {
       "platform": "youtube",
@@ -1643,8 +1643,8 @@
       "rank": 33,
       "word": "The Biker Was Just Trying to Explain Himself",
       "hot_value": 1376288,
-      "track": "汽车",
-      "related": true
+      "track": "社会民生",
+      "related": false
     },
     {
       "platform": "youtube",
@@ -1653,7 +1653,7 @@
       "word": "Cuando el mecánico no revisa nada antes de empezar 😅 #fails #funny",
       "hot_value": 20395646,
       "track": "汽车",
-      "related": true
+      "related": false
     },
     {
       "platform": "youtube",
@@ -1662,7 +1662,7 @@
       "word": "Chevelle SS Snow blower with chrome with chrome plated blade",
       "hot_value": 971493,
       "track": "汽车",
-      "related": true
+      "related": false
     },
     {
       "platform": "youtube",
@@ -1671,7 +1671,7 @@
       "word": "What would you have done? 👀 #cars #dashcam #parody #jylez06",
       "hot_value": 4252276,
       "track": "汽车",
-      "related": true
+      "related": false
     },
     {
       "platform": "youtube",
@@ -1680,7 +1680,7 @@
       "word": "RIP these cars 🥀#stevewilldoit",
       "hot_value": 1460386,
       "track": "汽车",
-      "related": true
+      "related": false
     },
     {
       "platform": "youtube",
@@ -1689,7 +1689,7 @@
       "word": "From top up to engine rebuild in seconds",
       "hot_value": 21514423,
       "track": "汽车",
-      "related": true
+      "related": false
     },
     {
       "platform": "youtube",
@@ -1697,8 +1697,8 @@
       "rank": 39,
       "word": "Me when anything happens 😂 #mechanic #autorepair #funny #work #coworkers #customerservice #viral",
       "hot_value": 822125,
-      "track": "汽车",
-      "related": true
+      "track": "生活",
+      "related": false
     },
     {
       "platform": "youtube",
@@ -1707,7 +1707,7 @@
       "word": "How much power do you think this thing is making 😅 #hemmings #semashow #twinsupercharged #blower",
       "hot_value": 1782613,
       "track": "汽车",
-      "related": true
+      "related": false
     },
     {
       "platform": "youtube",
@@ -1716,7 +1716,7 @@
       "word": "Testing Our NEW Racecar, But George Messed Up BAD!",
       "hot_value": 1403580,
       "track": "汽车",
-      "related": true
+      "related": false
     },
     {
       "platform": "youtube",
@@ -1734,7 +1734,7 @@
       "word": "Road Rage Karma Goes Very Wrong!",
       "hot_value": 2859614,
       "track": "社会民生",
-      "related": true
+      "related": false
     },
     {
       "platform": "youtube",
@@ -1761,7 +1761,7 @@
       "word": "5 Fastest American Muscle Cars Ever Made! #cars #automotive",
       "hot_value": 702986,
       "track": "汽车",
-      "related": true
+      "related": false
     },
     {
       "platform": "youtube",
@@ -1770,7 +1770,7 @@
       "word": "Wow! That’s a Fast POWER wheels! 7 year old Nova In her Modified power wheels built by her dad Chevy",
       "hot_value": 706492,
       "track": "汽车",
-      "related": true
+      "related": false
     },
     {
       "platform": "youtube",
@@ -1778,8 +1778,8 @@
       "rank": 48,
       "word": "\"The fastest pit stops in history...🤯\" #automobile #racing #formula1 #f1",
       "hot_value": 21601619,
-      "track": "体育",
-      "related": true
+      "track": "汽车",
+      "related": false
     },
     {
       "platform": "youtube",
@@ -1788,7 +1788,7 @@
       "word": "World’s first kickflip on a dirt bike 😤",
       "hot_value": 710196,
       "track": "体育",
-      "related": true
+      "related": false
     },
     {
       "platform": "youtube",
@@ -1797,7 +1797,7 @@
       "word": "He let me drive his TWIN TURBO Huracan 😭🙏",
       "hot_value": 5275491,
       "track": "汽车",
-      "related": true
+      "related": false
     }
   ],
   "keywords": [
@@ -1832,15 +1832,15 @@
     {
       "platform": "bilibili",
       "word": "发光车标",
-      "status": "queued",
-      "found": null,
+      "status": "empty",
+      "found": 0,
       "hot_word": "发光logo回归的Mac评测"
     },
     {
       "platform": "bilibili",
       "word": "AI车机",
-      "status": "queued",
-      "found": null,
+      "status": "done",
+      "found": 1,
       "hot_word": "DeepSeek Super Agent"
     },
     {
@@ -1874,16 +1874,23 @@
     {
       "platform": "youtube",
       "word": "twin turbo Huracan test drive",
-      "status": "queued",
-      "found": null,
+      "status": "empty",
+      "found": 0,
       "hot_word": "He let me drive his TWIN TURBO Huracan 😭🙏"
     },
     {
       "platform": "youtube",
       "word": "2027 Rolls Royce review",
-      "status": "queued",
-      "found": null,
+      "status": "done",
+      "found": 0,
       "hot_word": "I BOUGHT MY DREAM CAR!! (2027 Rolls Royce)"
+    },
+    {
+      "platform": "bilibili",
+      "word": "新能源选车",
+      "status": "done",
+      "found": 0,
+      "hot_word": ""
     }
   ],
   "videos": [
@@ -3162,6 +3169,151 @@
         ]
       },
       "transcript_excerpt": "这台赛历师生产的叫蓝电硬\n我正在维修的啊\n修着修着我突然发现这个电机控制线上面居然出现了比亚迪的标\n哇 这个天哪\n这赛历师造的车子怎么会出现比亚迪的零件\n他们到"
+    },
+    {
+      "aweme_id": "bilibili:BV1h44g6UEeY",
+      "day": "2026-11-07",
+      "desc": "少儿益智真人秀《龙宝工程车趣味大冒险》逃跑的三角龙、挖掘机有危险、洒水车的烦恼！",
+      "author": "科学星球",
+      "keyword": "AI车机",
+      "published_at": "2026-11-03T09:48:16+00:00",
+      "platform": "bilibili",
+      "analysis_provider": "codex",
+      "analysis_model": "codex",
+      "followers": 21362,
+      "likes": 24,
+      "views": 58659,
+      "coins": 1,
+      "comments": 1,
+      "favorites": 18,
+      "shares": 0,
+      "ratio": 2.7459507536747494,
+      "url": "https://www.bilibili.com/video/BV1h44g6UEeY",
+      "status": "done",
+      "saved": false,
+      "tags": [
+        "困境提问",
+        "拟人故事",
+        "任务悬念",
+        "二次受阻",
+        "结果兑现"
+      ],
+      "analysis": {
+        "summary": "最值得借鉴的是“具体困境启动任务—追加阻碍—展示解决结果”的叙事链，但这条少儿故事只能提供结构参考，播放粉丝比约2.7不能证明其机制有效，也不能直接外推到汽车内容。",
+        "hook": "这里有一个恐龙车在哭。恐龙车，你哭什么？",
+        "hook_type": "拟人化异常状态 + 困境提问",
+        "structure": [
+          "恐龙车哭泣，交代恐龙逃跑的原因，并提出寻找任务。",
+          "龙宝推测恐龙会躲藏，经历草丛寻找无果后，根据声音找到恐龙。",
+          "恐龙被带回，但台词又以“吃太多草、装不进去”追加运输障碍。",
+          "运输车加入并解决运输问题，第一段以帮助他人的满足感收尾。",
+          "拖拉机提出挖掘机失踪的新任务，龙宝进入石头多、有积水的区域寻找。",
+          "挖掘机说明落水原因，龙宝将其救回，并以提醒注意危险结束第二段。",
+          "洒水车因池塘灌不满而烦恼，龙宝提出利用附近河水的办法。",
+          "龙宝挖通引水通道，水流出现并获得角色称赞，随后回家结束故事。"
+        ],
+        "template": "___出现了一个异常状况。为什么会这样？原来它遇到了___。要完成的任务是___。先尝试___，却发现还有___这个限制。接着换用___，最后展示___，确认任务是否完成。用于汽车内容时，困难、尝试和结果都要来自实际素材，不能预设一定失败或成功。",
+        "topic": "围绕恐龙、工程车和龙宝组织三段求助与解决故事，以拟人困境和协作推进情节；提供的正文不涉及AI车机，不能因搜索关键词而将其视为汽车科技内容。",
+        "audience": "根据标题中的“少儿益智真人秀”和正文推测，目标是喜欢恐龙、工程车及救援故事的儿童，可能兼及陪看的家长；实际观看者的年龄、性别和构成无法确认。",
+        "reasons": [
+          {
+            "point": "拟人化异常先引出情绪，再把情绪落到“恐龙逃跑”的明确任务上，可能同时产生关心角色与等待解决的动机。反事实看，删去哭泣和追问、直接交代运输任务，开头的异常感可能减弱；这只是文本层面的解释。",
+            "evidence": "这里有一个恐龙车在哭。恐龙车，你哭什么？我在丛林里拉了一个恐龙，结果不小心让它给跑了。",
+            "is_hypothesis": true
+          },
+          {
+            "point": "抓到恐龙后追加“装不进去”的限制，让任务暂时不能结束，可能延长对解决办法的期待。若删去这一转折，寻找与归还即可直接收尾，运输车出现的必要性和悬念都会减弱；没有留存数据证明这一效果实际发生。",
+            "evidence": "哎，不行，这个恐龙在外面吃太多草，也装不进去了。",
+            "is_hypothesis": true
+          }
+        ],
+        "tags": [
+          "困境提问",
+          "拟人故事",
+          "任务悬念",
+          "二次受阻",
+          "结果兑现"
+        ],
+        "gaps": "目前只有标题、可能存在错字的语音识别稿和用户提供的公开计数，未独立核验。播放58,659、粉丝21,362，播放÷粉丝约2.7，与材料标注一致，但不能据此判断是否显著超过该账号的日常表现。点赞24、评论1、收藏18、投币1、分享0，不足以证明强共鸣或分享扩散，且没有评论正文可以解释互动动机。缺少画面、音频、逐句时间戳、视频时长、完播率与留存曲线，无法判断真实前3秒、镜头剪辑、语气、节奏及观众在哪处离开。缺少发布时间、计数观察窗口、发布时粉丝量、历史作品基线、受众画像和流量来源，不能区分粉丝基础、热点时机、投流未知、分发差异与随机波动的影响。“AI车机”与正文题材不匹配，检索命中原因未知。这里只分析了被选中的一个样本，存在幸存者偏差；单条内容不能证明通用规律，也不能证明上述结构造成了播放表现。",
+        "analysis_version": 2,
+        "account_field": "女性车主视角的新能源与家用车选购、场景试驾及用车知识",
+        "opening_3s": {
+          "evidence": "这里有一个恐龙车在哭。恐龙车，你哭什么？",
+          "technique": "先给工程车赋予“哭泣”这一异常状态，紧接着追问原因，把待解释的问题放在开头。",
+          "retention_reason": "对这类故事感兴趣的观众可能想知道它为什么哭、问题能否解决；问题具体，理解所需背景较少，但实际留人效果未知。",
+          "limitation": "没有时间戳，仅按开头文字推测，无法确认真实前 3 秒；没有画面与音频，也无法判断开场呈现、语气和剪辑。"
+        },
+        "takeaways": [
+          {
+            "point": "先呈现一个需要解决的具体状况，让观众知道接下来要看什么。",
+            "evidence": "恐龙逃跑了，那可不行，我得赶紧把恐龙抓回来。",
+            "application": "面向有接娃需求的女性车主，先明确“停好车以后，后排车门是否方便打开”这一任务，再展示测试。开头列出判断标准，结尾逐项回应，避免只报车型配置。"
+          },
+          {
+            "point": "在初步完成任务后加入真实使用限制，把表面成功推进到完整验证。",
+            "evidence": "哎，不行，这个恐龙在外面吃太多草，也装不进去了。",
+            "application": "测试家用车后备厢时，先试婴儿车，再加入实际出行常带的包和购物袋，检查尾门关闭与取物空间。记录车型配置、物品尺寸和装载过程；只有实际出现限制时，才把它作为转折。"
+          },
+          {
+            "point": "让解决办法回应问题所在，并展示可观察的结果。",
+            "evidence": "这么近的距离，你把它挖通不就得了。",
+            "application": "做AI车机用车知识时，将一句包含两个要求的指令与拆成两句的指令进行对照，展示每项任务是否完成。固定测试条件，保留成功和失败，依据结果说明可用表达，避免只评价“聪不聪明”。"
+          }
+        ],
+        "avoid_copying": [
+          {
+            "point": "直接搬用哭泣求助、叠词和反复夸赞。",
+            "reason": "这些表达服务于少儿故事；成人选车内容需要具体判断依据，反复夸赞可能占用解释空间。",
+            "alternative": "用真实使用限制引出问题，例如车位宽度、婴儿车尺寸或车机任务是否完成；结尾用观察结果代替“太厉害了”。"
+          },
+          {
+            "point": "为了制造转折而安排失败，再让一个万能办法轻松解决。",
+            "reason": "故事可以预设情节，汽车测试需要保留真实结果；人为制造问题或省略条件会降低可信度。",
+            "alternative": "拍摄前确定测试步骤和判断标准，拍摄后根据真实结果组织内容。没有失败就展示成功边界，不补演一次失败。"
+          },
+          {
+            "point": "在同一条汽车内容里连续拼接三个关联较弱的任务。",
+            "reason": "这条材料用同一角色串联多个故事，但不能证明这种长度和组织方式适合购车决策；跨任务切换也会增加制作成本。",
+            "alternative": "一条围绕一个决策，例如“这台车是否适合接娃”，将停车、后排开门和装载作为同一场景的连续验证。"
+          }
+        ],
+        "adapted_topics": [
+          {
+            "title": "婴儿车放得下，家用车后备厢就够用了吗？",
+            "opening": "带娃选车，后备厢只试一辆婴儿车够吗？把出门常带的包和购物袋也加上，再看尾门能不能关、东西好不好拿。",
+            "outline": [
+              "待补素材：实车装载过程、车型年款与配置、婴儿车及行李尺寸，并说明后排座椅状态。",
+              "先单独装入婴儿车，记录摆放方式和尾门能否关闭。",
+              "加入事先列好的常用物品，展示剩余空间与取物过程，不预设一定装不下。",
+              "按这份装载清单给出结论，说明不能代表所有家庭的出行需求。"
+            ],
+            "source_mechanism": "借鉴任务初步完成后追加限制的结构，把“放得进”继续验证为“整套出行物品是否好用”。"
+          },
+          {
+            "title": "接娃出发前，车机能听懂一句话里的两个要求吗？",
+            "opening": "“导航去学校，再把空调调到24度。”一句话提两个要求，车机能完成几项？我们再拆成两句，对照结果。",
+            "outline": [
+              "待补素材：真实车机录屏、车内收音、车型、软件版本及联网状态，并确认待测功能支持哪些指令。",
+              "在停车状态下，预先确定相同测试次数，对照组合指令和拆分指令。",
+              "逐项记录导航目的地与空调设置是否正确完成，完整呈现成功和失败。",
+              "只总结该版本、该条件下的表现与可用表达，不用一次成败代表整套车机能力。"
+            ],
+            "source_mechanism": "借鉴明确任务与替代解法，但通过实际对照寻找结果，不预设车机会失败。"
+          },
+          {
+            "title": "带娃停车，自动泊车要验哪三步？",
+            "opening": "选车时，自动泊车除了最后停得正不正，还要看什么？我们按接娃场景，依次看车位识别、过程接管和后排开门空间。",
+            "outline": [
+              "待补素材：支持该功能的实车、功能使用条件、车位尺寸及完整测试录像。",
+              "在功能说明允许的场景内，记录能否识别车位、是否完成泊入，以及过程中是否需要接管。",
+              "停稳后由成人检查后排车门开启和上下车空间，不预设一定方便或不方便。",
+              "将结果对应到这一个车位和测试条件，说明哪些结论仍需更多车位验证。"
+            ],
+            "source_mechanism": "借鉴“完成主任务后继续检查额外限制”，将停车结果推进到家庭实际上下车需求。"
+          }
+        ]
+      },
+      "transcript_excerpt": "这里有一个恐龙车在哭。恐龙车，你哭什么？我在丛林里拉了一个恐龙，结果不小心让它给跑了。跑掉了？太可怕了吧！这可怎么办呀？你能帮帮我吗？我太难了。嗯？，还真跑掉了"
     },
     {
       "aweme_id": "youtube:EfOCz-x5_GE",
@@ -4662,7 +4814,7 @@
       "ratio": null,
       "url": "",
       "status": "done",
-      "saved": true,
+      "saved": false,
       "tags": [
         "#邵雨琪",
         "#体育美女",
@@ -4728,7 +4880,7 @@
       "ratio": null,
       "url": "",
       "status": "done",
-      "saved": true,
+      "saved": false,
       "tags": [
         "人物故事",
         "人物指向",
